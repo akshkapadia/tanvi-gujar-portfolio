@@ -1,0 +1,670 @@
+/* =========================================================
+   Design tokens
+   ========================================================= */
+:root {
+  --color-bg: #000000;
+  --color-purple: #9d4edd;
+  --color-purple-strong: #8a43c5;
+  --color-purple-mid: #582785;
+  --color-purple-deep: #11002c;
+  --color-white: #ffffff;
+  --color-border-gray: #d0d5dd;
+
+  --font-display: "League Gothic", sans-serif;
+  --font-script: "Qwigley", cursive;
+  --font-body: "Poppins", sans-serif;
+
+  --hero-width: 1440;
+  --hero-height: 874;
+  --nav-h: 110px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg);
+  font-family: var(--font-body);
+  color: var(--color-white);
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================
+   Navbar — glassmorphism
+   ========================================================= */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+  padding: clamp(16px, 3vw, 30px) 24px;
+}
+
+.nav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(2px, 0.6vw, 10px);
+  padding: 8px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50px;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+.nav-pill::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-link {
+  flex-shrink: 0;
+  padding: 10px clamp(16px, 2.6vw, 40px);
+  border-radius: 60px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(14px, 1.35vw, 20px);
+  letter-spacing: -0.3px;
+  color: var(--color-white);
+  white-space: nowrap;
+  transition: background-color 0.35s ease, color 0.35s ease, transform 0.2s ease, border-color 0.35s ease;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.nav-link.active {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.95), rgba(138, 67, 197, 0.8));
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 18px rgba(157, 78, 221, 0.55);
+}
+
+.nav-link.active:hover {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.95), rgba(138, 67, 197, 0.8));
+}
+
+.nav-link:active {
+  transform: scale(0.96);
+}
+
+.nav-toggle {
+  display: none;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex-direction: column;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+}
+
+.nav-toggle-bar {
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-white);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-toggle.open .nav-toggle-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle.open .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.open .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Navbar is fixed/floating (see .navbar), so main reserves
+   space for it up front — hero content must never load
+   underneath the nav, not even before the user scrolls. */
+main {
+  display: block;
+  padding-top: var(--nav-h);
+}
+
+/* =========================================================
+   Hero — fluid canvas
+   Every child is positioned as a % of the 1440x874 design,
+   and .hero keeps that exact aspect ratio at every width, so
+   the whole composition scales in lockstep with no breakpoint
+   jumps until the stacked mobile layout kicks in. The width
+   is also capped by available viewport height (minus the
+   navbar) so the hero never grows taller than the screen on
+   short/wide laptop viewports — it scales to fit, not just to
+   fill the width.
+   ========================================================= */
+.hero {
+  position: relative;
+  width: min(
+    100%,
+    calc(var(--hero-width) * 1px),
+    calc((100vh - var(--nav-h)) * var(--hero-width) / var(--hero-height))
+  );
+  aspect-ratio: var(--hero-width) / var(--hero-height);
+  margin: 0 auto;
+  background: var(--color-bg);
+  overflow: hidden;
+  container-type: inline-size;
+  container-name: hero;
+}
+
+.hero-bg-text {
+  position: absolute;
+  left: 50%;
+  top: -4.12%;
+  width: 93.2%;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(64px, 20.8cqw, 300px);
+  line-height: 1;
+  letter-spacing: -10px;
+  text-align: center;
+  white-space: nowrap;
+  background: linear-gradient(
+    to bottom,
+    var(--color-purple) 41.25%,
+    var(--color-purple-mid) 62.892%,
+    var(--color-purple-deep) 84.861%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  opacity: 0;
+  animation: fade-up-x 0.9s ease-out 0.15s forwards;
+}
+
+.hero-greeting {
+  position: absolute;
+  left: 15%;
+  top: 23.34%;
+  width: 21.53%;
+  min-width: 180px;
+  transform: translateX(-50%);
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: clamp(40px, 6.667cqw, 96px);
+  text-align: center;
+  color: var(--color-white);
+  opacity: 0;
+  animation: fade-up-x 0.8s ease-out 0.35s forwards;
+}
+
+.hero-name {
+  position: absolute;
+  left: 5.14%;
+  top: 35.93%;
+  width: 17.64%;
+  min-width: 150px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(56px, 10.417cqw, 150px);
+  line-height: 0.9;
+  color: var(--color-white);
+  white-space: nowrap;
+  opacity: 0;
+  animation: fade-up 0.8s ease-out 0.5s forwards, pulse-zoom 3.2s ease-in-out 1.3s infinite;
+}
+
+.hero-name-line1,
+.hero-name-line2 {
+  display: block;
+}
+
+.hero-name-line1 {
+  letter-spacing: 2px;
+}
+
+.hero-role {
+  position: absolute;
+  left: 17.26%;
+  top: 69.34%;
+  transform: translateX(-50%);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(24px, 3.333cqw, 48px);
+  color: var(--color-purple);
+  white-space: nowrap;
+  opacity: 0;
+  animation: fade-up-x 0.8s ease-out 0.65s forwards;
+}
+
+/* ---- photo ---- */
+.hero-photo-wrap {
+  position: absolute;
+  left: 30.42%;
+  top: 5.61%;
+  width: 34.86%;
+  height: 75.74%;
+  opacity: 0;
+  animation: fade-up 1s ease-out 0.25s forwards, float 6s ease-in-out 1.2s infinite;
+}
+
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom;
+}
+
+.hero-photo-shadow {
+  position: absolute;
+  left: -0.49%;
+  top: 71.97%;
+  width: 35.07%;
+  height: 7.32%;
+  background: rgba(0, 0, 0, 0.88);
+  filter: blur(15.65px);
+  border-radius: 50%;
+}
+
+/* ---- quote ---- */
+.hero-quote-wrap {
+  position: absolute;
+  left: 70.07%;
+  top: 47.25%;
+  width: 27.29%;
+  min-width: 220px;
+  opacity: 0;
+  animation: fade-up 0.8s ease-out 0.55s forwards;
+}
+
+.hero-quote {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(18px, 2.5cqw, 36px);
+  line-height: normal;
+  color: var(--color-white);
+}
+
+.squiggle-quote {
+  position: absolute;
+  right: -8px;
+  top: -16px;
+  width: clamp(24px, 2.7cqw, 39px);
+  height: clamp(25px, 2.85cqw, 41px);
+}
+
+/* ---- CTA ---- */
+.hero-cta {
+  position: absolute;
+  left: calc(50% + 0.31%);
+  top: calc(50% + 41.19%);
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  animation: fade-up-xy 0.8s ease-out 0.8s forwards;
+}
+
+.squiggle-cta {
+  position: absolute;
+  left: -40px;
+  top: 20px;
+  width: clamp(26px, 2.78cqw, 40px);
+  height: clamp(27px, 2.92cqw, 42px);
+  transform: rotate(135deg) scaleY(-1);
+}
+
+.cta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: clamp(260px, 25.5cqw, 367px);
+  height: clamp(60px, 5.7cqw, 82px);
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--color-white);
+  border-radius: 50px;
+  backdrop-filter: blur(7.5px);
+  -webkit-backdrop-filter: blur(7.5px);
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  padding: 10px clamp(14px, 1.4cqw, 20px);
+  border-radius: 60px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(16px, 1.784cqw, 25.692px);
+  letter-spacing: -0.385px;
+  color: var(--color-white);
+  white-space: nowrap;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.btn-resume {
+  width: clamp(150px, 14.44cqw, 208px);
+  background: var(--color-purple-strong);
+  border: 0.5px solid var(--color-border-gray);
+}
+
+.btn-resume:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(138, 67, 197, 0.55);
+}
+
+.arrow-icon {
+  width: clamp(26px, 2.92cqw, 42px);
+  height: clamp(26px, 2.92cqw, 42px);
+  transition: transform 0.25s ease;
+}
+
+.btn-resume:hover .arrow-icon {
+  transform: translate(2px, -2px);
+}
+
+.btn-hire {
+  flex: 1 0 0;
+}
+
+.btn-hire:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* =========================================================
+   Motion keyframes
+   ========================================================= */
+@keyframes nav-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navbar {
+  animation: nav-drop 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Variants that bake a static centering transform into the
+   animation itself — a CSS animation's transform keyframes
+   fully replace an element's own static `transform`, so any
+   element that both animates and needs translateX(-50%) (or
+   similar) for positioning must use one of these instead of
+   plain fade-up, or it silently loses its centering. */
+@keyframes fade-up-x {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes fade-up-xy {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes pulse-zoom {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+/* =========================================================
+   Nav: hamburger + dropdown below 760px
+   ========================================================= */
+@media (max-width: 760px) {
+  main {
+    padding-top: 70px;
+  }
+
+  .navbar {
+    justify-content: flex-end;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  .nav-pill {
+    position: fixed;
+    top: 84px;
+    right: 20px;
+    left: auto;
+    max-width: min(72vw, 300px);
+    flex-direction: column;
+    align-items: stretch;
+    overflow: visible;
+    opacity: 0;
+    transform: translateY(-12px) scale(0.97);
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .nav-pill.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .nav-link {
+    width: 100%;
+    text-align: center;
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+}
+
+/* =========================================================
+   Responsive fallback (stacked flow layout) — small screens
+   ========================================================= */
+@media (max-width: 760px) {
+  .hero {
+    width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+    padding: 24px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .hero-bg-text {
+    position: static;
+    transform: none;
+    animation-name: fade-up;
+    width: 100%;
+    font-size: clamp(48px, 16vw, 160px);
+    letter-spacing: -4px;
+    white-space: normal;
+    margin-bottom: -0.1em;
+    order: 5;
+  }
+
+  .hero-greeting,
+  .hero-name,
+  .hero-role,
+  .hero-photo-wrap,
+  .hero-quote-wrap,
+  .hero-cta {
+    position: static;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .hero-greeting,
+  .hero-role,
+  .hero-cta {
+    animation-name: fade-up;
+  }
+
+  .hero-greeting {
+    order: 1;
+  }
+
+  .hero-name {
+    order: 2;
+  }
+
+  .hero-role {
+    order: 3;
+  }
+
+  .hero-photo-wrap {
+    width: min(90vw, 420px);
+    height: auto;
+    aspect-ratio: 502 / 662;
+    order: 4;
+  }
+
+  .hero-quote-wrap {
+    order: 6;
+  }
+
+  .hero-cta {
+    order: 7;
+  }
+
+  .hero-photo-shadow {
+    display: none;
+  }
+
+  .hero-greeting {
+    font-size: clamp(48px, 14vw, 96px);
+  }
+
+  .hero-name {
+    font-size: clamp(64px, 20vw, 150px);
+    white-space: normal;
+  }
+
+  .hero-role {
+    font-size: clamp(26px, 7vw, 48px);
+    white-space: normal;
+  }
+
+  .hero-quote-wrap {
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .hero-quote {
+    font-size: clamp(18px, 5vw, 28px);
+    text-align: center;
+  }
+
+  .squiggle-quote {
+    display: none;
+  }
+
+  .squiggle-cta {
+    display: none;
+  }
+
+  .hero-cta {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cta-pill {
+    width: min(100%, 367px);
+    min-width: 0;
+  }
+}
