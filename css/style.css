@@ -24,6 +24,22 @@
   --font-script: "Qwigley", cursive;
   --font-body: "Poppins", system-ui, sans-serif;
 
+  /* One type scale for the whole page. Every heading, subheading,
+     body run and label pulls from here, so a size is only ever
+     defined once and the sections stay in step with each other. */
+  --fs-display: clamp(52px, 8.4vw, 128px);
+  --fs-eyebrow: clamp(28px, 3.4vw, 44px);
+  --fs-lead: clamp(20px, 2.1vw, 28px);
+  --fs-title: clamp(22px, 2.1vw, 30px);
+  --fs-sub: clamp(16px, 1.5vw, 21px);
+  --fs-body: clamp(15px, 1.15vw, 17px);
+  --fs-small: 14px;
+  --fs-label: 12px;
+
+  --lh-body: 1.7;
+  --lh-tight: 1.3;
+  --ls-label: 0.16em;
+
   --hero-width: 1440;
   --hero-height: 874;
   --nav-h: 110px;
@@ -612,7 +628,7 @@ main {
 
 .eyebrow {
   font-family: var(--font-script);
-  font-size: clamp(30px, 3.6vw, 48px);
+  font-size: var(--fs-eyebrow);
   line-height: 1.1;
   color: #c58bf5;
 }
@@ -620,7 +636,7 @@ main {
 .section-title {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(52px, 8.4vw, 128px);
+  font-size: var(--fs-display);
   line-height: 0.92;
   letter-spacing: -2px;
   /* Stays bright the whole way down — the old ramp faded into
@@ -654,58 +670,14 @@ main {
   padding-bottom: clamp(28px, 4vw, 56px);
 }
 
-/* The services heading pins to the top and stays there for the
-   whole section, so it is still on screen while all four cards
-   stack underneath it. The cards park below its bottom edge —
-   JS measures the real height into --stack-top — and the black
-   gradient lets a card slide under the heading rather than
-   colliding with the type. */
+/* The card is capped to what fits between where it parks and the
+   bottom of the screen, counting the three 16px notches the deepest
+   card sits lower and leaving a gap underneath, so no card's bottom
+   edge runs past the fold. The floor is set by the tallest card's
+   copy — shrink past that and max-height starts clipping text. */
 @media (min-width: 901px) {
-  /* A close-enough default so the first paint is right and the
-     layout still holds if the script never runs; JS then replaces
-     it with the heading's measured height. */
-  :root {
-    --stack-top: 220px;
-  }
-
-  .section-head-only {
-    position: sticky;
-    top: 0;
-    z-index: 3;
-    padding-top: calc(var(--nav-h) - 34px);
-    padding-bottom: clamp(12px, 1.4vw, 18px);
-    background: linear-gradient(to bottom, #000 0%, #000 74%, rgba(0, 0, 0, 0) 100%);
-  }
-
-  /* Pinned, bloomed and ruled, the heading holds its own without
-     the full-size display type — and every pixel it gives up is a
-     pixel of card that stays on screen. */
-  .section-head-only .eyebrow {
-    font-size: clamp(22px, 2vw, 30px);
-  }
-
-  .section-head-only .section-title {
-    font-size: clamp(38px, 4.6vw, 72px);
-  }
-
-  .section-head-only .section-head {
-    margin-bottom: 0;
-  }
-
-  .section-head-only .section-head::after {
-    margin-top: 10px;
-  }
-
-  /* Every card has to fit between the pinned heading and the
-     bottom of the screen, including the deepest one in the stack,
-     which parks three 16px notches lower than the first. The 72px
-     is a deliberate gap under the deepest card, so the stack ends
-     clear of the bottom edge rather than flush against it. */
   .svc {
-    /* The floor is set by the tallest card's copy — shrink past
-       that and max-height starts cutting text off. */
-    --card-h: clamp(344px, calc(100svh - var(--stack-top) - 48px - 72px), 372px);
-    z-index: 1;
+    --card-h: clamp(340px, calc(100svh - var(--stack-top) - 48px - 72px), 400px);
     min-height: var(--card-h);
     max-height: var(--card-h);
   }
@@ -713,40 +685,6 @@ main {
   .svc-media {
     align-self: stretch;
     height: 100%;
-  }
-}
-
-/* A 1366x768 laptop leaves roughly 650px of viewport once browser
-   chrome is taken out. Rather than drop the pinned heading there,
-   shrink it — it has to stay small enough that a full card still
-   clears the bottom of the screen. */
-@media (min-width: 901px) and (max-height: 780px) {
-  :root {
-    --stack-top: 178px;
-  }
-
-  .section-head-only {
-    padding-top: calc(var(--nav-h) - 52px);
-    padding-bottom: 10px;
-  }
-
-  .section-head-only .eyebrow {
-    font-size: clamp(19px, 1.8vw, 25px);
-  }
-
-  .section-head-only .section-title {
-    font-size: clamp(34px, 3.9vw, 56px);
-  }
-
-  .section-head-only .section-head::after {
-    margin-top: 7px;
-  }
-
-  /* Shallower notches: on a short screen those 16px steps are
-     height the deepest card cannot spare. */
-  .svc {
-    --card-h: clamp(344px, calc(100svh - var(--stack-top) - 30px - 64px), 372px);
-    top: calc(var(--stack-top) + var(--i) * 10px);
   }
 }
 
@@ -773,7 +711,7 @@ main {
      another in place. */
   top: calc(var(--stack-top) + var(--i) * 16px);
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) minmax(0, 440px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 396px);
   align-items: center;
   gap: clamp(18px, 2.6vw, 36px);
   min-height: 340px;
@@ -783,26 +721,38 @@ main {
   overflow: hidden;
 }
 
-.svc-num {
-  align-self: start;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: clamp(28px, 2.8vw, 40px);
-  line-height: normal;
-  color: var(--color-white);
-}
-
 .svc-copy {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
+  /* Without a cap the copy column runs the full width of a wide
+     card and the subtitle becomes one long unreadable line. */
+  max-width: 56ch;
+}
+
+/* Numeral and title sit on one line. `baseline` rather than
+   `center` so the digits sit on the same line as the title's
+   letters however the two sizes are tuned. */
+.svc-head {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(14px, 1.6vw, 22px);
+}
+
+.svc-num {
+  flex-shrink: 0;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-title);
+  line-height: var(--lh-tight);
+  color: var(--color-white);
 }
 
 .svc-title {
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: clamp(23px, 2.3vw, 32px);
-  line-height: normal;
+  font-size: var(--fs-title);
+  line-height: var(--lh-tight);
   text-transform: uppercase;
   color: var(--color-purple);
 }
@@ -810,8 +760,8 @@ main {
 .svc-sub {
   font-family: var(--font-body);
   font-weight: 500;
-  font-size: clamp(17px, 1.75vw, 24px);
-  line-height: normal;
+  font-size: var(--fs-sub);
+  line-height: 1.45;
   color: #f1f1f1;
   text-wrap: pretty;
 }
@@ -819,12 +769,12 @@ main {
 .svc-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding-left: 30px;
+  gap: 4px;
+  padding-left: 24px;
   list-style: disc;
-  font-weight: 500;
-  font-size: clamp(15px, 1.45vw, 20px);
-  line-height: normal;
+  font-weight: 400;
+  font-size: var(--fs-body);
+  line-height: 1.5;
   color: #e3e5e8;
 }
 
@@ -869,7 +819,7 @@ main {
 
 .about-lead {
   font-weight: 500;
-  font-size: clamp(21px, 2.5vw, 32px);
+  font-size: var(--fs-lead);
   line-height: 1.35;
   letter-spacing: -0.4px;
   text-wrap: balance;
@@ -877,8 +827,8 @@ main {
 
 .about-text {
   font-weight: 300;
-  font-size: clamp(15px, 1.2vw, 16px);
-  line-height: 1.75;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   color: var(--text-dim);
   text-wrap: pretty;
 }
@@ -894,7 +844,7 @@ main {
   padding: 9px 18px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50px;
-  font-size: 14px;
+  font-size: var(--fs-small);
   font-weight: 400;
   color: rgba(255, 255, 255, 0.85);
   background: rgba(255, 255, 255, 0.05);
@@ -916,8 +866,8 @@ main {
 }
 
 .side-label {
-  font-size: 13px;
-  letter-spacing: 1.4px;
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--text-faint);
   margin-top: 18px;
@@ -929,12 +879,13 @@ main {
 
 .side-value {
   font-weight: 500;
-  font-size: clamp(17px, 1.5vw, 20px);
+  font-size: var(--fs-sub);
+  line-height: var(--lh-tight);
 }
 
 .side-link {
   font-weight: 500;
-  font-size: clamp(15px, 1.3vw, 17px);
+  font-size: var(--fs-body);
   color: var(--color-purple);
   word-break: break-all;
   border-bottom: 1px solid transparent;
@@ -995,8 +946,8 @@ main {
 
 .cover-note {
   position: relative;
-  font-size: 12px;
-  letter-spacing: 2px;
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
   color: rgba(255, 255, 255, 0.62);
 }
 
@@ -1008,8 +959,8 @@ main {
 }
 
 .project-meta {
-  font-size: 12px;
-  letter-spacing: 1.6px;
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--text-faint);
 }
@@ -1017,14 +968,15 @@ main {
 .project-title {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: clamp(19px, 1.7vw, 24px);
+  font-size: var(--fs-title);
+  line-height: var(--lh-tight);
   letter-spacing: -0.4px;
 }
 
 .project-text {
   font-weight: 300;
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   color: var(--text-dim);
 }
 
@@ -1033,7 +985,7 @@ main {
   align-items: center;
   gap: 6px;
   margin-top: 8px;
-  font-size: 15px;
+  font-size: var(--fs-small);
   font-weight: 500;
   color: var(--color-purple);
 }
@@ -1098,8 +1050,8 @@ main {
 }
 
 .timeline-when {
-  font-size: 13px;
-  letter-spacing: 1.4px;
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--color-purple);
 }
@@ -1107,20 +1059,21 @@ main {
 .timeline-role {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: clamp(18px, 1.6vw, 22px);
+  font-size: var(--fs-title);
+  line-height: var(--lh-tight);
   letter-spacing: -0.3px;
 }
 
 .timeline-org {
-  font-size: 15px;
+  font-size: var(--fs-body);
   font-weight: 500;
   color: rgba(255, 255, 255, 0.8);
 }
 
 .timeline-text {
   font-weight: 300;
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   color: var(--text-dim);
   text-wrap: pretty;
 }
@@ -1152,8 +1105,8 @@ main {
 .contact-text {
   max-width: 46ch;
   font-weight: 300;
-  font-size: clamp(15px, 1.3vw, 17px);
-  line-height: 1.7;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   color: var(--text-dim);
 }
 
@@ -1211,7 +1164,7 @@ main {
   border-radius: 50px;
   border: 1px solid rgba(255, 255, 255, 0.22);
   background: rgba(255, 255, 255, 0.05);
-  font-size: 15px;
+  font-size: var(--fs-small);
   transition: transform 0.3s var(--ease-out), background-color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -1222,7 +1175,7 @@ main {
 }
 
 .contact-note {
-  font-size: 13px;
+  font-size: var(--fs-small);
   color: var(--text-faint);
 }
 
@@ -1239,7 +1192,7 @@ main {
   margin: 0 auto;
   padding: 26px var(--page-x) 40px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 13px;
+  font-size: var(--fs-small);
   color: var(--text-faint);
 }
 
@@ -1462,26 +1415,17 @@ main {
   }
 
   .svc {
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 16px 16px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
     min-height: 0;
     padding: 22px;
-    /* Literal, not --stack-top: that variable is measured from
-       the sticky heading, which only exists above 900px, and a
-       stale value must not reach the phone layout. */
     top: calc(76px + var(--i) * 10px);
   }
 
   .svc-media {
-    grid-column: 1 / -1;
-    grid-row: 1;
+    order: -1;
     aspect-ratio: 16 / 10;
     max-height: 40svh;
-  }
-
-  .svc-num,
-  .svc-copy {
-    grid-row: 2;
   }
 
   .svc-copy {
