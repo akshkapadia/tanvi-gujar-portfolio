@@ -665,15 +665,15 @@ main {
      layout still holds if the script never runs; JS then replaces
      it with the heading's measured height. */
   :root {
-    --stack-top: 250px;
+    --stack-top: 220px;
   }
 
   .section-head-only {
     position: sticky;
     top: 0;
     z-index: 3;
-    padding-top: calc(var(--nav-h) - 26px);
-    padding-bottom: clamp(14px, 1.8vw, 24px);
+    padding-top: calc(var(--nav-h) - 34px);
+    padding-bottom: clamp(12px, 1.4vw, 18px);
     background: linear-gradient(to bottom, #000 0%, #000 74%, rgba(0, 0, 0, 0) 100%);
   }
 
@@ -681,11 +681,11 @@ main {
      the full-size display type — and every pixel it gives up is a
      pixel of card that stays on screen. */
   .section-head-only .eyebrow {
-    font-size: clamp(24px, 2.3vw, 34px);
+    font-size: clamp(22px, 2vw, 30px);
   }
 
   .section-head-only .section-title {
-    font-size: clamp(42px, 5.2vw, 82px);
+    font-size: clamp(38px, 4.6vw, 72px);
   }
 
   .section-head-only .section-head {
@@ -693,16 +693,18 @@ main {
   }
 
   .section-head-only .section-head::after {
-    margin-top: clamp(10px, 1.1vw, 14px);
+    margin-top: 10px;
   }
 
   /* Every card has to fit between the pinned heading and the
      bottom of the screen, including the deepest one in the stack,
-     which parks three 16px notches lower than the first. */
+     which parks three 16px notches lower than the first. The 72px
+     is a deliberate gap under the deepest card, so the stack ends
+     clear of the bottom edge rather than flush against it. */
   .svc {
     /* The floor is set by the tallest card's copy — shrink past
        that and max-height starts cutting text off. */
-    --card-h: clamp(360px, calc(100svh - var(--stack-top) - 48px - 40px), 406px);
+    --card-h: clamp(344px, calc(100svh - var(--stack-top) - 48px - 72px), 372px);
     z-index: 1;
     min-height: var(--card-h);
     max-height: var(--card-h);
@@ -720,24 +722,31 @@ main {
    clears the bottom of the screen. */
 @media (min-width: 901px) and (max-height: 780px) {
   :root {
-    --stack-top: 190px;
+    --stack-top: 178px;
   }
 
   .section-head-only {
-    padding-top: calc(var(--nav-h) - 44px);
-    padding-bottom: 12px;
+    padding-top: calc(var(--nav-h) - 52px);
+    padding-bottom: 10px;
   }
 
   .section-head-only .eyebrow {
-    font-size: clamp(20px, 1.9vw, 26px);
+    font-size: clamp(19px, 1.8vw, 25px);
   }
 
   .section-head-only .section-title {
-    font-size: clamp(36px, 4.2vw, 60px);
+    font-size: clamp(34px, 3.9vw, 56px);
   }
 
   .section-head-only .section-head::after {
-    margin-top: 8px;
+    margin-top: 7px;
+  }
+
+  /* Shallower notches: on a short screen those 16px steps are
+     height the deepest card cannot spare. */
+  .svc {
+    --card-h: clamp(344px, calc(100svh - var(--stack-top) - 30px - 64px), 372px);
+    top: calc(var(--stack-top) + var(--i) * 10px);
   }
 }
 
@@ -764,11 +773,11 @@ main {
      another in place. */
   top: calc(var(--stack-top) + var(--i) * 16px);
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) minmax(0, 489px);
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 440px);
   align-items: center;
-  gap: clamp(20px, 3vw, 40px);
-  min-height: 400px;
-  padding: 40px 40px 40px clamp(28px, 4.2vw, 60px);
+  gap: clamp(18px, 2.6vw, 36px);
+  min-height: 340px;
+  padding: 30px 32px 30px clamp(24px, 3.4vw, 48px);
   background: #121212;
   box-shadow: 0 6px 20px rgba(211, 178, 252, 0.13);
   overflow: hidden;
