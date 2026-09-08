@@ -4,14 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tanvi Gujar | UI/UX Designer</title>
+  <meta name="description" content="Tanvi Gujar — UI/UX Designer transforming complex problems into intuitive experiences.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=League+Gothic:wdth@75..100&family=Poppins:wght@400;500;600&family=Qwigley&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=League+Gothic:wdth@75..100&family=Poppins:wght@300;400;500;600&family=Qwigley&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+  <div class="ambient" aria-hidden="true">
+    <span class="orb orb-1" data-parallax="0.16"></span>
+    <span class="orb orb-2" data-parallax="-0.10"></span>
+    <span class="orb orb-3" data-parallax="0.22"></span>
+    <span class="grain"></span>
+  </div>
 
   <header class="navbar">
     <nav class="nav-pill" id="navPill" aria-label="Primary">
@@ -30,37 +38,287 @@
   </header>
 
   <main>
-    <section class="hero" id="home">
-      <h2 class="hero-bg-text" aria-hidden="true">UI/UX DESIGNER</h2>
 
-      <div class="hero-photo-wrap">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="home">
+      <h2 class="hero-bg-text" aria-hidden="true" data-depth="0.20">UI/UX DESIGNER</h2>
+
+      <div class="hero-photo-wrap" data-depth="0.05">
         <div class="hero-photo-shadow" aria-hidden="true"></div>
+        <div class="hero-photo-glow" aria-hidden="true"></div>
         <img src="assets/img/hero-photo.png" alt="Portrait of Tanvi Gujar" class="hero-photo">
       </div>
 
-      <p class="hero-greeting">Hello, I'am</p>
+      <p class="hero-greeting" data-depth="-0.06">Hello, I'am</p>
 
-      <h1 class="hero-name"><span class="hero-name-line1">TANVI</span><span class="hero-name-line2">GUJAR</span></h1>
+      <h1 class="hero-name" data-depth="-0.08"><span class="hero-name-line1"><span class="hero-name-inner">TANVI</span></span><span class="hero-name-line2"><span class="hero-name-inner">GUJAR</span></span></h1>
 
-      <p class="hero-role">UI/UX Designer</p>
+      <p class="hero-role" data-depth="-0.10">UI/UX Designer</p>
 
-      <div class="hero-quote-wrap">
+      <div class="hero-quote-wrap" data-depth="-0.13">
         <p class="hero-quote">&ldquo; A UI/UX Designer who transform complex into intuitive experience. &rdquo;</p>
         <img class="squiggle squiggle-quote" src="assets/img/squiggle-1.svg" alt="" aria-hidden="true">
       </div>
 
-      <div class="hero-cta">
+      <div class="hero-cta" data-depth="-0.17">
         <img class="squiggle squiggle-cta" src="assets/img/squiggle-2.svg" alt="" aria-hidden="true">
         <div class="cta-pill">
           <a class="btn btn-resume" href="https://drive.google.com/file/d/1HcYMmSamMIvudgpthz2FhHRsEDMO_PXJ/view" target="_blank" rel="noopener">
             Resume
             <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon">
           </a>
-          <a class="btn btn-hire" href="mailto:gujartanvi2610@gmail.com" target="_blank" rel="noopener">Hire me</a>
+          <a class="btn btn-hire" href="mailto:gujartanvi2610@gmail.com">Hire me</a>
         </div>
       </div>
     </section>
+
+    <!-- ============ SERVICES — sticky stack ============ -->
+    <section id="services">
+      <header class="section section-head-only">
+        <div class="section-head reveal">
+          <p class="eyebrow">What I do</p>
+          <h2 class="section-title">SERVICES</h2>
+        </div>
+      </header>
+
+      <div class="stack">
+        <article class="svc">
+          <div class="svc-inner">
+            <p class="svc-rail">01 — Research</p>
+            <div class="svc-copy">
+              <h3 class="svc-title">UX Research</h3>
+              <p class="svc-sub">Evidence before a single pixel</p>
+              <p class="svc-text">Interviews, competitive audits and usability tests that replace assumptions with evidence. I go looking for the flow nobody wants to map, because that is usually where the product is losing people.</p>
+              <a class="svc-link" href="#contact"><span class="svc-rule" aria-hidden="true"></span>Start with research</a>
+            </div>
+            <div class="svc-visual" aria-hidden="true">
+              <span class="svc-bloom"></span>
+              <svg class="svc-icon" viewBox="0 0 24 24" fill="none">
+                <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M15.8 15.8 21 21" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                <path d="M8.4 11h5.2M11 8.4v5.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="svc-index" aria-hidden="true">01</span>
+          </div>
+        </article>
+
+        <article class="svc">
+          <div class="svc-inner">
+            <p class="svc-rail">02 — Interface</p>
+            <div class="svc-copy">
+              <h3 class="svc-title">UI Design</h3>
+              <p class="svc-sub">One system, every screen</p>
+              <p class="svc-text">Interfaces built on a real type scale, grid and colour system, so the twentieth screen still feels like it belongs to the same product as the first. Craft lives in the spacing, the weight of a label, the states nobody remembers to design.</p>
+              <a class="svc-link" href="#contact"><span class="svc-rule" aria-hidden="true"></span>Design the interface</a>
+            </div>
+            <div class="svc-visual" aria-hidden="true">
+              <span class="svc-bloom"></span>
+              <svg class="svc-icon" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+            </div>
+            <span class="svc-index" aria-hidden="true">02</span>
+          </div>
+        </article>
+
+        <article class="svc">
+          <div class="svc-inner">
+            <p class="svc-rail">03 — Motion</p>
+            <div class="svc-copy">
+              <h3 class="svc-title">Prototyping</h3>
+              <p class="svc-sub">Test the interaction, not the picture</p>
+              <p class="svc-text">Clickable flows with real states, real empty screens and real timing, so the team can feel the interaction long before it reaches engineering. Arguments about a flow end quickly once everyone can click it.</p>
+              <a class="svc-link" href="#contact"><span class="svc-rule" aria-hidden="true"></span>Build a prototype</a>
+            </div>
+            <div class="svc-visual" aria-hidden="true">
+              <span class="svc-bloom"></span>
+              <svg class="svc-icon" viewBox="0 0 24 24" fill="none">
+                <path d="M4 7.5h9a4 4 0 0 1 0 8H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10.5 13 8 15.5 10.5 18" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="18" cy="7.5" r="2.5" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+            </div>
+            <span class="svc-index" aria-hidden="true">03</span>
+          </div>
+        </article>
+
+        <article class="svc">
+          <div class="svc-inner">
+            <p class="svc-rail">04 — Systems</p>
+            <div class="svc-copy">
+              <h3 class="svc-title">Design Systems</h3>
+              <p class="svc-sub">Consistency that survives scale</p>
+              <p class="svc-text">Documented components, tokens and the rules around them, so a product stays coherent as more people start designing in it. A system earns its keep the day someone else ships a screen you never touched.</p>
+              <a class="svc-link" href="#contact"><span class="svc-rule" aria-hidden="true"></span>Set up a system</a>
+            </div>
+            <div class="svc-visual" aria-hidden="true">
+              <span class="svc-bloom"></span>
+              <svg class="svc-icon" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="14" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="3" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+            </div>
+            <span class="svc-index" aria-hidden="true">04</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="section" id="about">
+      <header class="section-head reveal">
+        <p class="eyebrow">A little about me</p>
+        <h2 class="section-title">ABOUT</h2>
+      </header>
+
+      <div class="about-grid">
+        <div class="glass about-panel reveal">
+          <p class="about-lead">I design digital products that people understand on the first try.</p>
+          <p class="about-text">My work starts with the messy part — the research, the edge cases, the flow nobody wants to map — and ends with an interface that hides all of it. I care about the small things: the rhythm of spacing, the weight of a label, the half-second a transition should take.</p>
+          <p class="about-text">Right now I'm looking for a product design role where craft and research carry equal weight.</p>
+
+          <ul class="chips">
+            <li class="chip">Figma</li>
+            <li class="chip">User Research</li>
+            <li class="chip">Wireframing</li>
+            <li class="chip">Prototyping</li>
+            <li class="chip">Usability Testing</li>
+            <li class="chip">Design Systems</li>
+          </ul>
+        </div>
+
+        <aside class="glass about-side reveal" style="--d: 120ms">
+          <p class="side-label">Currently</p>
+          <p class="side-value">Open to UI/UX roles</p>
+          <p class="side-label">Based in</p>
+          <p class="side-value">[YOUR CITY]</p>
+          <p class="side-label">Get in touch</p>
+          <a class="side-link" href="mailto:gujartanvi2610@gmail.com">gujartanvi2610@gmail.com</a>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ PROJECT ============ -->
+    <section class="section" id="project">
+      <header class="section-head reveal">
+        <p class="eyebrow">Selected work</p>
+        <h2 class="section-title">PROJECT</h2>
+      </header>
+
+      <div class="project-list">
+        <a class="glass project reveal" href="#contact" style="--d: 0ms">
+          <div class="project-cover" aria-hidden="true"><span class="cover-note">[ADD PROJECT COVER]</span></div>
+          <div class="project-body">
+            <p class="project-meta">Case study · [YEAR]</p>
+            <h3 class="project-title">[PROJECT ONE NAME]</h3>
+            <p class="project-text">[One line on the problem you solved and the outcome.]</p>
+            <span class="project-cta">View case study
+              <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
+            </span>
+          </div>
+        </a>
+
+        <a class="glass project reveal" href="#contact" style="--d: 110ms">
+          <div class="project-cover" aria-hidden="true"><span class="cover-note">[ADD PROJECT COVER]</span></div>
+          <div class="project-body">
+            <p class="project-meta">Case study · [YEAR]</p>
+            <h3 class="project-title">[PROJECT TWO NAME]</h3>
+            <p class="project-text">[One line on the problem you solved and the outcome.]</p>
+            <span class="project-cta">View case study
+              <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
+            </span>
+          </div>
+        </a>
+
+        <a class="glass project reveal" href="#contact" style="--d: 220ms">
+          <div class="project-cover" aria-hidden="true"><span class="cover-note">[ADD PROJECT COVER]</span></div>
+          <div class="project-body">
+            <p class="project-meta">Case study · [YEAR]</p>
+            <h3 class="project-title">[PROJECT THREE NAME]</h3>
+            <p class="project-text">[One line on the problem you solved and the outcome.]</p>
+            <span class="project-cta">View case study
+              <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
+            </span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ EXPERIENCE ============ -->
+    <section class="section" id="experience">
+      <header class="section-head reveal">
+        <p class="eyebrow">Where I've worked</p>
+        <h2 class="section-title">EXPERIENCE</h2>
+      </header>
+
+      <ol class="timeline">
+        <li class="timeline-item reveal" style="--d: 0ms">
+          <span class="timeline-dot" aria-hidden="true"></span>
+          <div class="glass timeline-card">
+            <p class="timeline-when">[START] — [END]</p>
+            <h3 class="timeline-role">[ROLE TITLE]</h3>
+            <p class="timeline-org">[COMPANY NAME]</p>
+            <p class="timeline-text">[What you owned, and one result you're proud of.]</p>
+          </div>
+        </li>
+        <li class="timeline-item reveal" style="--d: 110ms">
+          <span class="timeline-dot" aria-hidden="true"></span>
+          <div class="glass timeline-card">
+            <p class="timeline-when">[START] — [END]</p>
+            <h3 class="timeline-role">[ROLE TITLE]</h3>
+            <p class="timeline-org">[COMPANY NAME]</p>
+            <p class="timeline-text">[What you owned, and one result you're proud of.]</p>
+          </div>
+        </li>
+        <li class="timeline-item reveal" style="--d: 220ms">
+          <span class="timeline-dot" aria-hidden="true"></span>
+          <div class="glass timeline-card">
+            <p class="timeline-when">[START] — [END]</p>
+            <h3 class="timeline-role">[EDUCATION OR EARLY ROLE]</h3>
+            <p class="timeline-org">[INSTITUTION NAME]</p>
+            <p class="timeline-text">[One line of context.]</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="section section-contact" id="contact">
+      <div class="glass contact-panel reveal">
+        <p class="eyebrow">Say hello</p>
+        <h2 class="contact-title">LET'S BUILD SOMETHING CLEAR</h2>
+        <p class="contact-text">Hiring, freelance, or just want a second opinion on a flow — my inbox is open.</p>
+
+        <a class="mail-link" href="mailto:gujartanvi2610@gmail.com">
+          gujartanvi2610@gmail.com
+          <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
+        </a>
+
+        <div class="contact-actions">
+          <a class="btn btn-resume solid" href="https://drive.google.com/file/d/1HcYMmSamMIvudgpthz2FhHRsEDMO_PXJ/view" target="_blank" rel="noopener">
+            Resume
+            <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
+          </a>
+          <ul class="socials">
+            <li><a class="social" href="#" data-placeholder>LinkedIn</a></li>
+            <li><a class="social" href="#" data-placeholder>Behance</a></li>
+            <li><a class="social" href="#" data-placeholder>Dribbble</a></li>
+          </ul>
+        </div>
+        <p class="contact-note">Social links still to be added — replace the three placeholders above.</p>
+      </div>
+    </section>
+
   </main>
+
+  <footer class="footer">
+    <p>© <span id="year">2026</span> Tanvi Gujar</p>
+    <p>Designed &amp; built with care</p>
+  </footer>
 
   <script src="js/script.js"></script>
 </body>

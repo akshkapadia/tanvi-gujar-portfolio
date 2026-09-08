@@ -10,13 +10,26 @@
   --color-white: #ffffff;
   --color-border-gray: #d0d5dd;
 
-  --font-display: "League Gothic", sans-serif;
+  --text-dim: rgba(255, 255, 255, 0.62);
+  --text-faint: rgba(255, 255, 255, 0.40);
+
+  /* glass */
+  --glass-fill: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --glass-blur: blur(18px) saturate(160%);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  --radius-card: 24px;
+
+  --font-display: "League Gothic", "Oswald", "Arial Narrow", sans-serif;
   --font-script: "Qwigley", cursive;
-  --font-body: "Poppins", sans-serif;
+  --font-body: "Poppins", system-ui, sans-serif;
 
   --hero-width: 1440;
   --hero-height: 874;
   --nav-h: 110px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --page-x: clamp(20px, 5vw, 80px);
 }
 
 * {
@@ -33,7 +46,16 @@ body {
   background: var(--color-bg);
   font-family: var(--font-body);
   color: var(--color-white);
-  overflow-x: hidden;
+  /* `clip`, not `hidden`: hidden would turn the body into a
+     scroll container and break the sticky services stack. */
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+@supports not (overflow: clip) {
+  body {
+    overflow-x: hidden;
+  }
 }
 
 img {
@@ -46,15 +68,87 @@ a {
   color: inherit;
 }
 
+ul,
+ol {
+  list-style: none;
+}
+
+::selection {
+  background: rgba(157, 78, 221, 0.5);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-purple);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
-  *::before,
-  *::after {
+  *::after,
+  *::before {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* =========================================================
+   Ambient background — soft purple light + grain, parallaxed
+   ========================================================= */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.orb {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  filter: blur(64px);
+  transform: translateZ(0);
+}
+
+.orb-1 {
+  top: -12vh;
+  left: -6vw;
+  width: 46vw;
+  height: 46vw;
+  background: radial-gradient(circle, rgba(157, 78, 221, 0.30), transparent 68%);
+}
+
+.orb-2 {
+  top: 38vh;
+  right: -14vw;
+  width: 52vw;
+  height: 52vw;
+  background: radial-gradient(circle, rgba(88, 39, 133, 0.34), transparent 68%);
+}
+
+.orb-3 {
+  bottom: -18vh;
+  left: 22vw;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, rgba(138, 67, 197, 0.22), transparent 70%);
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.16;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='0.5'/></svg>");
+}
+
+main,
+.navbar,
+.footer {
+  position: relative;
+  z-index: 1;
 }
 
 /* =========================================================
@@ -71,6 +165,7 @@ a {
   align-items: flex-start;
   gap: 12px;
   padding: clamp(16px, 3vw, 30px) 24px;
+  animation: nav-drop 0.7s var(--ease-out) both;
 }
 
 .nav-pill {
@@ -78,12 +173,12 @@ a {
   align-items: center;
   gap: clamp(2px, 0.6vw, 10px);
   padding: 8px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
   border-radius: 50px;
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
   max-width: 100%;
   overflow-x: auto;
   scrollbar-width: none;
@@ -136,12 +231,12 @@ a {
   justify-content: center;
   gap: 5px;
   flex-direction: column;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
   border-radius: 50%;
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
   cursor: pointer;
 }
 
@@ -165,9 +260,8 @@ a {
   transform: translateY(-7px) rotate(-45deg);
 }
 
-/* Navbar is fixed/floating (see .navbar), so main reserves
-   space for it up front — hero content must never load
-   underneath the nav, not even before the user scrolls. */
+/* Navbar is fixed/floating, so main reserves space for it up
+   front — hero content must never load underneath the nav. */
 main {
   display: block;
   padding-top: var(--nav-h);
@@ -175,14 +269,12 @@ main {
 
 /* =========================================================
    Hero — fluid canvas
-   Every child is positioned as a % of the 1440x874 design,
-   and .hero keeps that exact aspect ratio at every width, so
-   the whole composition scales in lockstep with no breakpoint
-   jumps until the stacked mobile layout kicks in. The width
-   is also capped by available viewport height (minus the
-   navbar) so the hero never grows taller than the screen on
-   short/wide laptop viewports — it scales to fit, not just to
-   fill the width.
+   Every child is positioned as a % of the 1440x874 design and
+   .hero keeps that exact aspect ratio at every width, so the
+   composition scales in lockstep with no breakpoint jumps
+   until the stacked mobile layout takes over. Width is also
+   capped by available viewport height so the hero never grows
+   taller than the screen on short/wide laptop viewports.
    ========================================================= */
 .hero {
   position: relative;
@@ -193,7 +285,6 @@ main {
   );
   aspect-ratio: var(--hero-width) / var(--hero-height);
   margin: 0 auto;
-  background: var(--color-bg);
   overflow: hidden;
   container-type: inline-size;
   container-name: hero;
@@ -223,7 +314,7 @@ main {
   color: transparent;
   -webkit-text-fill-color: transparent;
   opacity: 0;
-  animation: fade-up-x 0.9s ease-out 0.15s forwards;
+  animation: hero-bg-in 1.4s var(--ease-out) 0.1s forwards;
 }
 
 .hero-greeting {
@@ -254,17 +345,38 @@ main {
   line-height: 0.9;
   color: var(--color-white);
   white-space: nowrap;
-  opacity: 0;
-  animation: fade-up 0.8s ease-out 0.5s forwards, pulse-zoom 3.2s ease-in-out 1.3s infinite;
+  animation: pulse-zoom 3.2s ease-in-out 2.2s infinite;
 }
 
+/* Each line is its own mask; the inner span rises out of it,
+   so the name wipes up line by line instead of just fading.
+   The padding/negative-margin pair widens the mask box past
+   the glyph box so League Gothic's caps and descenders are
+   never sheared by the overflow clip. */
 .hero-name-line1,
 .hero-name-line2 {
   display: block;
+  overflow: hidden;
+  padding: 0.08em 0.04em 0.05em;
+  margin: -0.08em -0.04em -0.05em;
+}
+
+.hero-name-inner {
+  display: block;
+  transform: translateY(115%);
+  animation: line-rise 1s var(--ease-out) forwards;
 }
 
 .hero-name-line1 {
   letter-spacing: 2px;
+}
+
+.hero-name-line1 .hero-name-inner {
+  animation-delay: 0.42s;
+}
+
+.hero-name-line2 .hero-name-inner {
+  animation-delay: 0.56s;
 }
 
 .hero-role {
@@ -290,6 +402,23 @@ main {
   height: 75.74%;
   opacity: 0;
   animation: fade-up 1s ease-out 0.25s forwards, float 6s ease-in-out 1.2s infinite;
+}
+
+/* Soft purple bloom behind the portrait — it lifts her off
+   the black and breathes slowly so the hero is never fully
+   still, without anything actually moving. */
+.hero-photo-glow {
+  position: absolute;
+  left: 50%;
+  top: 26%;
+  width: 96%;
+  height: 74%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(157, 78, 221, 0.42), rgba(157, 78, 221, 0.10) 62%, transparent 78%);
+  filter: blur(26px);
+  opacity: 0;
+  animation: glow-in 1.6s ease-out 0.4s forwards, breathe 7s ease-in-out 2s infinite;
 }
 
 .hero-photo {
@@ -329,6 +458,7 @@ main {
   font-size: clamp(18px, 2.5cqw, 36px);
   line-height: normal;
   color: var(--color-white);
+  text-wrap: pretty;
 }
 
 .squiggle-quote {
@@ -337,6 +467,8 @@ main {
   top: -16px;
   width: clamp(24px, 2.7cqw, 39px);
   height: clamp(25px, 2.85cqw, 41px);
+  opacity: 0;
+  animation: pop-in 0.55s var(--ease-out) 1.05s forwards;
 }
 
 /* ---- CTA ---- */
@@ -358,6 +490,8 @@ main {
   width: clamp(26px, 2.78cqw, 40px);
   height: clamp(27px, 2.92cqw, 42px);
   transform: rotate(135deg) scaleY(-1);
+  opacity: 0;
+  animation: pop-in-cta 0.55s var(--ease-out) 1.25s forwards;
 }
 
 .cta-pill {
@@ -408,6 +542,11 @@ main {
   transition: transform 0.25s ease;
 }
 
+.arrow-icon.sm {
+  width: 22px;
+  height: 22px;
+}
+
 .btn-resume:hover .arrow-icon {
   transform: translate(2px, -2px);
 }
@@ -425,7 +564,604 @@ main {
 }
 
 /* =========================================================
-   Motion keyframes
+   Section shell
+   ========================================================= */
+.section {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(72px, 10vw, 150px) var(--page-x);
+}
+
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: clamp(32px, 5vw, 64px);
+}
+
+.eyebrow {
+  font-family: var(--font-script);
+  font-size: clamp(30px, 3.6vw, 48px);
+  line-height: 1.1;
+  color: var(--color-purple);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(52px, 8.4vw, 128px);
+  line-height: 0.92;
+  letter-spacing: -2px;
+  background: linear-gradient(to bottom, #ffffff 30%, rgba(157, 78, 221, 0.85) 105%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass {
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+}
+
+/* =========================================================
+   Services — sticky stack
+
+   Each panel sticks to the top of the viewport and the next
+   one scrolls up over it, so the four services deal onto one
+   another going down and peel back apart going up. The panels
+   must be fully opaque (no backdrop-filter here) or the ones
+   underneath show through the stack.
+   ========================================================= */
+.section-head-only {
+  padding-bottom: clamp(28px, 4vw, 56px);
+}
+
+.stack {
+  position: relative;
+}
+
+.svc {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  display: flex;
+  background:
+    linear-gradient(150deg, rgba(157, 78, 221, 0.065), rgba(0, 0, 0, 0) 44%),
+    #040107;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 -24px 60px rgba(0, 0, 0, 0.6);
+}
+
+.svc-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.78fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 88px);
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(96px, 13vh, 150px) var(--page-x) clamp(72px, 10vh, 110px) calc(var(--page-x) + 46px);
+}
+
+/* Vertical rail label down the left edge. */
+.svc-rail {
+  position: absolute;
+  left: var(--page-x);
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.svc-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  max-width: 46ch;
+}
+
+.svc-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(46px, 6.4vw, 96px);
+  line-height: 0.94;
+  letter-spacing: -1.5px;
+  color: var(--color-white);
+}
+
+.svc-sub {
+  font-family: var(--font-script);
+  font-size: clamp(24px, 2.6vw, 38px);
+  line-height: 1.1;
+  color: var(--color-purple);
+}
+
+.svc-text {
+  margin-top: 6px;
+  font-weight: 300;
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.8;
+  color: var(--text-dim);
+  text-wrap: pretty;
+}
+
+.svc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+  min-height: 44px;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-white);
+  transition: color 0.35s ease;
+}
+
+.svc-rule {
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: var(--color-purple);
+  transition: width 0.45s var(--ease-out), background-color 0.35s ease;
+}
+
+.svc-link:hover {
+  color: var(--color-purple);
+}
+
+.svc-link:hover .svc-rule {
+  width: 78px;
+}
+
+.svc-visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  max-height: 62vh;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  background: linear-gradient(160deg, rgba(157, 78, 221, 0.16), rgba(17, 0, 44, 0.55));
+  overflow: hidden;
+}
+
+.svc-bloom {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 118%;
+  height: 78%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(157, 78, 221, 0.42), transparent 74%);
+  filter: blur(38px);
+}
+
+.svc-icon {
+  position: relative;
+  width: clamp(64px, 8vw, 110px);
+  height: clamp(64px, 8vw, 110px);
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.svc-index {
+  position: absolute;
+  left: calc(var(--page-x) + 46px);
+  bottom: clamp(30px, 5vh, 58px);
+  font-family: var(--font-display);
+  font-size: clamp(52px, 6vw, 88px);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.09);
+  pointer-events: none;
+}
+
+/* =========================================================
+   About
+   ========================================================= */
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: clamp(16px, 2vw, 24px);
+  align-items: start;
+}
+
+.about-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(26px, 3.4vw, 48px);
+}
+
+.about-lead {
+  font-weight: 500;
+  font-size: clamp(21px, 2.5vw, 32px);
+  line-height: 1.35;
+  letter-spacing: -0.4px;
+  text-wrap: balance;
+}
+
+.about-text {
+  font-weight: 300;
+  font-size: clamp(15px, 1.2vw, 16px);
+  line-height: 1.75;
+  color: var(--text-dim);
+  text-wrap: pretty;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.chip {
+  padding: 9px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s var(--ease-out), background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.chip:hover {
+  transform: translateY(-3px);
+  background: rgba(157, 78, 221, 0.22);
+  border-color: rgba(157, 78, 221, 0.7);
+  color: #fff;
+}
+
+.about-side {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: clamp(26px, 3.4vw, 40px);
+}
+
+.side-label {
+  font-size: 13px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-top: 18px;
+}
+
+.side-label:first-child {
+  margin-top: 0;
+}
+
+.side-value {
+  font-weight: 500;
+  font-size: clamp(17px, 1.5vw, 20px);
+}
+
+.side-link {
+  font-weight: 500;
+  font-size: clamp(15px, 1.3vw, 17px);
+  color: var(--color-purple);
+  word-break: break-all;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.side-link:hover {
+  color: #c58bf5;
+  border-bottom-color: currentColor;
+}
+
+/* =========================================================
+   Project
+   ========================================================= */
+.project-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+
+.project {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.5s var(--ease-out), border-color 0.45s ease, box-shadow 0.45s ease;
+}
+
+.project:hover {
+  transform: translateY(-10px);
+  border-color: rgba(157, 78, 221, 0.6);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.project-cover {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(135deg, rgba(157, 78, 221, 0.42), rgba(17, 0, 44, 0.9)),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+}
+
+.project-cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(70% 60% at 50% 120%, rgba(157, 78, 221, 0.55), transparent 70%);
+  transform: translateY(20%);
+  transition: transform 0.6s var(--ease-out);
+}
+
+.project:hover .project-cover::before {
+  transform: translateY(0);
+}
+
+.cover-note {
+  position: relative;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.project-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: clamp(20px, 2.2vw, 28px);
+}
+
+.project-meta {
+  font-size: 12px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.project-title {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(19px, 1.7vw, 24px);
+  letter-spacing: -0.4px;
+}
+
+.project-text {
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+.project-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-purple);
+}
+
+.project:hover .project-cta .arrow-icon {
+  transform: translate(3px, -3px);
+}
+
+/* =========================================================
+   Experience — timeline
+   ========================================================= */
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2vw, 24px);
+  padding-left: 34px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: linear-gradient(to bottom, rgba(157, 78, 221, 0.9), rgba(157, 78, 221, 0.05));
+}
+
+.timeline-item {
+  position: relative;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -34px;
+  top: 26px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  border: 2px solid var(--color-purple);
+  transition: box-shadow 0.4s ease, transform 0.4s var(--ease-out);
+}
+
+.timeline-item:hover .timeline-dot {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 6px rgba(157, 78, 221, 0.18);
+}
+
+.timeline-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: clamp(22px, 2.4vw, 32px);
+  transition: transform 0.45s var(--ease-out), border-color 0.4s ease;
+}
+
+.timeline-item:hover .timeline-card {
+  transform: translateX(8px);
+  border-color: rgba(157, 78, 221, 0.55);
+}
+
+.timeline-when {
+  font-size: 13px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--color-purple);
+}
+
+.timeline-role {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(18px, 1.6vw, 22px);
+  letter-spacing: -0.3px;
+}
+
+.timeline-org {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.timeline-text {
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-dim);
+  text-wrap: pretty;
+}
+
+/* =========================================================
+   Contact
+   ========================================================= */
+.section-contact {
+  padding-bottom: clamp(48px, 6vw, 90px);
+}
+
+.contact-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+  padding: clamp(30px, 4.5vw, 72px);
+}
+
+.contact-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(42px, 6.6vw, 96px);
+  line-height: 0.94;
+  letter-spacing: -1.5px;
+  text-wrap: balance;
+}
+
+.contact-text {
+  max-width: 46ch;
+  font-weight: 300;
+  font-size: clamp(15px, 1.3vw, 17px);
+  line-height: 1.7;
+  color: var(--text-dim);
+}
+
+.mail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding-bottom: 4px;
+  font-weight: 500;
+  font-size: clamp(18px, 2.6vw, 34px);
+  letter-spacing: -0.5px;
+  color: var(--color-white);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+  word-break: break-all;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.mail-link:hover {
+  color: var(--color-purple);
+  border-bottom-color: var(--color-purple);
+}
+
+.mail-link:hover .arrow-icon {
+  transform: translate(3px, -3px);
+}
+
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.btn-resume.solid {
+  height: 54px;
+  width: auto;
+  min-width: 168px;
+  border-radius: 50px;
+  font-size: 16px;
+}
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.social {
+  display: inline-flex;
+  align-items: center;
+  height: 54px;
+  padding: 0 22px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 15px;
+  transition: transform 0.3s var(--ease-out), background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.social:hover {
+  transform: translateY(-3px);
+  background: rgba(157, 78, 221, 0.2);
+  border-color: rgba(157, 78, 221, 0.7);
+}
+
+.contact-note {
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+/* =========================================================
+   Footer
+   ========================================================= */
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 26px var(--page-x) 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+/* =========================================================
+   Motion
    ========================================================= */
 @keyframes nav-drop {
   from {
@@ -436,10 +1172,6 @@ main {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.navbar {
-  animation: nav-drop 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes fade-up {
@@ -456,9 +1188,9 @@ main {
 /* Variants that bake a static centering transform into the
    animation itself — a CSS animation's transform keyframes
    fully replace an element's own static `transform`, so any
-   element that both animates and needs translateX(-50%) (or
-   similar) for positioning must use one of these instead of
-   plain fade-up, or it silently loses its centering. */
+   element that both animates and needs translateX(-50%) for
+   positioning must use one of these instead of plain fade-up,
+   or it silently loses its centering. */
 @keyframes fade-up-x {
   from {
     opacity: 0;
@@ -481,6 +1213,73 @@ main {
   }
 }
 
+@keyframes hero-bg-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(34px) scale(1.05);
+    filter: blur(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes line-rise {
+  from {
+    transform: translateY(115%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.82;
+    transform: translateX(-50%) scale(0.97);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.04);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(-25deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes pop-in-cta {
+  from {
+    opacity: 0;
+    transform: rotate(160deg) scaleY(-1) scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(135deg) scaleY(-1) scale(1);
+  }
+}
+
 @keyframes float {
   0%,
   100% {
@@ -499,6 +1298,20 @@ main {
   50% {
     transform: scale(1.06);
   }
+}
+
+/* Scroll reveal — opt-in via JS so the page still shows
+   everything if scripting is unavailable. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+
+.js .reveal.in {
+  opacity: 1;
+  transform: none;
 }
 
 /* =========================================================
@@ -542,13 +1355,52 @@ main {
   .nav-link {
     width: 100%;
     text-align: center;
-    padding: 12px 20px;
+    padding: 14px 20px;
     font-size: 16px;
   }
 }
 
 /* =========================================================
-   Responsive fallback (stacked flow layout) — small screens
+   Layout: tablet
+   ========================================================= */
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Below this the stack stops being a stack: sticky panels
+     that are taller than the viewport trap the reader, so the
+     services become a plain vertical run of full-width cards. */
+  .svc {
+    position: static;
+    min-height: 0;
+  }
+
+  .svc-inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding: clamp(48px, 8vw, 72px) var(--page-x) clamp(56px, 9vw, 80px);
+  }
+
+  .svc-rail {
+    display: none;
+  }
+
+  .svc-visual {
+    order: -1;
+    aspect-ratio: 16 / 9;
+    max-height: none;
+  }
+
+  .svc-index {
+    top: clamp(24px, 5vw, 36px);
+    bottom: auto;
+    font-size: clamp(44px, 11vw, 64px);
+  }
+}
+
+/* =========================================================
+   Hero: stacked flow layout on small screens
    ========================================================= */
 @media (max-width: 760px) {
   .hero {
@@ -597,14 +1449,19 @@ main {
 
   .hero-greeting {
     order: 1;
+    font-size: clamp(48px, 14vw, 96px);
   }
 
   .hero-name {
     order: 2;
+    font-size: clamp(64px, 20vw, 150px);
+    white-space: normal;
   }
 
   .hero-role {
     order: 3;
+    font-size: clamp(26px, 7vw, 48px);
+    white-space: normal;
   }
 
   .hero-photo-wrap {
@@ -614,33 +1471,12 @@ main {
     order: 4;
   }
 
-  .hero-quote-wrap {
-    order: 6;
-  }
-
-  .hero-cta {
-    order: 7;
-  }
-
   .hero-photo-shadow {
     display: none;
   }
 
-  .hero-greeting {
-    font-size: clamp(48px, 14vw, 96px);
-  }
-
-  .hero-name {
-    font-size: clamp(64px, 20vw, 150px);
-    white-space: normal;
-  }
-
-  .hero-role {
-    font-size: clamp(26px, 7vw, 48px);
-    white-space: normal;
-  }
-
   .hero-quote-wrap {
+    order: 6;
     max-width: 420px;
     margin: 0 auto;
   }
@@ -650,15 +1486,13 @@ main {
     text-align: center;
   }
 
-  .squiggle-quote {
-    display: none;
-  }
-
+  .squiggle-quote,
   .squiggle-cta {
     display: none;
   }
 
   .hero-cta {
+    order: 7;
     width: 100%;
     justify-content: center;
   }
@@ -666,5 +1500,32 @@ main {
   .cta-pill {
     width: min(100%, 367px);
     min-width: 0;
+  }
+
+  .arrow-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .timeline {
+    padding-left: 26px;
+  }
+
+  .timeline-dot {
+    left: -26px;
+  }
+
+  .timeline-item:hover .timeline-card {
+    transform: none;
+  }
+}
+
+/* Coarse pointers get no hover-lift (it sticks after a tap)
+   and no pointer parallax. */
+@media (hover: none) {
+  .project:hover,
+  .chip:hover,
+  .social:hover {
+    transform: none;
   }
 }
