@@ -650,10 +650,55 @@ main {
    must be fully opaque (no backdrop-filter here) or the ones
    underneath show through the stack.
    ========================================================= */
-/* Extra runway under the heading so it holds the screen on its
-   own for a beat before the first card slides up over it. */
 .section-head-only {
-  padding-bottom: clamp(52px, 8vw, 104px);
+  padding-bottom: clamp(28px, 4vw, 56px);
+}
+
+/* The services heading pins to the top and stays there for the
+   whole section, so it is still on screen while all four cards
+   stack underneath it. The cards park below its bottom edge —
+   JS measures the real height into --stack-top — and the black
+   gradient lets a card slide under the heading rather than
+   colliding with the type. */
+@media (min-width: 901px) {
+  .section-head-only {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    padding-top: calc(var(--nav-h) - 16px);
+    padding-bottom: clamp(18px, 2.4vw, 32px);
+    background: linear-gradient(to bottom, #000 0%, #000 74%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .section-head-only .section-head {
+    margin-bottom: 0;
+  }
+
+  .svc {
+    z-index: 1;
+  }
+}
+
+/* On a short laptop window the pinned heading plus a 400px card
+   is more than the viewport holds, and the bottom of the deepest
+   card would be cut off — so the heading gives back some height. */
+@media (min-width: 901px) and (max-height: 820px) {
+  .section-head-only {
+    padding-top: calc(var(--nav-h) - 34px);
+    padding-bottom: 12px;
+  }
+
+  .section-head-only .eyebrow {
+    font-size: clamp(24px, 2.4vw, 32px);
+  }
+
+  .section-head-only .section-title {
+    font-size: clamp(42px, 5.4vw, 80px);
+  }
+
+  .section-head-only .section-head::after {
+    margin-top: 10px;
+  }
 }
 
 .stack {
@@ -1368,7 +1413,10 @@ main {
     gap: 16px 16px;
     min-height: 0;
     padding: 22px;
-    top: calc(var(--stack-top) + var(--i) * 10px);
+    /* Literal, not --stack-top: that variable is measured from
+       the sticky heading, which only exists above 900px, and a
+       stale value must not reach the phone layout. */
+    top: calc(76px + var(--i) * 10px);
   }
 
   .svc-media {

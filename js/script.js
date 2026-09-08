@@ -280,6 +280,38 @@ if (stacked.addEventListener) {
 paint();
 
 /* ---------------------------------------------------------
+   Where the service cards park
+
+   Above 900px the services heading is sticky, so the cards
+   have to stop below it. Its height depends on how the title
+   wraps, so measure it rather than guessing — the CSS keeps
+   its own fallback for the phone layout.
+   --------------------------------------------------------- */
+const stackHead = document.querySelector(".section-head-only");
+const headSticky = window.matchMedia("(min-width: 901px)");
+
+function syncStackTop() {
+  if (!stackHead) return;
+
+  if (!headSticky.matches) {
+    document.documentElement.style.removeProperty("--stack-top");
+    return;
+  }
+
+  const h = Math.round(stackHead.getBoundingClientRect().height);
+  document.documentElement.style.setProperty("--stack-top", h + 16 + "px");
+}
+
+if (stackHead) {
+  syncStackTop();
+  window.addEventListener("resize", syncStackTop, { passive: true });
+  if (headSticky.addEventListener) headSticky.addEventListener("change", syncStackTop);
+  // The heading is set in a webfont, so its height changes once
+  // that font swaps in.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncStackTop);
+}
+
+/* ---------------------------------------------------------
    Footer year
    --------------------------------------------------------- */
 const yearEl = document.getElementById("year");
