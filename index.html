@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=9">
+  <link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 
@@ -202,45 +202,61 @@
       <!-- The wheel turns on its own and stops while the pointer is
            over it. Every project is also a real button, so the same
            content is reachable without waiting for the rotation. -->
+      <!-- One component: the dial steps by exactly one segment, holds
+           for a beat, and the card in its centre changes on the beat
+           the step lands, so the wheel and the featured project are
+           never out of step with each other. -->
       <div class="carousel reveal" id="carousel">
-        <div class="arc" aria-hidden="true"></div>
-        <div class="ring" aria-hidden="true"></div>
+        <div class="dial-stage">
+          <div class="dial-clip">
+          <div class="dial" id="dial">
+            <div class="dial-face" aria-hidden="true"></div>
 
-        <div class="hub">
-          <div class="hub-shot" id="hubShot" aria-hidden="true">
-            <span class="shot-bar"></span>
-            <span class="shot-row"></span>
-            <span class="shot-row short"></span>
-            <span class="shot-block"></span>
+            <button class="spoke" type="button" style="--a: 0deg" data-name="Pulse Healthcare Dashboard" data-cat="Web app · Dashboard" data-tint="272">
+              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            </button>
+            <button class="spoke" type="button" style="--a: 60deg" data-name="Nomad Travel Booking" data-cat="Mobile app · Booking" data-tint="258">
+              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            </button>
+            <button class="spoke" type="button" style="--a: 120deg" data-name="Ledger Fintech Console" data-cat="Web app · Fintech" data-tint="286">
+              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            </button>
+            <button class="spoke" type="button" style="--a: 180deg" data-name="Aria Music Player" data-cat="Mobile app · Media" data-tint="248">
+              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            </button>
+            <button class="spoke" type="button" style="--a: 240deg" data-name="Verde Grocery Commerce" data-cat="E-commerce · Web" data-tint="295">
+              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            </button>
+            <button class="spoke" type="button" style="--a: 300deg" data-name="Atlas Design System" data-cat="Design system · Web" data-tint="265">
+              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            </button>
           </div>
-          <p class="hub-name"><span class="hub-dot" aria-hidden="true"></span><span id="hubName">Pulse Healthcare Dashboard</span></p>
-          <p class="hub-cat" id="hubCat">Web app · Dashboard</p>
-          <div class="hub-actions">
-            <a class="hub-btn" id="hubBehance" href="#" data-placeholder>Behance Design
-              <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
-            </a>
-            <a class="hub-btn ghost" id="hubProto" href="#" data-placeholder>Prototype</a>
+            <div class="dial-core" aria-hidden="true"></div>
           </div>
-        </div>
 
-        <div class="wheel" id="wheel">
-          <button class="spoke" type="button" style="--a: 0deg" data-name="Pulse Healthcare Dashboard" data-cat="Web app · Dashboard" data-tint="272">
-            <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+
+          <div class="hub" id="hub">
+            <div class="hub-shot" id="hubShot" aria-hidden="true">
+              <span class="shot-bar"></span>
+              <span class="shot-row"></span>
+              <span class="shot-row short"></span>
+              <span class="shot-block"></span>
+            </div>
+            <p class="hub-name"><span class="hub-dot" aria-hidden="true"></span><span id="hubName">Pulse Healthcare Dashboard</span></p>
+            <p class="hub-cat" id="hubCat">Web app · Dashboard</p>
+            <div class="hub-actions">
+              <a class="hub-btn" id="hubBehance" href="#" data-placeholder>Behance Design
+                <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
+              </a>
+              <a class="hub-btn ghost" id="hubProto" href="#" data-placeholder>Prototype</a>
+            </div>
+          </div>
+
+          <button class="dial-arrow prev" type="button" id="dialPrev" aria-label="Previous project">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <button class="spoke" type="button" style="--a: 60deg" data-name="Nomad Travel Booking" data-cat="Mobile app · Booking" data-tint="258">
-            <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
-          </button>
-          <button class="spoke" type="button" style="--a: 120deg" data-name="Ledger Fintech Console" data-cat="Web app · Fintech" data-tint="286">
-            <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
-          </button>
-          <button class="spoke" type="button" style="--a: 180deg" data-name="Aria Music Player" data-cat="Mobile app · Media" data-tint="248">
-            <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
-          </button>
-          <button class="spoke" type="button" style="--a: 240deg" data-name="Verde Grocery Commerce" data-cat="E-commerce · Web" data-tint="295">
-            <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
-          </button>
-          <button class="spoke" type="button" style="--a: 300deg" data-name="Atlas Design System" data-cat="Design system · Web" data-tint="265">
-            <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+          <button class="dial-arrow next" type="button" id="dialNext" aria-label="Next project">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
       </div>
@@ -320,6 +336,6 @@
     <p>Designed &amp; built with care</p>
   </footer>
 
-  <script src="js/script.js?v=9"></script>
+  <script src="js/script.js?v=11"></script>
 </body>
 </html>

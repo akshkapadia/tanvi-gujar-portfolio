@@ -324,77 +324,97 @@ if (stackHead) {
    card can actually be read, and clicking a project eases it
    round to the top rather than snapping.
    --------------------------------------------------------- */
-const wheel = document.getElementById("wheel");
+const dial = document.getElementById("dial");
 const carousel = document.getElementById("carousel");
 
-if (wheel && carousel) {
-  const spokes = [...wheel.querySelectorAll(".spoke")];
-  const base = spokes.map((s) => parseFloat(s.style.getPropertyValue("--a")) || 0);
+if (dial && carousel) {
+  const spokes = [...dial.querySelectorAll(".spoke")];
+  const STEP = 360 / spokes.length;
   const hubShot = document.getElementById("hubShot");
   const hubName = document.getElementById("hubName");
   const hubCat = document.getElementById("hubCat");
 
-  const DEG_PER_SEC = 3.2; // a full turn in just under two minutes
+  const HOLD = 2400; // a project sits at the top for this long
+  const TURN = 820; // and takes this long to hand over to the next
+
+  let index = 0;
   let angle = 0;
-  let goal = null;
+  let from = 0;
+  let to = 0;
+  let turning = false;
+  let mark = 0;
   let held = false;
-  let active = -1;
-  let last = 0;
 
-  // Signed distance from the top of the wheel, in (-180, 180].
-  const fromTop = (deg) => {
-    let d = (deg + 180) % 360;
-    if (d < 0) d += 360;
-    return d - 180;
-  };
+  // Ease-in-out so the dial gathers and sheds speed rather than
+  // starting and stopping dead.
+  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
-  function showActive() {
-    let best = 0;
-    let bestDist = Infinity;
-
+  function paintSpokes() {
     spokes.forEach((s, i) => {
-      const d = Math.abs(fromTop(base[i] + angle));
+      // How far this project is from the top of the dial, 0-180.
+      let d = Math.abs((((i * STEP + angle + 180) % 360) + 360) % 360 - 180);
 
-      // A project fades out as it reaches the top, where the card
-      // takes over showing it — otherwise the tile and the card
-      // would sit on top of each other at the apex of the arc.
-      const o = Math.min(Math.max((d - 20) / 26, 0), 1);
+      // It fades out as it arrives at the top, because that is where
+      // the card takes over showing it — otherwise the tile and the
+      // card would sit on top of one another.
+      const o = Math.min(Math.max((d - 22) / 24, 0), 1);
       s.style.opacity = o.toFixed(3);
       s.style.pointerEvents = o < 0.15 ? "none" : "";
-
-      if (d < bestDist) {
-        bestDist = d;
-        best = i;
-      }
     });
+  }
 
-    if (best === active) return;
-    active = best;
-
-    spokes.forEach((s, i) => s.toggleAttribute("data-active", i === best));
-
-    const s = spokes[best];
+  function showCard() {
+    const s = spokes[((index % spokes.length) + spokes.length) % spokes.length];
     hubName.textContent = s.dataset.name;
     hubCat.textContent = s.dataset.cat;
     hubShot.style.setProperty("--tint", s.dataset.tint);
   }
 
-  function frame(now) {
-    const dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
-    last = now;
+  function goTo(next) {
+    if (turning) return;
+    // Always turn by the shortest run of whole segments.
+    let delta = next - index;
+    while (delta > spokes.length / 2) delta -= spokes.length;
+    while (delta < -spokes.length / 2) delta += spokes.length;
+    if (!delta) return;
 
-    if (goal !== null) {
-      angle += (goal - angle) * 0.08;
-      if (Math.abs(goal - angle) < 0.15) {
-        angle = goal;
-        goal = null;
-      }
-    } else if (!held) {
-      angle += DEG_PER_SEC * dt;
+    index = next;
+    from = angle;
+    to = angle - delta * STEP;
+
+    if (reduceMotion) {
+      // No frame loop is running, so arrows and clicks jump.
+      angle = to;
+      dial.style.transform = "rotate(" + angle + "deg)";
+      showCard();
+      paintSpokes();
+      return;
     }
 
-    wheel.style.transform = "rotate(" + angle.toFixed(3) + "deg)";
-    showActive();
+    turning = true;
+    mark = performance.now();
+    carousel.setAttribute("data-turning", "");
+  }
+
+  function frame(now) {
+    if (turning) {
+      const p = Math.min((now - mark) / TURN, 1);
+      angle = from + (to - from) * ease(p);
+
+      if (p === 1) {
+        angle = to;
+        turning = false;
+        mark = now;
+        // The card changes on the beat the step lands.
+        showCard();
+        carousel.removeAttribute("data-turning");
+      }
+    } else if (!held && now - mark >= HOLD) {
+      goTo(index + 1);
+    }
+
+    dial.style.transform = "rotate(" + angle.toFixed(3) + "deg)";
+    paintSpokes();
     requestAnimationFrame(frame);
   }
 
@@ -402,6 +422,9 @@ if (wheel && carousel) {
     held = true;
   };
   const release = () => {
+    // Restart the beat from now, so leaving does not trigger an
+    // immediate jump because the clock ran on while paused.
+    if (held && !turning) mark = performance.now();
     held = false;
   };
 
@@ -413,20 +436,36 @@ if (wheel && carousel) {
   carousel.addEventListener("touchstart", hold, { passive: true });
   carousel.addEventListener("touchend", release, { passive: true });
 
-  spokes.forEach((s, i) => {
-    s.setAttribute("aria-label", s.dataset.name + " — " + s.dataset.cat);
-    s.addEventListener("click", () => {
-      // Take the short way round to the top from where it is now.
-      goal = angle - fromTop(base[i] + angle);
-    });
+  // Frames stop while the tab is in the background. Land the turn
+  // straight away rather than leaving the dial halfway round with
+  // its card faded out, waiting for a frame that will not come.
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden || !turning) return;
+    angle = to;
+    turning = false;
+    mark = performance.now();
+    dial.style.transform = "rotate(" + angle + "deg)";
+    showCard();
+    paintSpokes();
+    carousel.removeAttribute("data-turning");
   });
 
-  spokes.forEach((s, i) => s.style.setProperty("--tint", s.dataset.tint));
+  spokes.forEach((s, i) => {
+    s.style.setProperty("--tint", s.dataset.tint);
+    s.setAttribute("aria-label", s.dataset.name + " — " + s.dataset.cat);
+    s.addEventListener("click", () => goTo(i));
+  });
 
-  if (reduceMotion) {
-    showActive();
-    wheel.style.transform = "rotate(0deg)";
-  } else {
+  const prev = document.getElementById("dialPrev");
+  const next = document.getElementById("dialNext");
+  if (prev) prev.addEventListener("click", () => goTo(index - 1));
+  if (next) next.addEventListener("click", () => goTo(index + 1));
+
+  showCard();
+  paintSpokes();
+
+  if (!reduceMotion) {
+    mark = performance.now();
     requestAnimationFrame(frame);
   }
 }
