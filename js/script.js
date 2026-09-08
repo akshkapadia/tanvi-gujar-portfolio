@@ -306,9 +306,13 @@ if (stackHead) {
   syncStackTop();
   window.addEventListener("resize", syncStackTop, { passive: true });
   if (headSticky.addEventListener) headSticky.addEventListener("change", syncStackTop);
-  // The heading is set in a webfont, so its height changes once
-  // that font swaps in.
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncStackTop);
+
+  // Watching the heading itself catches every way its height can
+  // change — the webfont swapping in, the title rewrapping, the
+  // breakpoint resizing the type — where a resize listener alone
+  // left the cards parked against a stale measurement.
+  if ("ResizeObserver" in window) new ResizeObserver(syncStackTop).observe(stackHead);
+  else if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncStackTop);
 }
 
 /* ---------------------------------------------------------
