@@ -316,6 +316,122 @@ if (stackHead) {
 }
 
 /* ---------------------------------------------------------
+   Project wheel
+
+   The ring turns slowly and forever; whichever project is
+   nearest the top is the one the card above the arc shows.
+   Hovering (or focusing, or touching) holds it still so the
+   card can actually be read, and clicking a project eases it
+   round to the top rather than snapping.
+   --------------------------------------------------------- */
+const wheel = document.getElementById("wheel");
+const carousel = document.getElementById("carousel");
+
+if (wheel && carousel) {
+  const spokes = [...wheel.querySelectorAll(".spoke")];
+  const base = spokes.map((s) => parseFloat(s.style.getPropertyValue("--a")) || 0);
+  const hubShot = document.getElementById("hubShot");
+  const hubName = document.getElementById("hubName");
+  const hubCat = document.getElementById("hubCat");
+
+  const DEG_PER_SEC = 3.2; // a full turn in just under two minutes
+  let angle = 0;
+  let goal = null;
+  let held = false;
+  let active = -1;
+  let last = 0;
+
+  // Signed distance from the top of the wheel, in (-180, 180].
+  const fromTop = (deg) => {
+    let d = (deg + 180) % 360;
+    if (d < 0) d += 360;
+    return d - 180;
+  };
+
+  function showActive() {
+    let best = 0;
+    let bestDist = Infinity;
+
+    spokes.forEach((s, i) => {
+      const d = Math.abs(fromTop(base[i] + angle));
+
+      // A project fades out as it reaches the top, where the card
+      // takes over showing it — otherwise the tile and the card
+      // would sit on top of each other at the apex of the arc.
+      const o = Math.min(Math.max((d - 20) / 26, 0), 1);
+      s.style.opacity = o.toFixed(3);
+      s.style.pointerEvents = o < 0.15 ? "none" : "";
+
+      if (d < bestDist) {
+        bestDist = d;
+        best = i;
+      }
+    });
+
+    if (best === active) return;
+    active = best;
+
+    spokes.forEach((s, i) => s.toggleAttribute("data-active", i === best));
+
+    const s = spokes[best];
+    hubName.textContent = s.dataset.name;
+    hubCat.textContent = s.dataset.cat;
+    hubShot.style.setProperty("--tint", s.dataset.tint);
+  }
+
+  function frame(now) {
+    const dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
+    last = now;
+
+    if (goal !== null) {
+      angle += (goal - angle) * 0.08;
+      if (Math.abs(goal - angle) < 0.15) {
+        angle = goal;
+        goal = null;
+      }
+    } else if (!held) {
+      angle += DEG_PER_SEC * dt;
+    }
+
+    wheel.style.transform = "rotate(" + angle.toFixed(3) + "deg)";
+    showActive();
+    requestAnimationFrame(frame);
+  }
+
+  const hold = () => {
+    held = true;
+  };
+  const release = () => {
+    held = false;
+  };
+
+  carousel.addEventListener("pointerenter", hold);
+  carousel.addEventListener("pointerleave", release);
+  carousel.addEventListener("focusin", hold);
+  carousel.addEventListener("focusout", release);
+  // A touch has no hover to leave, so the pause ends with the touch.
+  carousel.addEventListener("touchstart", hold, { passive: true });
+  carousel.addEventListener("touchend", release, { passive: true });
+
+  spokes.forEach((s, i) => {
+    s.setAttribute("aria-label", s.dataset.name + " — " + s.dataset.cat);
+    s.addEventListener("click", () => {
+      // Take the short way round to the top from where it is now.
+      goal = angle - fromTop(base[i] + angle);
+    });
+  });
+
+  spokes.forEach((s, i) => s.style.setProperty("--tint", s.dataset.tint));
+
+  if (reduceMotion) {
+    showActive();
+    wheel.style.transform = "rotate(0deg)";
+  } else {
+    requestAnimationFrame(frame);
+  }
+}
+
+/* ---------------------------------------------------------
    Footer year
    --------------------------------------------------------- */
 const yearEl = document.getElementById("year");

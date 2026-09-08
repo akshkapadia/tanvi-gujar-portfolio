@@ -953,98 +953,238 @@ main {
 /* =========================================================
    Project
    ========================================================= */
-.project-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  gap: clamp(16px, 2vw, 24px);
-}
+/* =========================================================
+   Project — rotating semicircle
 
-.project {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: transform 0.5s var(--ease-out), border-color 0.45s ease, box-shadow 0.45s ease;
-}
+   The wheel is a point anchored at the bottom centre of the
+   stage. Each project is a spoke rotated around that point and
+   pushed out by the radius, so only the upper arc is on screen
+   and the rest of the ring waits below the fold.
+   ========================================================= */
+.carousel {
+  --r: clamp(196px, 27vw, 400px);
+  --tile-w: clamp(84px, 10.5vw, 146px);
+  --tile-h: calc(var(--tile-w) * 1.32);
 
-.project:hover {
-  transform: translateY(-10px);
-  border-color: rgba(157, 78, 221, 0.6);
-  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-}
-
-.project-cover {
   position: relative;
-  aspect-ratio: 16 / 10;
-  display: grid;
-  place-items: center;
-  background:
-    linear-gradient(135deg, rgba(157, 78, 221, 0.42), rgba(17, 0, 44, 0.9)),
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  height: calc(var(--r) + var(--tile-h) * 0.6 + clamp(150px, 17vw, 240px));
   overflow: hidden;
+  isolation: isolate;
 }
 
-.project-cover::before {
-  content: "";
+/* Purple ground the arc sits on. */
+.arc {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(70% 60% at 50% 120%, rgba(157, 78, 221, 0.55), transparent 70%);
-  transform: translateY(20%);
-  transition: transform 0.6s var(--ease-out);
+  left: 50%;
+  bottom: 0;
+  z-index: -1;
+  width: calc(var(--r) * 2 + var(--tile-w) * 1.6);
+  height: calc(var(--r) + var(--tile-h) * 0.55);
+  transform: translateX(-50%);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background:
+    radial-gradient(120% 100% at 50% 100%, rgba(157, 78, 221, 0.34), rgba(157, 78, 221, 0.06) 58%, transparent 76%);
 }
 
-.project:hover .project-cover::before {
-  transform: translateY(0);
+.ring {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: -1;
+  width: calc(var(--r) * 2);
+  height: calc(var(--r) * 2);
+  transform: translate(-50%, 50%);
+  border: 1px dashed rgba(157, 78, 221, 0.28);
+  border-radius: 50%;
 }
 
-.cover-note {
+.wheel {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 0;
+}
+
+.spoke {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--tile-w);
+  height: var(--tile-h);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  /* Rotate about the wheel's centre, then push out to the arc. */
+  transform-origin: 0 0;
+  transform: rotate(var(--a)) translate(calc(var(--tile-w) / -2), calc(-1 * var(--r) - var(--tile-h) / 2));
+}
+
+.tile {
   position: relative;
-  font-size: var(--fs-label);
-  letter-spacing: var(--ls-label);
-  color: rgba(255, 255, 255, 0.62);
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 12% 11%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  background:
+    linear-gradient(160deg, hsl(var(--tint, 272) 62% 46% / 0.55), hsl(var(--tint, 272) 70% 18% / 0.92));
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transition: border-color 0.5s ease, box-shadow 0.5s ease, filter 0.5s ease;
 }
 
-.project-body {
+.spoke[data-active] .tile {
+  border-color: rgba(216, 180, 254, 0.85);
+  box-shadow: 0 12px 34px rgba(157, 78, 221, 0.45);
+  filter: brightness(1.14);
+}
+
+.spoke:not([data-active]) .tile {
+  filter: brightness(0.72) saturate(0.8);
+}
+
+/* Abstract screen inside a cover — a stand-in for real artwork,
+   drawn rather than faked with a stock photo. */
+.shot-bar,
+.shot-row,
+.shot-block {
+  display: block;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.shot-bar {
+  width: 46%;
+  height: 5%;
+  margin-bottom: 11%;
+}
+
+.shot-row {
+  width: 78%;
+  height: 4%;
+  margin-bottom: 7%;
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.shot-row.short {
+  width: 52%;
+}
+
+.shot-block {
+  width: 100%;
+  height: 42%;
+  border-radius: 6px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+}
+
+/* ---- the card above the arc ---- */
+.hub {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  z-index: 2;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: clamp(20px, 2.2vw, 28px);
+  align-items: center;
+  gap: 10px;
+  width: min(92%, 380px);
+  text-align: center;
 }
 
-.project-meta {
+.hub-shot {
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  padding: 7% 8%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background:
+    linear-gradient(160deg, hsl(var(--tint, 272) 62% 48% / 0.6), hsl(var(--tint, 272) 70% 16% / 0.95));
+  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  transition: background 0.7s ease;
+}
+
+/* The dot is inline rather than a flex sibling so a two-line
+   name keeps it beside the first word instead of stranding it in
+   the vertical middle. */
+.hub-name {
+  margin-top: 4px;
+  font-weight: 600;
+  font-size: var(--fs-title);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.3px;
+  text-wrap: balance;
+}
+
+.hub-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 9px;
+  border-radius: 50%;
+  background: var(--color-purple);
+  vertical-align: middle;
+}
+
+.hub-cat {
   font-size: var(--fs-label);
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--text-faint);
 }
 
-.project-title {
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: var(--fs-title);
-  line-height: var(--lh-tight);
-  letter-spacing: -0.4px;
+.hub-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
 }
 
-.project-text {
-  font-weight: 300;
-  font-size: var(--fs-body);
-  line-height: var(--lh-body);
-  color: var(--text-dim);
-}
-
-.project-cta {
+.hub-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 7px;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.06);
   font-size: var(--fs-small);
   font-weight: 500;
-  color: var(--color-purple);
+  white-space: nowrap;
+  transition: transform 0.3s var(--ease-out), background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.project:hover .project-cta .arrow-icon {
-  transform: translate(3px, -3px);
+.hub-btn.ghost {
+  background: var(--color-purple-strong);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.hub-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(157, 78, 221, 0.28);
+  border-color: rgba(157, 78, 221, 0.75);
+}
+
+.hub-btn.ghost:hover {
+  background: var(--color-purple);
+}
+
+.hub-btn .arrow-icon {
+  width: 17px;
+  height: 17px;
+}
+
+.carousel-note {
+  margin-top: clamp(14px, 2vw, 22px);
+  text-align: center;
+  font-size: var(--fs-small);
+  color: var(--text-faint);
 }
 
 /* =========================================================
@@ -1487,6 +1627,28 @@ main {
 
   .svc-list {
     padding-left: 20px;
+  }
+
+  /* On a phone the card is nearly as tall as the wheel itself, so
+     the ring gets a smaller radius and the stage gets more height
+     to keep the card clear of the tiles on either side. */
+  .carousel {
+    --r: clamp(140px, 38vw, 230px);
+    --tile-w: clamp(62px, 17vw, 92px);
+    height: calc(var(--r) + var(--tile-h) * 0.6 + 330px);
+  }
+
+  .hub {
+    width: min(86%, 300px);
+    gap: 8px;
+  }
+
+  .hub-name {
+    font-size: var(--fs-sub);
+  }
+
+  .hub-btn {
+    padding: 0 16px;
   }
 }
 

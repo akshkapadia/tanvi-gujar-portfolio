@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=8">
+  <link rel="stylesheet" href="css/style.css?v=9">
 </head>
 <body>
 
@@ -199,43 +199,53 @@
         <h2 class="section-title">PROJECT</h2>
       </header>
 
-      <div class="project-list">
-        <a class="glass project reveal" href="#contact" style="--d: 0ms">
-          <div class="project-cover" aria-hidden="true"><span class="cover-note">[ADD PROJECT COVER]</span></div>
-          <div class="project-body">
-            <p class="project-meta">Case study · [YEAR]</p>
-            <h3 class="project-title">[PROJECT ONE NAME]</h3>
-            <p class="project-text">[One line on the problem you solved and the outcome.]</p>
-            <span class="project-cta">View case study
-              <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
-            </span>
-          </div>
-        </a>
+      <!-- The wheel turns on its own and stops while the pointer is
+           over it. Every project is also a real button, so the same
+           content is reachable without waiting for the rotation. -->
+      <div class="carousel reveal" id="carousel">
+        <div class="arc" aria-hidden="true"></div>
+        <div class="ring" aria-hidden="true"></div>
 
-        <a class="glass project reveal" href="#contact" style="--d: 110ms">
-          <div class="project-cover" aria-hidden="true"><span class="cover-note">[ADD PROJECT COVER]</span></div>
-          <div class="project-body">
-            <p class="project-meta">Case study · [YEAR]</p>
-            <h3 class="project-title">[PROJECT TWO NAME]</h3>
-            <p class="project-text">[One line on the problem you solved and the outcome.]</p>
-            <span class="project-cta">View case study
-              <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
-            </span>
+        <div class="hub">
+          <div class="hub-shot" id="hubShot" aria-hidden="true">
+            <span class="shot-bar"></span>
+            <span class="shot-row"></span>
+            <span class="shot-row short"></span>
+            <span class="shot-block"></span>
           </div>
-        </a>
+          <p class="hub-name"><span class="hub-dot" aria-hidden="true"></span><span id="hubName">Pulse Healthcare Dashboard</span></p>
+          <p class="hub-cat" id="hubCat">Web app · Dashboard</p>
+          <div class="hub-actions">
+            <a class="hub-btn" id="hubBehance" href="#" data-placeholder>Behance Design
+              <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
+            </a>
+            <a class="hub-btn ghost" id="hubProto" href="#" data-placeholder>Prototype</a>
+          </div>
+        </div>
 
-        <a class="glass project reveal" href="#contact" style="--d: 220ms">
-          <div class="project-cover" aria-hidden="true"><span class="cover-note">[ADD PROJECT COVER]</span></div>
-          <div class="project-body">
-            <p class="project-meta">Case study · [YEAR]</p>
-            <h3 class="project-title">[PROJECT THREE NAME]</h3>
-            <p class="project-text">[One line on the problem you solved and the outcome.]</p>
-            <span class="project-cta">View case study
-              <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
-            </span>
-          </div>
-        </a>
+        <div class="wheel" id="wheel">
+          <button class="spoke" type="button" style="--a: 0deg" data-name="Pulse Healthcare Dashboard" data-cat="Web app · Dashboard" data-tint="272">
+            <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+          </button>
+          <button class="spoke" type="button" style="--a: 60deg" data-name="Nomad Travel Booking" data-cat="Mobile app · Booking" data-tint="258">
+            <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+          </button>
+          <button class="spoke" type="button" style="--a: 120deg" data-name="Ledger Fintech Console" data-cat="Web app · Fintech" data-tint="286">
+            <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+          </button>
+          <button class="spoke" type="button" style="--a: 180deg" data-name="Aria Music Player" data-cat="Mobile app · Media" data-tint="248">
+            <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+          </button>
+          <button class="spoke" type="button" style="--a: 240deg" data-name="Verde Grocery Commerce" data-cat="E-commerce · Web" data-tint="295">
+            <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+          </button>
+          <button class="spoke" type="button" style="--a: 300deg" data-name="Atlas Design System" data-cat="Design system · Web" data-tint="265">
+            <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+          </button>
+        </div>
       </div>
+
+      <p class="carousel-note">Placeholder projects — replace the names, covers and links with real case studies.</p>
     </section>
 
     <!-- ============ EXPERIENCE ============ -->
@@ -310,6 +320,6 @@
     <p>Designed &amp; built with care</p>
   </footer>
 
-  <script src="js/script.js?v=8"></script>
+  <script src="js/script.js?v=9"></script>
 </body>
 </html>
