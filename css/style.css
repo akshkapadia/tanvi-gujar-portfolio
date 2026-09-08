@@ -575,17 +575,46 @@ main {
 }
 
 .section-head {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 2px;
   margin-bottom: clamp(32px, 5vw, 64px);
+}
+
+/* A soft purple bloom sat behind the heading. On a black page
+   a big headline reads as a grey shape until something lifts
+   it off the ground — this is what makes the section titles
+   register before the content below them. */
+.section-head::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: -8%;
+  top: 50%;
+  width: min(640px, 74%);
+  height: 190%;
+  transform: translateY(-50%);
+  background: radial-gradient(closest-side, rgba(157, 78, 221, 0.30), transparent 70%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.section-head::after {
+  content: "";
+  width: clamp(72px, 9vw, 124px);
+  height: 2px;
+  margin-top: clamp(14px, 1.6vw, 22px);
+  background: linear-gradient(90deg, var(--color-purple), rgba(157, 78, 221, 0));
 }
 
 .eyebrow {
   font-family: var(--font-script);
   font-size: clamp(30px, 3.6vw, 48px);
   line-height: 1.1;
-  color: var(--color-purple);
+  color: #c58bf5;
 }
 
 .section-title {
@@ -594,7 +623,9 @@ main {
   font-size: clamp(52px, 8.4vw, 128px);
   line-height: 0.92;
   letter-spacing: -2px;
-  background: linear-gradient(to bottom, #ffffff 30%, rgba(157, 78, 221, 0.85) 105%);
+  /* Stays bright the whole way down — the old ramp faded into
+     a dark purple that sank into the background. */
+  background: linear-gradient(to bottom, #ffffff 36%, #dcc0ff 84%, #b276ef 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -619,8 +650,10 @@ main {
    must be fully opaque (no backdrop-filter here) or the ones
    underneath show through the stack.
    ========================================================= */
+/* Extra runway under the heading so it holds the screen on its
+   own for a beat before the first card slides up over it. */
 .section-head-only {
-  padding-bottom: clamp(28px, 4vw, 56px);
+  padding-bottom: clamp(52px, 8vw, 104px);
 }
 
 .stack {
@@ -648,7 +681,7 @@ main {
   min-height: 400px;
   padding: 40px 40px 40px clamp(28px, 4.2vw, 60px);
   background: #121212;
-  box-shadow: -6px 8px 64px rgba(102, 70, 173, 0.73);
+  box-shadow: -4px 10px 72px rgba(183, 124, 246, 0.28);
   overflow: hidden;
 }
 
