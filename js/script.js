@@ -280,6 +280,42 @@ if (stacked.addEventListener) {
 paint();
 
 /* ---------------------------------------------------------
+   Where the service cards park
+
+   Above 900px the services heading is pinned, so the cards have
+   to stop below it. Its height depends on the type size and how
+   the title wraps, so measure it rather than guess — the CSS
+   carries a per-breakpoint default for the first paint and for
+   the phone layout.
+   --------------------------------------------------------- */
+const stackHead = document.querySelector(".section-head-only");
+const headSticky = window.matchMedia("(min-width: 901px)");
+
+function syncStackTop() {
+  if (!stackHead) return;
+
+  if (!headSticky.matches) {
+    document.documentElement.style.removeProperty("--stack-top");
+    return;
+  }
+
+  const h = Math.round(stackHead.getBoundingClientRect().height);
+  document.documentElement.style.setProperty("--stack-top", h + 16 + "px");
+}
+
+if (stackHead) {
+  syncStackTop();
+  if (headSticky.addEventListener) headSticky.addEventListener("change", syncStackTop);
+
+  // Watching the heading itself catches every way its height can
+  // change — the webfont swapping in, the title rewrapping, the
+  // breakpoint resizing the type — where a resize listener alone
+  // left the cards parked against a stale measurement.
+  if ("ResizeObserver" in window) new ResizeObserver(syncStackTop).observe(stackHead);
+  else window.addEventListener("resize", syncStackTop, { passive: true });
+}
+
+/* ---------------------------------------------------------
    Footer year
    --------------------------------------------------------- */
 const yearEl = document.getElementById("year");

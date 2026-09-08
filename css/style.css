@@ -670,21 +670,69 @@ main {
   padding-bottom: clamp(28px, 4vw, 56px);
 }
 
-/* The card is capped to what fits between where it parks and the
+/* The heading pins to the top and holds there until the last card
+   has scrolled past, so it is on screen for the whole stack. It
+   keeps the same type as every other section heading; the room the
+   cards need comes out of the card, not the heading.
+
+   The card is capped to what fits between where it parks and the
    bottom of the screen, counting the three 16px notches the deepest
    card sits lower and leaving a gap underneath, so no card's bottom
    edge runs past the fold. The floor is set by the tallest card's
    copy — shrink past that and max-height starts clipping text. */
 @media (min-width: 901px) {
+  /* Close-enough default so the first paint is right and the layout
+     survives the script not running; JS then replaces it with the
+     heading's measured height. */
+  :root {
+    --stack-top: 330px;
+  }
+
+  .section-head-only {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    padding-top: calc(var(--nav-h) - 14px);
+    padding-bottom: clamp(20px, 2.4vw, 34px);
+    background: linear-gradient(to bottom, #000 0%, #000 76%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .section-head-only .section-head {
+    margin-bottom: 0;
+  }
+
   .svc {
-    --card-h: clamp(340px, calc(100svh - var(--stack-top) - 48px - 72px), 400px);
+    --card-h: clamp(300px, calc(100svh - var(--stack-top) - 48px - 56px), 372px);
+    z-index: 1;
     min-height: var(--card-h);
     max-height: var(--card-h);
   }
+}
 
-  .svc-media {
-    align-self: stretch;
-    height: 100%;
+/* On a short window the full-size heading plus a readable card is
+   more than the viewport holds, so the heading gives back its
+   padding and a little of its type rather than the stack losing
+   cards off the bottom edge. */
+@media (min-width: 901px) and (max-height: 800px) {
+  :root {
+    --stack-top: 232px;
+  }
+
+  .section-head-only {
+    padding-top: calc(var(--nav-h) - 40px);
+    padding-bottom: 16px;
+  }
+
+  .section-head-only .eyebrow {
+    font-size: clamp(24px, 2.6vw, 34px);
+  }
+
+  .section-head-only .section-title {
+    font-size: clamp(40px, 5.6vw, 84px);
+  }
+
+  .section-head-only .section-head::after {
+    margin-top: 12px;
   }
 }
 
@@ -711,11 +759,11 @@ main {
      another in place. */
   top: calc(var(--stack-top) + var(--i) * 16px);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 396px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 324px);
   align-items: center;
-  gap: clamp(18px, 2.6vw, 36px);
-  min-height: 340px;
-  padding: 30px 32px 30px clamp(24px, 3.4vw, 48px);
+  gap: clamp(24px, 4vw, 56px);
+  min-height: 300px;
+  padding: clamp(26px, 2.4vw, 34px) clamp(26px, 2.4vw, 34px) clamp(26px, 2.4vw, 34px) clamp(26px, 3.4vw, 48px);
   background: #121212;
   box-shadow: 0 6px 20px rgba(211, 178, 252, 0.13);
   overflow: hidden;
@@ -725,9 +773,6 @@ main {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  /* Without a cap the copy column runs the full width of a wide
-     card and the subtitle becomes one long unreadable line. */
-  max-width: 56ch;
 }
 
 /* Numeral and title sit on one line. `baseline` rather than
@@ -757,11 +802,15 @@ main {
   color: var(--color-purple);
 }
 
+/* The card runs the full width of the page, so the subtitle is the
+   one line that needs a measure of its own — left to fill the
+   column it becomes a single unreadable run. */
 .svc-sub {
   font-family: var(--font-body);
   font-weight: 500;
   font-size: var(--fs-sub);
   line-height: 1.45;
+  max-width: 46ch;
   color: #f1f1f1;
   text-wrap: pretty;
 }
@@ -782,10 +831,14 @@ main {
   list-style: disc;
 }
 
+/* Smaller than the copy block and centred against it, rather than
+   stretched to the card's full height — the picture supports the
+   text here, it does not compete with it. */
 .svc-media {
-  aspect-ratio: 3 / 2;
-  border-radius: 1px;
-  box-shadow: 0 4px 33.5px rgba(255, 255, 255, 0.16);
+  align-self: center;
+  aspect-ratio: 4 / 3;
+  border-radius: 2px;
+  box-shadow: 0 4px 24px rgba(255, 255, 255, 0.12);
   overflow: hidden;
 }
 
