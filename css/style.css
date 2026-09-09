@@ -881,16 +881,95 @@ main {
    ========================================================= */
 .about-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
-  gap: clamp(16px, 2vw, 24px);
-  align-items: start;
+  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: center;
 }
 
-.about-panel {
+/* ---- the ID badge ---- */
+.id-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  animation: badge-sway 7s ease-in-out infinite;
+  transform-origin: 50% 0%;
+}
+
+.id-lanyard {
+  width: clamp(96px, 11vw, 140px);
+  height: auto;
+  margin-bottom: -6px;
+}
+
+.id-card {
+  position: relative;
+  width: clamp(168px, 19vw, 240px);
+  aspect-ratio: 4 / 5;
+  padding: 14px 14px 18px;
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(157, 78, 221, 0.16);
+  transform: rotate(-2.5deg);
+}
+
+.id-card-hole {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  width: 34px;
+  height: 7px;
+  transform: translateX(-50%);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.id-card-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.id-card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes badge-sway {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+/* ---- the content column ---- */
+.about-content {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: clamp(26px, 3.4vw, 48px);
+}
+
+.about-hi {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(30px, 3.4vw, 46px);
+  line-height: 1;
+  letter-spacing: -0.5px;
+  color: var(--color-white);
+}
+
+.about-name {
+  color: var(--color-purple);
 }
 
 .about-lead {
@@ -934,11 +1013,27 @@ main {
   color: #fff;
 }
 
-.about-side {
+.about-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 56px);
+  margin-top: 8px;
+  padding-top: clamp(20px, 3vw, 32px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.meta-col {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: clamp(26px, 3.4vw, 40px);
+}
+
+.meta-heading {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--fs-sub);
+  color: var(--color-white);
+  margin-bottom: 8px;
 }
 
 .side-label {
@@ -946,10 +1041,10 @@ main {
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--text-faint);
-  margin-top: 18px;
+  margin-top: 12px;
 }
 
-.side-label:first-child {
+.side-label:first-of-type {
   margin-top: 0;
 }
 
@@ -960,12 +1055,39 @@ main {
 }
 
 .side-link {
+  display: block;
+  margin-top: 10px;
   font-weight: 500;
   font-size: var(--fs-body);
   color: var(--color-purple);
-  word-break: break-all;
+  word-break: break-word;
   border-bottom: 1px solid transparent;
   transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.software-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.software-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 22%;
+  overflow: hidden;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.14);
+  transition: transform 0.3s var(--ease-out);
+}
+
+.software-icon:hover {
+  transform: translateY(-3px);
+}
+
+.software-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .side-link:hover {
@@ -1686,6 +1808,21 @@ main {
 @media (max-width: 900px) {
   .about-grid {
     grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    text-align: center;
+  }
+
+  .about-meta {
+    grid-template-columns: minmax(0, 1fr);
+    text-align: left;
+  }
+
+  .software-row {
+    justify-content: center;
+  }
+
+  .chips {
+    justify-content: center;
   }
 
   /* The card keeps stacking on phones, rebuilt as: image

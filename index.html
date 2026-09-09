@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=19">
+  <link rel="stylesheet" href="css/style.css?v=20">
 </head>
 <body>
 
@@ -181,7 +181,33 @@
       </header>
 
       <div class="about-grid">
-        <div class="glass about-panel reveal">
+        <!-- A photo ID on a lanyard, tilted slightly and swaying very
+             gently — the lanyard is two SVG strokes converging on a
+             clip, the card is a plain glass sleeve around the photo
+             with a punch-hole, no printed text (matching the
+             reference: the card carries only the photo). -->
+        <div class="id-badge reveal">
+          <svg class="id-lanyard" viewBox="0 0 160 190" aria-hidden="true">
+            <path d="M18 0 C18 62 78 88 80 118" fill="none" stroke="url(#lanyardGrad)" stroke-width="15" stroke-linecap="round"/>
+            <path d="M142 0 C142 62 82 88 80 118" fill="none" stroke="url(#lanyardGrad)" stroke-width="15" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="lanyardGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#f2eee8"/>
+                <stop offset="1" stop-color="#c9c2ba"/>
+              </linearGradient>
+            </defs>
+            <rect x="70" y="112" width="20" height="16" rx="4" fill="#3a3a3a"/>
+          </svg>
+          <div class="id-card">
+            <span class="id-card-hole" aria-hidden="true"></span>
+            <div class="id-card-photo">
+              <img src="assets/img/about-id-photo.jpg" alt="Portrait of Tanvi Gujar" loading="lazy" width="640" height="799">
+            </div>
+          </div>
+        </div>
+
+        <div class="about-content reveal" style="--d: 120ms">
+          <p class="about-hi">Hi, I'm <span class="about-name">Tanvi</span></p>
           <p class="about-lead">I design digital products that people understand on the first try.</p>
           <p class="about-text">My work starts with the messy part — the research, the edge cases, the flow nobody wants to map — and ends with an interface that hides all of it. I care about the small things: the rhythm of spacing, the weight of a label, the half-second a transition should take.</p>
           <p class="about-text">Right now I'm looking for a product design role where craft and research carry equal weight.</p>
@@ -194,16 +220,30 @@
             <li class="chip">Usability Testing</li>
             <li class="chip">Design Systems</li>
           </ul>
-        </div>
 
-        <aside class="glass about-side reveal" style="--d: 120ms">
-          <p class="side-label">Currently</p>
-          <p class="side-value">Open to UI/UX roles</p>
-          <p class="side-label">Based in</p>
-          <p class="side-value">[YOUR CITY]</p>
-          <p class="side-label">Get in touch</p>
-          <a class="side-link" href="mailto:gujartanvi2610@gmail.com">gujartanvi2610@gmail.com</a>
-        </aside>
+          <div class="about-meta">
+            <div class="meta-col">
+              <p class="meta-heading">Contact</p>
+              <p class="side-label">Currently</p>
+              <p class="side-value">Open to UI/UX roles</p>
+              <p class="side-label">Based in</p>
+              <p class="side-value">[YOUR CITY]</p>
+              <a class="side-link" href="mailto:gujartanvi2610@gmail.com">gujartanvi2610@gmail.com</a>
+              <a class="side-link" href="#" data-placeholder>LinkedIn — [add your link]</a>
+              <a class="side-link" href="#" data-placeholder>Behance — [add your link]</a>
+            </div>
+
+            <div class="meta-col">
+              <p class="meta-heading">Software</p>
+              <ul class="software-row">
+                <li class="software-icon" title="Figma"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#F5F5F5"/><path d="M20 8h4a6 6 0 010 12h-4Z" fill="#F24E1E"/><path d="M20 20h4a6 6 0 010 12h-4Z" fill="#A259FF"/><path d="M20 32h4a6 6 0 11-6 6 6 6 0 016-6Z" fill="#0ACF83"/><circle cx="14" cy="14" r="6" fill="#FF7262"/><circle cx="14" cy="26" r="6" fill="#1ABCFE"/></svg></li>
+                <li class="software-icon" title="Adobe XD"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#470137"/><text x="24" y="32" font-family="Poppins, Arial, sans-serif" font-weight="600" font-size="20" fill="#FF61F6" text-anchor="middle">Xd</text></svg></li>
+                <li class="software-icon" title="Miro"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#FFDA1A"/><path d="M18 11h9l-6.5 10h7.5L15 38l4.5-13H12Z" fill="#050038"/></svg></li>
+                <li class="software-icon" title="Framer"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#ffffff"/><path d="M14 10h20v9H23Z" fill="#0055FF"/><path d="M14 19h9v9h9Z" fill="#0055FF"/><path d="M14 28h9l9 9H14Z" fill="#0055FF"/></svg></li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
