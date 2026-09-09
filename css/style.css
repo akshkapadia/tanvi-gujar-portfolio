@@ -879,11 +879,34 @@ main {
 /* =========================================================
    About
    ========================================================= */
+
+/* The heading pins to the top of the viewport for the whole section
+   — the same treatment Services uses — so scrolling through the
+   bio/contact/software content never loses the "you're in About"
+   context. The solid background is load-bearing, not cosmetic:
+   without it, whatever scrolls up underneath (starting with the ID
+   badge itself) would visually overlap the header text instead of
+   being cleanly covered by it as it passes beneath. */
+@media (min-width: 901px) {
+  #about > .section-head {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    padding-top: calc(var(--nav-h) - 14px);
+    padding-bottom: clamp(20px, 2.4vw, 34px);
+    background: linear-gradient(to bottom, #000 0%, #000 78%, rgba(0, 0, 0, 0) 100%);
+  }
+}
+
 .about-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr);
   gap: clamp(28px, 5vw, 64px);
   align-items: center;
+  /* Keeps the swaying badge clear of the pinned header above it —
+     without this gap the lanyard's own sway could still graze the
+     header's lower edge even though the header covers it opaquely. */
+  padding-top: clamp(8px, 1.5vw, 20px);
 }
 
 /* ---- the ID badge ---- */
