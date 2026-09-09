@@ -873,17 +873,22 @@ main {
   gap: 18px;
 }
 
+/* Lying on its side rather than upright — the body's long axis runs
+   horizontal, so the box itself is built wide (not a portrait shape
+   spun with `transform`, which would keep its narrow layout footprint
+   and spill outside it). The "front" — seam and scroll wheel — faces
+   right. */
 .tech-mouse {
   position: relative;
-  width: clamp(112px, 13vw, 152px);
+  width: clamp(172px, 21vw, 232px);
 }
 
 .tech-mouse-glow {
   position: absolute;
   left: 50%;
-  top: 46%;
-  width: 220%;
-  height: 130%;
+  top: 50%;
+  width: 150%;
+  height: 210%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background: radial-gradient(closest-side, rgba(157, 78, 221, 0.34), transparent 72%);
@@ -892,8 +897,8 @@ main {
 
 .tech-mouse-body {
   position: relative;
-  aspect-ratio: 5 / 8;
-  border-radius: 46% 46% 42% 42% / 30% 30% 20% 20%;
+  aspect-ratio: 8 / 5;
+  border-radius: 999px;
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(157, 78, 221, 0.08));
   border: 1.5px solid rgba(255, 255, 255, 0.28);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.14);
@@ -901,20 +906,20 @@ main {
 
 .tech-mouse-seam {
   position: absolute;
-  left: 50%;
-  top: 8%;
-  width: 1px;
-  height: 30%;
+  top: 50%;
+  right: 10%;
+  width: 26%;
+  height: 1px;
   background: rgba(255, 255, 255, 0.22);
 }
 
 .tech-mouse-wheel {
   position: absolute;
-  left: 50%;
-  top: 15%;
-  width: 20%;
-  height: 24%;
-  transform: translateX(-50%);
+  top: 50%;
+  right: 16%;
+  width: 22%;
+  height: 28%;
+  transform: translateY(-50%);
   border-radius: 40px;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.22);
@@ -923,11 +928,11 @@ main {
 
 .tech-mouse-dot {
   position: absolute;
-  left: 50%;
-  top: 0;
-  width: 62%;
+  top: 50%;
+  left: 0;
+  height: 60%;
   aspect-ratio: 1;
-  transform: translateX(-50%);
+  transform: translateY(-50%);
   border-radius: 50%;
   background: var(--color-purple);
   box-shadow: 0 0 10px rgba(157, 78, 221, 0.8);
@@ -943,7 +948,7 @@ main {
 
 @keyframes mouse-scroll {
   0% {
-    top: 6%;
+    left: 6%;
     opacity: 0;
   }
   20% {
@@ -953,7 +958,7 @@ main {
     opacity: 1;
   }
   100% {
-    top: 68%;
+    left: 66%;
     opacity: 0;
   }
 }
@@ -1005,6 +1010,10 @@ main {
   transform: rotate(var(--a)) translate(calc(var(--tile) / -2), calc(-1 * var(--r) - var(--tile) / 2));
 }
 
+/* No counter-rotation: each icon is rigidly fixed to the ring, so as
+   it travels round it turns through every orientation — sideways at
+   3 and 9 o'clock, fully upside down at the bottom of its own arc —
+   the way a mark welded to a wheel's rim actually behaves. */
 .orbit-icon {
   display: block;
   width: var(--tile);
@@ -1012,9 +1021,6 @@ main {
   border-radius: 22%;
   overflow: hidden;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.14);
-  /* Counter-spins at the same rate the ring turns, so the icon
-     itself never rotates — only its position on the ring does. */
-  animation: orbit-counter-spin 26s linear infinite;
 }
 
 .orbit-icon svg {
@@ -1026,12 +1032,6 @@ main {
 @keyframes orbit-spin {
   to {
     transform: rotate(360deg);
-  }
-}
-
-@keyframes orbit-counter-spin {
-  to {
-    transform: rotate(-360deg);
   }
 }
 
