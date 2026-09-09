@@ -854,8 +854,8 @@ main {
 }
 
 /* =========================================================
-   Technology — a vertical string of tool icons drifting past
-   on the left, a mouse with a genuinely spinning scroll wheel
+   Technology — a semicircle of tool icons on the left, a mouse
+   with a genuinely spinning scroll wheel, facing that semicircle,
    on the right.
    ========================================================= */
 .tech-grid {
@@ -865,7 +865,12 @@ main {
   gap: clamp(32px, 6vw, 72px);
 }
 
-/* ---- left: the rail ---- */
+/* ---- left: the icon semicircle ----
+   The ring is anchored at the LEFT edge of the stage, so only its
+   right-opening half is ever inside the stage's own bounds — a true
+   semicircle, not a full ring cropped by a mask. Each icon travels
+   the arc vertically (up over the top, down through the bottom) as
+   the ring turns. */
 .tech-rail-panel {
   display: flex;
   flex-direction: column;
@@ -874,70 +879,94 @@ main {
 }
 
 .rail-stage {
+  --r: clamp(92px, 11vw, 152px);
+  --tile: clamp(46px, 5.6vw, 62px);
+
   position: relative;
-  width: 100%;
-  max-width: 300px;
-  height: clamp(300px, 34vw, 400px);
+  width: calc(var(--r) + var(--tile) * 0.7);
+  height: calc(var(--r) * 2 + var(--tile));
+  margin: 0 auto;
   overflow: hidden;
-  /* Fades the top and bottom of the string into the section
-     background, so icons arrive and leave softly rather than
-     being sliced off by a hard edge. */
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
-  mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
 }
 
-.rail-spine {
+.rail-arc {
   position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  transform: translateX(-50%);
-  background: linear-gradient(to bottom, transparent, rgba(157, 78, 221, 0.4), transparent);
+  left: 0;
+  top: 50%;
+  width: calc(var(--r) * 2);
+  height: calc(var(--r) * 2);
+  transform: translateY(-50%);
+  border: 1px dashed rgba(157, 78, 221, 0.28);
+  border-radius: 50%;
 }
 
-/* Two identical passes of the same four icons, translated by
-   exactly half the track's own height — the loop needs no reset
-   because the second half is indistinguishable from the first. */
-.rail-track {
+/* An invisible 0-size marker sitting exactly at the arc's rest
+   position (the rightmost point) — JS measures distance to this
+   rather than to the stage's own bounding-box centre, which would
+   not line up with the arc's actual peak. */
+.rail-peak {
   position: absolute;
-  left: 50%;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  animation: rail-scroll 24s linear infinite;
+  left: 0;
+  top: 50%;
+  transform: translate(var(--r), -50%);
 }
 
-@keyframes rail-scroll {
+.rail-ring {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: translateY(-50%);
+  animation: rail-spin 28s linear infinite;
+}
+
+@keyframes rail-spin {
   to {
-    transform: translateX(-50%) translateY(-50%);
+    transform: translateY(-50%) rotate(360deg);
   }
 }
 
 .rail-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  height: clamp(78px, 9vw, 100px);
-  transition: transform 0.4s var(--ease-out);
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  transform: rotate(var(--a)) translate(calc(var(--r) - var(--tile) / 2), calc(-1 * var(--tile) / 2));
 }
 
-.rail-tick {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 22px;
-  height: 1px;
-  transform: translate(-100%, -50%);
-  background: rgba(157, 78, 221, 0.4);
+/* Counters the ring's spin PLUS this item's own fixed --a offset,
+   so the icon is genuinely upright at every point on the arc — not
+   just correcting the ring's motion and leaving the item rotated by
+   whatever angle it happens to sit at.
+
+   --scale rides along inside the same animated transform (JS smooths
+   it toward 1 or 1.18 every frame) rather than living in a separate
+   `.is-featured { transform: scale(...) }` rule — a plain rule on
+   this property would be silently ignored, since a running CSS
+   animation always owns `transform` here and a static declaration
+   for the same property can never compete with it. */
+.rail-item-inner {
+  --scale: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: rail-counter-spin 28s linear infinite;
+}
+
+@keyframes rail-counter-spin {
+  from {
+    transform: rotate(calc(-1 * var(--a))) scale(var(--scale));
+  }
+  to {
+    transform: rotate(calc(-360deg - var(--a))) scale(var(--scale));
+  }
 }
 
 .rail-icon {
   position: relative;
-  width: clamp(46px, 5.6vw, 62px);
-  height: clamp(46px, 5.6vw, 62px);
+  width: var(--tile);
+  height: var(--tile);
   flex-shrink: 0;
   border-radius: 50%;
   overflow: hidden;
@@ -961,17 +990,16 @@ main {
   transition: opacity 0.35s ease, transform 0.35s ease, color 0.35s ease;
 }
 
-/* JS marks whichever item is nearest the stage's centre — the
-   drift itself never changes, only this highlight. */
-.rail-item.is-featured {
-  transform: scale(1.16);
-}
-
-.rail-item.is-featured .rail-icon {
+/* JS marks whichever item is nearest the arc's peak and eases its
+   --scale toward 1.18 (others back toward 1) every frame — the
+   ring's own spin never changes, only this highlight. The icon and
+   label glow are plain, un-animated elements, so a class-based rule
+   applies to them normally. */
+.rail-item-inner.is-featured .rail-icon {
   box-shadow: 0 14px 32px rgba(157, 78, 221, 0.5), 0 0 0 2px rgba(216, 180, 254, 0.85);
 }
 
-.rail-item.is-featured .rail-label {
+.rail-item-inner.is-featured .rail-label {
   opacity: 1;
   transform: translateX(0);
   color: var(--color-white);
@@ -995,8 +1023,8 @@ main {
 /* Lying on its side rather than upright — the body's long axis runs
    horizontal, so the box itself is built wide (not a portrait shape
    spun with `transform`, which would keep its narrow layout footprint
-   and spill outside it). The "front" — seam and scroll wheel — faces
-   right. */
+   and spill outside it). The "front" — the scroll wheel — faces left,
+   back toward the icon semicircle. */
 .tech-mouse {
   position: relative;
   width: clamp(172px, 21vw, 232px);
@@ -1039,7 +1067,7 @@ main {
 .tech-mouse-wheel {
   position: absolute;
   top: 50%;
-  right: 18%;
+  left: 18%;
   width: 30%;
   aspect-ratio: 1;
   transform: translateY(-50%);
@@ -1072,6 +1100,10 @@ main {
     grid-template-columns: minmax(0, 1fr);
     justify-items: center;
     gap: 48px;
+  }
+
+  .rail-stage {
+    --r: clamp(100px, 26vw, 150px);
   }
 }
 

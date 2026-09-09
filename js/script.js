@@ -471,32 +471,50 @@ if (dial && carousel) {
 }
 
 /* ---------------------------------------------------------
-   Technology rail — the drift is a pure CSS marquee (a doubled
-   list translated by exactly half its own height, so the loop
-   is seamless) and keeps running unconditionally. This loop
-   only WATCHES which icon is nearest the stage's centre and
-   marks it `.is-featured`; it never sets position or timing,
-   so it cannot make the drift stall, stutter, or resync.
+   Technology rail — a semicircle of icons that spins on a plain
+   CSS loop and keeps running unconditionally. This code only
+   WATCHES which icon is nearest the arc's peak (a 0-size marker
+   sitting at the arc's rest position, not the stage's own
+   bounding-box centre, which sits inside the anchor and would
+   never line up with anything) and eases its --scale up while
+   the rest ease back down. It never sets the ring's position or
+   timing, so it cannot make the spin stall, stutter, or resync.
    --------------------------------------------------------- */
-const railStage = document.querySelector(".rail-stage");
-const railItems = [...document.querySelectorAll(".rail-item")];
+const railPeak = document.getElementById("railPeak");
+const railInners = [...document.querySelectorAll(".rail-item-inner")];
 
-if (railStage && railItems.length) {
+if (railPeak && railInners.length) {
+  const scales = new Map(railInners.map((el) => [el, 1]));
+
   function markFeatured() {
-    const centerY = railStage.getBoundingClientRect().top + railStage.offsetHeight / 2;
+    const peak = railPeak.getBoundingClientRect();
+    const px = peak.left + peak.width / 2;
+    const py = peak.top + peak.height / 2;
+
     let closest = null;
     let closestDist = Infinity;
 
-    railItems.forEach((item) => {
-      const r = item.getBoundingClientRect();
-      const dist = Math.abs(r.top + r.height / 2 - centerY);
+    railInners.forEach((inner) => {
+      const r = inner.getBoundingClientRect();
+      const dx = r.left + r.width / 2 - px;
+      const dy = r.top + r.height / 2 - py;
+      const dist = dx * dx + dy * dy;
       if (dist < closestDist) {
         closestDist = dist;
-        closest = item;
+        closest = inner;
       }
     });
 
-    railItems.forEach((item) => item.classList.toggle("is-featured", item === closest));
+    railInners.forEach((inner) => {
+      const featured = inner === closest;
+      inner.classList.toggle("is-featured", featured);
+
+      const target = featured ? 1.18 : 1;
+      const current = scales.get(inner);
+      const next = reduceMotion ? target : current + (target - current) * 0.14;
+      scales.set(inner, next);
+      inner.style.setProperty("--scale", next.toFixed(3));
+    });
   }
 
   if (reduceMotion) {

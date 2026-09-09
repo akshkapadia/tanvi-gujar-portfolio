@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=14">
+  <link rel="stylesheet" href="css/style.css?v=15">
 </head>
 <body>
 
@@ -167,56 +167,44 @@
       </header>
 
       <div class="tech-grid reveal">
-        <!-- A vertical string of tool icons drifts past continuously —
-             a doubled list translated by exactly half its own height,
-             so the loop is seamless with no reset to hide. JS only
-             watches which icon is nearest the centre and marks it
-             `.is-featured`; it never touches position or timing, so
-             the drift itself can never stall or stutter. -->
+        <!-- Four icons ride a ring anchored at the LEFT edge of the
+             stage, so only its right-opening half is ever visible — a
+             true semicircle, not a straight list. The ring spins on a
+             plain CSS loop that never stops; each icon counter-spins
+             at the exact same rate PLUS its own fixed position angle,
+             so it stays genuinely upright the whole way round rather
+             than drifting to whatever angle it was placed at. JS only
+             watches which icon is nearest the peak (the rightmost
+             point of the arc, marked by `.rail-peak`) and toggles
+             `.is-featured` — it never touches position or timing. -->
         <div class="tech-rail-panel">
           <div class="rail-stage" aria-hidden="true">
-            <span class="rail-spine"></span>
-            <div class="rail-track" id="railTrack">
-              <div class="rail-item" data-name="Miro">
-                <span class="rail-tick"></span>
-                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#FFDA1A"/><path d="M18 11h9l-6.5 10h7.5L15 38l4.5-13H12Z" fill="#050038"/></svg></span>
-                <span class="rail-label">Miro</span>
+            <span class="rail-arc"></span>
+            <span class="rail-peak" id="railPeak"></span>
+            <div class="rail-ring" id="railRing">
+              <div class="rail-item" style="--a: 0deg" data-name="Miro">
+                <div class="rail-item-inner">
+                  <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#FFDA1A"/><path d="M18 11h9l-6.5 10h7.5L15 38l4.5-13H12Z" fill="#050038"/></svg></span>
+                  <span class="rail-label">Miro</span>
+                </div>
               </div>
-              <div class="rail-item" data-name="Figma">
-                <span class="rail-tick"></span>
-                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#F5F5F5"/><path d="M20 8h4a6 6 0 010 12h-4Z" fill="#F24E1E"/><path d="M20 20h4a6 6 0 010 12h-4Z" fill="#A259FF"/><path d="M20 32h4a6 6 0 11-6 6 6 6 0 016-6Z" fill="#0ACF83"/><circle cx="14" cy="14" r="6" fill="#FF7262"/><circle cx="14" cy="26" r="6" fill="#1ABCFE"/></svg></span>
-                <span class="rail-label">Figma</span>
+              <div class="rail-item" style="--a: 90deg" data-name="Figma">
+                <div class="rail-item-inner">
+                  <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#F5F5F5"/><path d="M20 8h4a6 6 0 010 12h-4Z" fill="#F24E1E"/><path d="M20 20h4a6 6 0 010 12h-4Z" fill="#A259FF"/><path d="M20 32h4a6 6 0 11-6 6 6 6 0 016-6Z" fill="#0ACF83"/><circle cx="14" cy="14" r="6" fill="#FF7262"/><circle cx="14" cy="26" r="6" fill="#1ABCFE"/></svg></span>
+                  <span class="rail-label">Figma</span>
+                </div>
               </div>
-              <div class="rail-item" data-name="Adobe XD">
-                <span class="rail-tick"></span>
-                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#470137"/><text x="24" y="32" font-family="Poppins, Arial, sans-serif" font-weight="600" font-size="20" fill="#FF61F6" text-anchor="middle">Xd</text></svg></span>
-                <span class="rail-label">Adobe XD</span>
+              <div class="rail-item" style="--a: 180deg" data-name="Adobe XD">
+                <div class="rail-item-inner">
+                  <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#470137"/><text x="24" y="32" font-family="Poppins, Arial, sans-serif" font-weight="600" font-size="20" fill="#FF61F6" text-anchor="middle">Xd</text></svg></span>
+                  <span class="rail-label">Adobe XD</span>
+                </div>
               </div>
-              <div class="rail-item" data-name="Framer">
-                <span class="rail-tick"></span>
-                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#ffffff"/><path d="M14 10h20v9H23Z" fill="#0055FF"/><path d="M14 19h9v9h9Z" fill="#0055FF"/><path d="M14 28h9l9 9H14Z" fill="#0055FF"/></svg></span>
-                <span class="rail-label">Framer</span>
-              </div>
-              <!-- Repeated so the marquee wraps with nothing to hide. -->
-              <div class="rail-item" data-name="Miro">
-                <span class="rail-tick"></span>
-                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#FFDA1A"/><path d="M18 11h9l-6.5 10h7.5L15 38l4.5-13H12Z" fill="#050038"/></svg></span>
-                <span class="rail-label">Miro</span>
-              </div>
-              <div class="rail-item" data-name="Figma">
-                <span class="rail-tick"></span>
-                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#F5F5F5"/><path d="M20 8h4a6 6 0 010 12h-4Z" fill="#F24E1E"/><path d="M20 20h4a6 6 0 010 12h-4Z" fill="#A259FF"/><path d="M20 32h4a6 6 0 11-6 6 6 6 0 016-6Z" fill="#0ACF83"/><circle cx="14" cy="14" r="6" fill="#FF7262"/><circle cx="14" cy="26" r="6" fill="#1ABCFE"/></svg></span>
-                <span class="rail-label">Figma</span>
-              </div>
-              <div class="rail-item" data-name="Adobe XD">
-                <span class="rail-tick"></span>
-                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#470137"/><text x="24" y="32" font-family="Poppins, Arial, sans-serif" font-weight="600" font-size="20" fill="#FF61F6" text-anchor="middle">Xd</text></svg></span>
-                <span class="rail-label">Adobe XD</span>
-              </div>
-              <div class="rail-item" data-name="Framer">
-                <span class="rail-tick"></span>
-                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#ffffff"/><path d="M14 10h20v9H23Z" fill="#0055FF"/><path d="M14 19h9v9h9Z" fill="#0055FF"/><path d="M14 28h9l9 9H14Z" fill="#0055FF"/></svg></span>
-                <span class="rail-label">Framer</span>
+              <div class="rail-item" style="--a: 270deg" data-name="Framer">
+                <div class="rail-item-inner">
+                  <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#ffffff"/><path d="M14 10h20v9H23Z" fill="#0055FF"/><path d="M14 19h9v9h9Z" fill="#0055FF"/><path d="M14 28h9l9 9H14Z" fill="#0055FF"/></svg></span>
+                  <span class="rail-label">Framer</span>
+                </div>
               </div>
             </div>
           </div>
@@ -417,6 +405,6 @@
     <p>Designed &amp; built with care</p>
   </footer>
 
-  <script src="js/script.js?v=13"></script>
+  <script src="js/script.js?v=14"></script>
 </body>
 </html>
