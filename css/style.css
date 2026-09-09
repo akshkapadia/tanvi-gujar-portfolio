@@ -1100,11 +1100,42 @@ main {
    size its own clearance below the hub card, which now deliberately
    overflows .carousel's own box. */
 #project {
-  --r: clamp(226px, 31vw, 440px);
-  --tile-w: clamp(74px, 9.4vw, 130px);
+  --r: clamp(150px, 18vw, 224px);
+  --tile-w: clamp(56px, 6.4vw, 88px);
   --tile-h: calc(var(--tile-w) * 1.3);
   /* Where the projects sit on the radius, as a fraction of it. */
   --ring: 0.71;
+}
+
+/* The whole wheel — label included — now lives inside one bounded
+   glass card rather than sprawling as a page-width section, so the
+   frame's own max-width/padding is what keeps this compact. */
+.project-frame {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: clamp(24px, 3.4vw, 36px) clamp(20px, 3vw, 32px) clamp(32px, 4vw, 44px);
+  overflow: hidden;
+}
+
+.project-frame-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: clamp(10px, 1.6vw, 18px);
+  text-align: center;
+}
+
+.project-frame-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-title);
+  letter-spacing: -0.5px;
+  background: linear-gradient(to bottom, #ffffff 36%, #dcc0ff 84%, #b276ef 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 .carousel {
@@ -1289,12 +1320,12 @@ main {
    part of the effect, not empty space to fill.
 
    Anchored flush with the stage's own bottom edge (never past it —
-   .hub is a bottom-anchored stack with the name/category/buttons
-   BELOW the image, so anything more negative here pushes that whole
-   tail past the semicircle's own boundary, which is exactly the
-   overlap this must avoid). The card is free to run tall enough that
-   its TOP pokes past the arc instead — that's the reference's own
-   read: the poster rises above the wheel, not below it. */
+   pushing it lower would cut into the semicircle's own boundary,
+   which is exactly the overlap this must avoid). The card is free to
+   run tall enough that its TOP pokes past the arc instead — that's
+   the reference's own read: the poster rises above the wheel, not
+   below it. .project-frame's own top padding gives that poke room
+   to clear the frame's edge without being clipped. */
 .hub {
   position: absolute;
   left: 50%;
@@ -1304,8 +1335,11 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 9px;
-  width: min(54%, 262px);
+  /* Scaled off --r (not a flat percentage of the stage) so the card
+     always stays inside the gap the arrows sit in — that gap itself
+     is a fraction of --r, and a flat percentage let the two collide
+     at the smaller end of the desktop range. */
+  width: clamp(56px, calc(var(--r) * 1.04 - 112px), 140px);
   text-align: center;
   transition: opacity 0.36s ease, transform 0.36s var(--ease-out);
 }
@@ -1362,92 +1396,6 @@ main {
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
-}
-
-/* With the card now flush to the semicircle's own boundary, this
-   caption sits over the dial-face's wedge pattern, not over dark
-   background — the backdrop here is load-bearing, not decorative,
-   so the name/category read cleanly instead of fighting the colour
-   showing through behind them. */
-.hub-caption {
-  margin-top: 4px;
-  padding: 8px 16px 10px;
-  border-radius: 12px;
-  background: rgba(5, 0, 8, 0.72);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-/* The dot is inline rather than a flex sibling so a two-line
-   name keeps it beside the first word instead of stranding it in
-   the vertical middle. */
-.hub-name {
-  font-weight: 600;
-  font-size: var(--fs-title);
-  line-height: var(--lh-tight);
-  letter-spacing: -0.3px;
-  text-wrap: balance;
-}
-
-.hub-dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 9px;
-  border-radius: 50%;
-  background: var(--color-purple);
-  vertical-align: middle;
-}
-
-.hub-cat {
-  margin-top: 4px;
-  font-size: var(--fs-label);
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-  color: var(--text-faint);
-}
-
-.hub-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 6px;
-}
-
-.hub-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 44px;
-  padding: 0 14px;
-  border-radius: 50px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  background: rgba(12, 3, 18, 0.72);
-  font-size: 13px;
-  font-weight: 500;
-  white-space: nowrap;
-  transition: transform 0.3s var(--ease-out), background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.hub-btn.ghost {
-  background: var(--color-purple-strong);
-  border-color: rgba(255, 255, 255, 0.32);
-}
-
-.hub-btn:hover {
-  transform: translateY(-2px);
-  background: rgba(157, 78, 221, 0.28);
-  border-color: rgba(157, 78, 221, 0.75);
-}
-
-.hub-btn.ghost:hover {
-  background: var(--color-purple);
-}
-
-.hub-btn .arrow-icon {
-  width: 17px;
-  height: 17px;
 }
 
 .carousel-note {
@@ -1920,38 +1868,28 @@ main {
      comment) so .carousel-note's own clearance tracks this override
      too, not just .carousel's internals. */
   #project {
-    /* 44vw keeps the dial (two radii wide) inside the page padding
-       — anything larger and the section scrolls sideways. */
-    --r: clamp(150px, 44vw, 290px);
+    /* 34vw keeps the dial (two radii wide) inside the frame's own
+       padding — anything larger and the frame scrolls sideways. */
+    --r: clamp(110px, 34vw, 180px);
     /* Projects ride further out so the card does not cover them. */
     --ring: 0.84;
   }
 
+  .project-frame {
+    padding: clamp(20px, 5vw, 28px) clamp(14px, 4vw, 22px) clamp(24px, 5vw, 32px);
+  }
+
   .carousel {
-    --tile-w: clamp(52px, 13vw, 76px);
+    --tile-w: clamp(40px, 11vw, 58px);
   }
 
   .hub {
-    width: min(38%, 156px);
-    gap: 6px;
-  }
-
-  .hub-name {
-    font-size: var(--fs-sub);
-  }
-
-  .hub-cat {
-    font-size: 11px;
-  }
-
-  .hub-btn {
-    min-height: 40px;
-    padding: 0 14px;
+    width: min(25%, 88px);
   }
 
   .dial-arrow {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
   }
 
   /* .prev never got a matching mobile override before — it was

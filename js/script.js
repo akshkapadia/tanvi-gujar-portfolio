@@ -331,8 +331,6 @@ if (dial && carousel) {
   const spokes = [...dial.querySelectorAll(".spoke")];
   const STEP = 360 / spokes.length;
   const hubShot = document.getElementById("hubShot");
-  const hubName = document.getElementById("hubName");
-  const hubCat = document.getElementById("hubCat");
 
   const HOLD = 2400; // a project sits at the top for this long
   const TURN = 820; // and takes this long to hand over to the next
@@ -365,8 +363,6 @@ if (dial && carousel) {
 
   function showCard() {
     const s = spokes[((index % spokes.length) + spokes.length) % spokes.length];
-    hubName.textContent = s.dataset.name;
-    hubCat.textContent = s.dataset.cat;
     hubShot.style.setProperty("--tint", s.dataset.tint);
   }
 
@@ -452,7 +448,9 @@ if (dial && carousel) {
 
   spokes.forEach((s, i) => {
     s.style.setProperty("--tint", s.dataset.tint);
-    s.setAttribute("aria-label", s.dataset.name + " — " + s.dataset.cat);
+    // No project name ships with these covers, so screen readers get
+    // a numbered fallback rather than reading "undefined".
+    s.setAttribute("aria-label", "Project " + (i + 1));
     s.addEventListener("click", () => goTo(i));
   });
 
