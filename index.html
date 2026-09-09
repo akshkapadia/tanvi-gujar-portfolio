@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=11">
+  <link rel="stylesheet" href="css/style.css?v=12">
 </head>
 <body>
 
@@ -27,6 +27,7 @@
     <nav class="nav-pill" id="navPill" aria-label="Primary">
       <a href="#home" class="nav-link active" data-nav>Home</a>
       <a href="#services" class="nav-link" data-nav>Services</a>
+      <a href="#technology" class="nav-link" data-nav>Technology</a>
       <a href="#about" class="nav-link" data-nav>About</a>
       <a href="#project" class="nav-link" data-nav>Project</a>
       <a href="#experience" class="nav-link" data-nav>Experience</a>
@@ -155,6 +156,65 @@
             <img src="assets/img/svc-prototyping.jpg" alt="User journey map on a whiteboard beside tablets showing prototype screens" loading="lazy" width="980" height="653">
           </div>
         </article>
+      </div>
+    </section>
+
+    <!-- ============ TECHNOLOGY ============ -->
+    <section class="section" id="technology">
+      <header class="section-head reveal">
+        <p class="eyebrow">What I use</p>
+        <h2 class="section-title">TECHNOLOGY</h2>
+      </header>
+
+      <div class="tech-grid reveal">
+        <!-- The scroll dot loops continuously — fade in, glide down,
+             fade out, restart from the top — so the wheel always
+             reads as mid-motion, never as freshly reset. -->
+        <div class="tech-mouse-panel">
+          <div class="tech-mouse">
+            <span class="tech-mouse-glow" aria-hidden="true"></span>
+            <div class="tech-mouse-body" aria-hidden="true">
+              <span class="tech-mouse-seam"></span>
+              <span class="tech-mouse-wheel"><span class="tech-mouse-dot"></span></span>
+            </div>
+          </div>
+          <p class="tech-mouse-caption">Scroll to explore</p>
+        </div>
+
+        <!-- The ring spins forever at a fixed slow speed — no hold,
+             no step, nothing to hover to pause. Each icon counter-
+             spins at the same rate so it stays upright as it travels,
+             and the stage clips to the icons' path, so only the
+             top of the loop is ever on screen: one tool arrives as
+             the last one leaves. -->
+        <div class="tech-orbit-panel">
+          <div class="orbit-stage">
+            <span class="orbit-ring" aria-hidden="true"></span>
+            <div class="orbit" aria-hidden="true">
+              <div class="orbit-item" style="--a: 0deg">
+                <span class="orbit-icon">
+                  <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#FFDA1A"/><path d="M18 11h9l-6.5 10h7.5L15 38l4.5-13H12Z" fill="#050038"/></svg>
+                </span>
+              </div>
+              <div class="orbit-item" style="--a: 90deg">
+                <span class="orbit-icon">
+                  <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#F5F5F5"/><path d="M20 8h4a6 6 0 010 12h-4Z" fill="#F24E1E"/><path d="M20 20h4a6 6 0 010 12h-4Z" fill="#A259FF"/><path d="M20 32h4a6 6 0 11-6 6 6 6 0 016-6Z" fill="#0ACF83"/><circle cx="14" cy="14" r="6" fill="#FF7262"/><circle cx="14" cy="26" r="6" fill="#1ABCFE"/></svg>
+                </span>
+              </div>
+              <div class="orbit-item" style="--a: 180deg">
+                <span class="orbit-icon">
+                  <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#470137"/><text x="24" y="32" font-family="Poppins, Arial, sans-serif" font-weight="600" font-size="20" fill="#FF61F6" text-anchor="middle">Xd</text></svg>
+                </span>
+              </div>
+              <div class="orbit-item" style="--a: 270deg">
+                <span class="orbit-icon">
+                  <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#ffffff"/><path d="M14 10h20v9H23Z" fill="#0055FF"/><path d="M14 19h9v9h9Z" fill="#0055FF"/><path d="M14 28h9l9 9H14Z" fill="#0055FF"/></svg>
+                </span>
+              </div>
+            </div>
+          </div>
+          <p class="orbit-caption">Miro · Figma · Adobe XD · Framer</p>
+        </div>
       </div>
     </section>
 
@@ -336,6 +396,6 @@
     <p>Designed &amp; built with care</p>
   </footer>
 
-  <script src="js/script.js?v=11"></script>
+  <script src="js/script.js?v=12"></script>
 </body>
 </html>
