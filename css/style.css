@@ -854,18 +854,137 @@ main {
 }
 
 /* =========================================================
-   Technology — scrolling mouse + a continuously spinning
-   semicircle of tool icons. Both sides run on plain CSS
-   keyframes, nothing JS-driven, so neither can stall.
+   Technology — a vertical string of tool icons drifting past
+   on the left, a mouse with a genuinely spinning scroll wheel
+   on the right.
    ========================================================= */
 .tech-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.86fr);
   align-items: center;
   gap: clamp(32px, 6vw, 72px);
 }
 
-/* ---- left: the mouse ---- */
+/* ---- left: the rail ---- */
+.tech-rail-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.rail-stage {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  height: clamp(300px, 34vw, 400px);
+  overflow: hidden;
+  /* Fades the top and bottom of the string into the section
+     background, so icons arrive and leave softly rather than
+     being sliced off by a hard edge. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+}
+
+.rail-spine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom, transparent, rgba(157, 78, 221, 0.4), transparent);
+}
+
+/* Two identical passes of the same four icons, translated by
+   exactly half the track's own height — the loop needs no reset
+   because the second half is indistinguishable from the first. */
+.rail-track {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: rail-scroll 24s linear infinite;
+}
+
+@keyframes rail-scroll {
+  to {
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+.rail-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: clamp(78px, 9vw, 100px);
+  transition: transform 0.4s var(--ease-out);
+}
+
+.rail-tick {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 22px;
+  height: 1px;
+  transform: translate(-100%, -50%);
+  background: rgba(157, 78, 221, 0.4);
+}
+
+.rail-icon {
+  position: relative;
+  width: clamp(46px, 5.6vw, 62px);
+  height: clamp(46px, 5.6vw, 62px);
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.16);
+  transition: box-shadow 0.4s ease;
+}
+
+.rail-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.rail-label {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--text-dim);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.35s ease, transform 0.35s ease, color 0.35s ease;
+}
+
+/* JS marks whichever item is nearest the stage's centre — the
+   drift itself never changes, only this highlight. */
+.rail-item.is-featured {
+  transform: scale(1.16);
+}
+
+.rail-item.is-featured .rail-icon {
+  box-shadow: 0 14px 32px rgba(157, 78, 221, 0.5), 0 0 0 2px rgba(216, 180, 254, 0.85);
+}
+
+.rail-item.is-featured .rail-label {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--color-white);
+}
+
+.rail-caption {
+  font-size: var(--fs-small);
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  text-align: center;
+}
+
+/* ---- right: the mouse ---- */
 .tech-mouse-panel {
   display: flex;
   flex-direction: column;
@@ -906,37 +1025,39 @@ main {
 
 .tech-mouse-seam {
   position: absolute;
+  left: 8%;
+  right: 8%;
   top: 50%;
-  right: 10%;
-  width: 26%;
   height: 1px;
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.2);
 }
 
+/* A real ring of ridges, not a dot in a slot — it spins in place,
+   the way an actual scroll wheel turns, rather than a pill sliding
+   along a track like a loading bar. The ridge pattern is a conic
+   gradient masked down to a band, so no per-notch markup is needed. */
 .tech-mouse-wheel {
   position: absolute;
   top: 50%;
-  right: 16%;
-  width: 22%;
-  height: 28%;
-  transform: translateY(-50%);
-  border-radius: 40px;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  overflow: hidden;
-}
-
-.tech-mouse-dot {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  height: 60%;
+  right: 18%;
+  width: 30%;
   aspect-ratio: 1;
   transform: translateY(-50%);
   border-radius: 50%;
-  background: var(--color-purple);
-  box-shadow: 0 0 10px rgba(157, 78, 221, 0.8);
-  animation: mouse-scroll 1.9s ease-in-out infinite;
+  background:
+    repeating-conic-gradient(rgba(255, 255, 255, 0.6) 0deg 6deg, transparent 6deg 45deg),
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.6) 74%);
+  -webkit-mask-image: radial-gradient(closest-side, transparent 32%, #000 37%, #000 84%, transparent 88%);
+  mask-image: radial-gradient(closest-side, transparent 32%, #000 37%, #000 84%, transparent 88%);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5), 0 0 14px rgba(157, 78, 221, 0.4);
+  animation: wheel-spin 2.2s linear infinite;
+}
+
+@keyframes wheel-spin {
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
 }
 
 .tech-mouse-caption {
@@ -946,111 +1067,11 @@ main {
   color: var(--text-faint);
 }
 
-@keyframes mouse-scroll {
-  0% {
-    left: 6%;
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  75% {
-    opacity: 1;
-  }
-  100% {
-    left: 66%;
-    opacity: 0;
-  }
-}
-
-/* ---- right: the orbit ---- */
-.tech-orbit-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
-.orbit-stage {
-  --r: clamp(96px, 12vw, 158px);
-  --tile: clamp(50px, 6vw, 72px);
-
-  position: relative;
-  width: 100%;
-  max-width: calc(var(--r) * 2 + var(--tile));
-  height: calc(var(--r) + var(--tile) * 0.55);
-  overflow: hidden;
-}
-
-.orbit-ring {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: calc(var(--r) * 2);
-  height: calc(var(--r) * 2);
-  transform: translate(-50%, 50%);
-  border: 1px dashed rgba(157, 78, 221, 0.26);
-  border-radius: 50%;
-}
-
-.orbit {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: 0;
-  height: 0;
-  animation: orbit-spin 26s linear infinite;
-}
-
-.orbit-item {
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform-origin: 0 0;
-  transform: rotate(var(--a)) translate(calc(var(--tile) / -2), calc(-1 * var(--r) - var(--tile) / 2));
-}
-
-/* No counter-rotation: each icon is rigidly fixed to the ring, so as
-   it travels round it turns through every orientation — sideways at
-   3 and 9 o'clock, fully upside down at the bottom of its own arc —
-   the way a mark welded to a wheel's rim actually behaves. */
-.orbit-icon {
-  display: block;
-  width: var(--tile);
-  height: var(--tile);
-  border-radius: 22%;
-  overflow: hidden;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.14);
-}
-
-.orbit-icon svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-@keyframes orbit-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.orbit-caption {
-  font-size: var(--fs-small);
-  letter-spacing: 0.04em;
-  color: var(--text-faint);
-  text-align: center;
-}
-
 @media (max-width: 900px) {
   .tech-grid {
     grid-template-columns: minmax(0, 1fr);
     justify-items: center;
     gap: 48px;
-  }
-
-  .orbit-stage {
-    --r: clamp(120px, 30vw, 170px);
   }
 }
 

@@ -471,6 +471,45 @@ if (dial && carousel) {
 }
 
 /* ---------------------------------------------------------
+   Technology rail — the drift is a pure CSS marquee (a doubled
+   list translated by exactly half its own height, so the loop
+   is seamless) and keeps running unconditionally. This loop
+   only WATCHES which icon is nearest the stage's centre and
+   marks it `.is-featured`; it never sets position or timing,
+   so it cannot make the drift stall, stutter, or resync.
+   --------------------------------------------------------- */
+const railStage = document.querySelector(".rail-stage");
+const railItems = [...document.querySelectorAll(".rail-item")];
+
+if (railStage && railItems.length) {
+  function markFeatured() {
+    const centerY = railStage.getBoundingClientRect().top + railStage.offsetHeight / 2;
+    let closest = null;
+    let closestDist = Infinity;
+
+    railItems.forEach((item) => {
+      const r = item.getBoundingClientRect();
+      const dist = Math.abs(r.top + r.height / 2 - centerY);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closest = item;
+      }
+    });
+
+    railItems.forEach((item) => item.classList.toggle("is-featured", item === closest));
+  }
+
+  if (reduceMotion) {
+    markFeatured();
+  } else {
+    (function loop() {
+      markFeatured();
+      requestAnimationFrame(loop);
+    })();
+  }
+}
+
+/* ---------------------------------------------------------
    Footer year
    --------------------------------------------------------- */
 const yearEl = document.getElementById("year");

@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=13">
+  <link rel="stylesheet" href="css/style.css?v=14">
 </head>
 <body>
 
@@ -167,53 +167,74 @@
       </header>
 
       <div class="tech-grid reveal">
-        <!-- The scroll dot loops continuously — fade in, glide down,
-             fade out, restart from the top — so the wheel always
-             reads as mid-motion, never as freshly reset. -->
+        <!-- A vertical string of tool icons drifts past continuously —
+             a doubled list translated by exactly half its own height,
+             so the loop is seamless with no reset to hide. JS only
+             watches which icon is nearest the centre and marks it
+             `.is-featured`; it never touches position or timing, so
+             the drift itself can never stall or stutter. -->
+        <div class="tech-rail-panel">
+          <div class="rail-stage" aria-hidden="true">
+            <span class="rail-spine"></span>
+            <div class="rail-track" id="railTrack">
+              <div class="rail-item" data-name="Miro">
+                <span class="rail-tick"></span>
+                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#FFDA1A"/><path d="M18 11h9l-6.5 10h7.5L15 38l4.5-13H12Z" fill="#050038"/></svg></span>
+                <span class="rail-label">Miro</span>
+              </div>
+              <div class="rail-item" data-name="Figma">
+                <span class="rail-tick"></span>
+                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#F5F5F5"/><path d="M20 8h4a6 6 0 010 12h-4Z" fill="#F24E1E"/><path d="M20 20h4a6 6 0 010 12h-4Z" fill="#A259FF"/><path d="M20 32h4a6 6 0 11-6 6 6 6 0 016-6Z" fill="#0ACF83"/><circle cx="14" cy="14" r="6" fill="#FF7262"/><circle cx="14" cy="26" r="6" fill="#1ABCFE"/></svg></span>
+                <span class="rail-label">Figma</span>
+              </div>
+              <div class="rail-item" data-name="Adobe XD">
+                <span class="rail-tick"></span>
+                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#470137"/><text x="24" y="32" font-family="Poppins, Arial, sans-serif" font-weight="600" font-size="20" fill="#FF61F6" text-anchor="middle">Xd</text></svg></span>
+                <span class="rail-label">Adobe XD</span>
+              </div>
+              <div class="rail-item" data-name="Framer">
+                <span class="rail-tick"></span>
+                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#ffffff"/><path d="M14 10h20v9H23Z" fill="#0055FF"/><path d="M14 19h9v9h9Z" fill="#0055FF"/><path d="M14 28h9l9 9H14Z" fill="#0055FF"/></svg></span>
+                <span class="rail-label">Framer</span>
+              </div>
+              <!-- Repeated so the marquee wraps with nothing to hide. -->
+              <div class="rail-item" data-name="Miro">
+                <span class="rail-tick"></span>
+                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#FFDA1A"/><path d="M18 11h9l-6.5 10h7.5L15 38l4.5-13H12Z" fill="#050038"/></svg></span>
+                <span class="rail-label">Miro</span>
+              </div>
+              <div class="rail-item" data-name="Figma">
+                <span class="rail-tick"></span>
+                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#F5F5F5"/><path d="M20 8h4a6 6 0 010 12h-4Z" fill="#F24E1E"/><path d="M20 20h4a6 6 0 010 12h-4Z" fill="#A259FF"/><path d="M20 32h4a6 6 0 11-6 6 6 6 0 016-6Z" fill="#0ACF83"/><circle cx="14" cy="14" r="6" fill="#FF7262"/><circle cx="14" cy="26" r="6" fill="#1ABCFE"/></svg></span>
+                <span class="rail-label">Figma</span>
+              </div>
+              <div class="rail-item" data-name="Adobe XD">
+                <span class="rail-tick"></span>
+                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#470137"/><text x="24" y="32" font-family="Poppins, Arial, sans-serif" font-weight="600" font-size="20" fill="#FF61F6" text-anchor="middle">Xd</text></svg></span>
+                <span class="rail-label">Adobe XD</span>
+              </div>
+              <div class="rail-item" data-name="Framer">
+                <span class="rail-tick"></span>
+                <span class="rail-icon"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#ffffff"/><path d="M14 10h20v9H23Z" fill="#0055FF"/><path d="M14 19h9v9h9Z" fill="#0055FF"/><path d="M14 28h9l9 9H14Z" fill="#0055FF"/></svg></span>
+                <span class="rail-label">Framer</span>
+              </div>
+            </div>
+          </div>
+          <p class="rail-caption">Miro · Figma · Adobe XD · Framer</p>
+        </div>
+
+        <!-- The wheel is a real ring of ridges that spins in place —
+             not a dot sliding along a track — so it reads as an
+             actual scroll wheel turning, not a loading bar. -->
         <div class="tech-mouse-panel">
           <div class="tech-mouse">
             <span class="tech-mouse-glow" aria-hidden="true"></span>
             <div class="tech-mouse-body" aria-hidden="true">
               <span class="tech-mouse-seam"></span>
-              <span class="tech-mouse-wheel"><span class="tech-mouse-dot"></span></span>
+              <span class="tech-mouse-wheel"></span>
             </div>
           </div>
           <p class="tech-mouse-caption">Scroll to explore</p>
-        </div>
-
-        <!-- The ring spins forever at a fixed slow speed — no hold,
-             no step, nothing to hover to pause. Each icon counter-
-             spins at the same rate so it stays upright as it travels,
-             and the stage clips to the icons' path, so only the
-             top of the loop is ever on screen: one tool arrives as
-             the last one leaves. -->
-        <div class="tech-orbit-panel">
-          <div class="orbit-stage">
-            <span class="orbit-ring" aria-hidden="true"></span>
-            <div class="orbit" aria-hidden="true">
-              <div class="orbit-item" style="--a: 0deg">
-                <span class="orbit-icon">
-                  <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#FFDA1A"/><path d="M18 11h9l-6.5 10h7.5L15 38l4.5-13H12Z" fill="#050038"/></svg>
-                </span>
-              </div>
-              <div class="orbit-item" style="--a: 90deg">
-                <span class="orbit-icon">
-                  <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#F5F5F5"/><path d="M20 8h4a6 6 0 010 12h-4Z" fill="#F24E1E"/><path d="M20 20h4a6 6 0 010 12h-4Z" fill="#A259FF"/><path d="M20 32h4a6 6 0 11-6 6 6 6 0 016-6Z" fill="#0ACF83"/><circle cx="14" cy="14" r="6" fill="#FF7262"/><circle cx="14" cy="26" r="6" fill="#1ABCFE"/></svg>
-                </span>
-              </div>
-              <div class="orbit-item" style="--a: 180deg">
-                <span class="orbit-icon">
-                  <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#470137"/><text x="24" y="32" font-family="Poppins, Arial, sans-serif" font-weight="600" font-size="20" fill="#FF61F6" text-anchor="middle">Xd</text></svg>
-                </span>
-              </div>
-              <div class="orbit-item" style="--a: 270deg">
-                <span class="orbit-icon">
-                  <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#ffffff"/><path d="M14 10h20v9H23Z" fill="#0055FF"/><path d="M14 19h9v9h9Z" fill="#0055FF"/><path d="M14 28h9l9 9H14Z" fill="#0055FF"/></svg>
-                </span>
-              </div>
-            </div>
-          </div>
-          <p class="orbit-caption">Miro · Figma · Adobe XD · Framer</p>
         </div>
       </div>
     </section>
@@ -396,6 +417,6 @@
     <p>Designed &amp; built with care</p>
   </footer>
 
-  <script src="js/script.js?v=12"></script>
+  <script src="js/script.js?v=13"></script>
 </body>
 </html>
