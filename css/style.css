@@ -1095,13 +1095,19 @@ main {
    pushed out by the radius, so only the upper arc is on screen
    and the rest of the ring waits below the fold.
    ========================================================= */
-.carousel {
+/* Defined on the section, not .carousel itself, so .carousel-note —
+   a sibling of .carousel, not a descendant — can also read --r to
+   size its own clearance below the hub card, which now deliberately
+   overflows .carousel's own box. */
+#project {
   --r: clamp(226px, 31vw, 440px);
   --tile-w: clamp(74px, 9.4vw, 130px);
   --tile-h: calc(var(--tile-w) * 1.3);
   /* Where the projects sit on the radius, as a fraction of it. */
   --ring: 0.71;
+}
 
+.carousel {
   position: relative;
   height: calc(var(--r) + var(--extra, 0px) + 24px);
 }
@@ -1274,40 +1280,87 @@ main {
   background: linear-gradient(150deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
 }
 
-/* ---- the card in the middle of the dial ---- */
+/* ---- the card in the middle of the dial ----
+   Tall and narrow rather than a landscape rectangle, and its base
+   dissolves into the core's own dark fill (a fade pseudo-element,
+   not a hard edge) so the card reads as rising up out of the ring
+   rather than a shape floating in front of it. Narrower than the
+   core on purpose — the bare dark circle showing on either side is
+   part of the effect, not empty space to fill. */
 .hub {
   position: absolute;
   left: 50%;
-  bottom: calc(var(--r) * 0.06);
+  /* .hub is a bottom-anchored flex column with the name/category/
+     buttons stacked BELOW the image, so anchoring near 0 would push
+     the image itself well clear of the core, floating above it
+     instead of meeting it. Shifted down enough that the image's own
+     bottom actually reaches the core's visible curve — the text
+     below it ends up past the dial's bottom edge, which is fine,
+     since .dial-stage doesn't clip .hub the way it clips the ring. */
+  bottom: calc(var(--r) * -0.31);
   z-index: 2;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 9px;
-  width: min(62%, 272px);
+  width: min(37%, 186px);
   text-align: center;
-  transition: opacity 0.32s ease, transform 0.32s var(--ease-out);
+  transition: opacity 0.36s ease, transform 0.36s var(--ease-out);
 }
 
-/* The card blinks out while the dial turns and comes back as the
-   step lands, so the swap belongs to the movement. */
+/* The card sinks back and fades while the dial turns, then rises
+   back into place as the step lands — the swap itself repeats the
+   emerging motion, not just the resting shape. */
 .carousel[data-turning] .hub {
   opacity: 0;
-  transform: translateX(-50%) translateY(10px);
+  transform: translateX(-50%) translateY(26px) scale(0.93);
 }
 
 .hub-shot {
+  position: relative;
   width: 100%;
-  aspect-ratio: 16 / 11;
-  padding: 7% 8%;
+  aspect-ratio: 3 / 4.3;
+  padding: 9% 10%;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
+  border-radius: 20px 20px 7px 7px;
   background:
     linear-gradient(160deg, hsl(var(--tint, 272) 62% 48% / 0.6), hsl(var(--tint, 272) 70% 16% / 0.95));
   box-shadow: 0 22px 54px rgba(0, 0, 0, 0.6);
   overflow: hidden;
   transition: background 0.7s ease;
+}
+
+/* The blend into the core — its colour matches .dial-core's own
+   fill exactly, so the join is invisible rather than a visible
+   second gradient sitting on top of the first. */
+.hub-shot::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 52%;
+  /* #050008 matches .dial-core's own outer fill exactly — the join
+     has to be the same colour on both sides or it reads as a second
+     gradient sitting on the card, not a blend into the ring. */
+  background: linear-gradient(to bottom, transparent, #050008 85%);
+  pointer-events: none;
+}
+
+.hub-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  aspect-ratio: 1;
+}
+
+.hub-play svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
 }
 
 /* The dot is inline rather than a flex sibling so a two-line
@@ -1382,8 +1435,14 @@ main {
   height: 17px;
 }
 
+/* The hub card's own bottom sits below .carousel's box on purpose
+   (see .hub) — .carousel's height doesn't grow to cover that, since
+   position:absolute children never contribute to their container's
+   size. Clearing .carousel-note by the same amount the card actually
+   overflows (via the shared --r on #project) is what stops the two
+   from colliding, not padding .carousel itself. */
 .carousel-note {
-  margin-top: clamp(14px, 2vw, 22px);
+  margin-top: calc(var(--r) * 0.34 + 44px);
   text-align: center;
   font-size: var(--fs-small);
   color: var(--text-faint);
@@ -1848,22 +1907,36 @@ main {
 
   /* A phone is narrower than the dial wants to be, so the radius is
      driven by the viewport width and the card inside it shrinks to
-     match. */
-  .carousel {
+     match. --r and --ring live on #project (see the desktop rule's
+     comment) so .carousel-note's own clearance tracks this override
+     too, not just .carousel's internals. */
+  #project {
     /* 44vw keeps the dial (two radii wide) inside the page padding
        — anything larger and the section scrolls sideways. */
     --r: clamp(150px, 44vw, 290px);
-    --tile-w: clamp(52px, 13vw, 76px);
-    /* Room above the semicircle for the card, which on a phone is
-       taller than the dial's own radius. */
-    --extra: 165px;
     /* Projects ride further out so the card does not cover them. */
     --ring: 0.84;
   }
 
+  .carousel {
+    --tile-w: clamp(52px, 13vw, 76px);
+  }
+
   .hub {
-    width: min(72%, 204px);
+    width: min(46%, 168px);
     gap: 6px;
+    /* Retuned for this breakpoint: the name/category/button stack
+       is proportionally shorter here (smaller type, smaller
+       buttons), so the desktop offset alone doesn't push the image
+       down far enough to actually reach the core. */
+    bottom: calc(var(--r) * -0.78);
+  }
+
+  /* .hub sits lower here than on desktop (see above), so the note
+     needs more clearance below it too — reusing the desktop formula
+     as-is would put the two back in collision. */
+  .carousel-note {
+    margin-top: calc(var(--r) * 0.82 + 44px);
   }
 
   .hub-name {
