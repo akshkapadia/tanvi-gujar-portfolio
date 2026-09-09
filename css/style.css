@@ -878,12 +878,25 @@ main {
   gap: 16px;
 }
 
+/* The anchor sits inset from the stage's right edge by --edge-gap,
+   with icons resting to its LEFT — so the arc bulges left, and its
+   clipped edge (where an icon crosses out of view) is the right
+   side, the same side for both arrival and departure. Because the
+   anchor is a bit INSIDE the stage rather than pinned exactly to its
+   edge, there's --edge-gap of room past the anchor too — so the clip
+   falls a little beyond the exact 180° mark and a bit more than a
+   flat half-circle of arc is visible, a generous crescent rather
+   than a razored D. (Widening the stage without moving the anchor
+   would not do this: the clip line is wherever the anchor sits, not
+   wherever the box happens to end — the first attempt at this only
+   added blank margin past the peak, not extra visible arc.) */
 .rail-stage {
   --r: clamp(92px, 11vw, 152px);
   --tile: clamp(46px, 5.6vw, 62px);
+  --edge-gap: calc(var(--r) * 0.22);
 
   position: relative;
-  width: calc(var(--r) + var(--tile) * 0.7);
+  width: calc(var(--r) + var(--edge-gap) + var(--tile) * 0.7);
   height: calc(var(--r) * 2 + var(--tile));
   margin: 0 auto;
   overflow: hidden;
@@ -891,7 +904,7 @@ main {
 
 .rail-arc {
   position: absolute;
-  left: 0;
+  right: var(--edge-gap);
   top: 50%;
   width: calc(var(--r) * 2);
   height: calc(var(--r) * 2);
@@ -901,19 +914,20 @@ main {
 }
 
 /* An invisible 0-size marker sitting exactly at the arc's rest
-   position (the rightmost point) — JS measures distance to this
-   rather than to the stage's own bounding-box centre, which would
-   not line up with the arc's actual peak. */
+   position (its leftmost point, the one farthest from the anchor) —
+   JS measures distance to this rather than to the stage's own
+   bounding-box centre, which would not line up with the arc's
+   actual peak. */
 .rail-peak {
   position: absolute;
-  left: 0;
+  right: var(--edge-gap);
   top: 50%;
-  transform: translate(var(--r), -50%);
+  transform: translate(calc(-1 * var(--r)), -50%);
 }
 
 .rail-ring {
   position: absolute;
-  left: 0;
+  right: var(--edge-gap);
   top: 50%;
   width: 0;
   height: 0;
@@ -932,7 +946,7 @@ main {
   left: 0;
   top: 0;
   transform-origin: 0 0;
-  transform: rotate(var(--a)) translate(calc(var(--r) - var(--tile) / 2), calc(-1 * var(--tile) / 2));
+  transform: rotate(var(--a)) translate(calc(-1 * var(--r) - var(--tile) / 2), calc(-1 * var(--tile) / 2));
 }
 
 /* Counters the ring's spin PLUS this item's own fixed --a offset,
