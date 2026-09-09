@@ -1305,7 +1305,7 @@ main {
   flex-direction: column;
   align-items: center;
   gap: 9px;
-  width: min(44%, 218px);
+  width: min(54%, 262px);
   text-align: center;
   transition: opacity 0.36s ease, transform 0.36s var(--ease-out);
 }
@@ -1321,7 +1321,7 @@ main {
 .hub-shot {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4.3;
+  aspect-ratio: 3 / 4.6;
   padding: 9% 10%;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px 20px 7px 7px;
@@ -1932,7 +1932,7 @@ main {
   }
 
   .hub {
-    width: min(46%, 168px);
+    width: min(38%, 156px);
     gap: 6px;
   }
 
@@ -1952,6 +1952,14 @@ main {
   .dial-arrow {
     width: 40px;
     height: 40px;
+  }
+
+  /* .prev never got a matching mobile override before — it was
+     still using the desktop 0.52 factor while .next used 0.66,
+     leaving .prev sitting much closer to centre than intended and
+     colliding with the (now wider) card. */
+  .dial-arrow.prev {
+    left: calc(50% - var(--r) * 0.66);
   }
 
   .dial-arrow.next {
