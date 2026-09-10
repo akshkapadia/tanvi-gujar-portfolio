@@ -1334,7 +1334,11 @@ main {
 .hub {
   position: absolute;
   left: 50%;
-  bottom: 0;
+  /* Flush with the inner circle's own rim — its radius above the
+     baseline, i.e. half of .dial-core's diameter — not the outer
+     ring's true bottom. That's what makes the card read as rising
+     out of the inner semicircle specifically, not the whole dome. */
+  bottom: calc(var(--r) * 0.3);
   z-index: 2;
   transform: translateX(-50%);
   display: flex;
