@@ -1329,14 +1329,16 @@ main {
 .hub {
   position: absolute;
   left: 50%;
-  /* Flush with the inner circle's own rim — its radius above the
-     baseline, i.e. half of .dial-core's diameter — not the outer
-     ring's true bottom. That's what makes the card read as rising
-     out of the inner semicircle specifically, not the whole dome.
-     Lifted a bit further than that radius alone (0.36 instead of
-     0.3) so the card sits visibly higher than the side tiles and
-     reads as the highlighted one. */
-  bottom: calc(var(--r) * 0.36);
+  /* High enough that .dial-face's own hairlines (the two nearest
+     vertical, at ±30°) have already spread past the card's own half
+     -width by the time they reach this height — otherwise they cross
+     behind the card's lower half instead of framing it. Given the
+     hairlines' 30° angle, clearing them needs bottom ≳ width * 0.87;
+     0.65 of --r covers that across the card's own width range with
+     margin, at both this and the mobile breakpoint. Also comfortably
+     higher than the side tiles, so the card reads as the highlighted
+     one. */
+  bottom: calc(var(--r) * 0.65);
   z-index: 2;
   transform: translateX(-50%);
   display: flex;
@@ -1393,12 +1395,14 @@ main {
   content: "";
   position: absolute;
   inset: auto 0 0 0;
-  height: 68%;
+  height: 78%;
   /* Matches .dial-face's own flat tint exactly (same colour, not an
      approximation) — the join has to land on the same shade on both
      sides or it reads as a second patch sitting on the card, not a
-     blend into the dome. */
-  background: linear-gradient(to bottom, transparent, rgba(157, 78, 221, 0.26) 72%);
+     blend into the dome. Reaches full colour well before the card's
+     own bottom edge, so nothing box-shaped is left to read as a
+     border down there — just the poster dissolving into the dome. */
+  background: linear-gradient(to bottom, transparent, rgba(157, 78, 221, 0.26) 60%);
   pointer-events: none;
 }
 
