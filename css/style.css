@@ -1201,13 +1201,18 @@ main {
   transform: rotate(var(--a)) translate(calc(var(--tile-w) / -2), calc(-1 * var(--ring) * var(--r) - var(--tile-h) / 2));
 }
 
-/* Dark well in the middle of the dial that the card sits on. */
+/* Dark well in the middle of the dial that the card sits on — sized
+   well under the outer ring (not 0.78 of it) so it reads as its own
+   smaller, nested inner semicircle rather than filling most of the
+   dome. The card's bottom sits flush with this circle's own flat
+   edge, which is what makes it read as emerging from the inner
+   ring specifically, not just floating in the dome generally. */
 .dial-core {
   position: absolute;
   left: 50%;
   bottom: 0;
-  width: calc(var(--r) * 0.78);
-  height: calc(var(--r) * 0.78);
+  width: calc(var(--r) * 0.6);
+  height: calc(var(--r) * 0.6);
   transform: translate(-50%, 50%);
   border-radius: 50%;
   border: 1px solid rgba(157, 78, 221, 0.3);
