@@ -1157,18 +1157,22 @@ main {
   height: calc(var(--r) * 2);
 }
 
-/* Six wedges and the hairlines between them, as one painted face
-   that turns with the projects rather than under them. One flat
-   tint rather than alternating wedge opacities — alternating 0.34/
-   0.15 read as two different colours (purple wedges next to near-
-   black ones) instead of one ring, and made the tint look like it
-   petered out before the true outer edge. A single opacity carries
-   evenly out from the centre. Fills the whole disc (now an ellipse,
-   via .dial's own non-square box), centre included — nothing punches
-   a hole for .dial-core any more. */
+/* A fixed backdrop, not part of the rotating #dial — only the tiles
+   orbit; the dome underneath them stays put. Sized and positioned to
+   match #dial's own box exactly (same 2rx × 2r ellipse, same corner)
+   so nothing shifts now that it's a sibling instead of a child; only
+   the rotation is gone. One flat tint rather than alternating wedge
+   opacities — alternating 0.34/0.15 read as two different colours
+   (purple wedges next to near-black ones) instead of one ring, and
+   made the tint look like it petered out before the true outer edge.
+   A single opacity carries evenly out from the centre, filling the
+   whole ellipse — nothing punches a hole for .dial-core any more. */
 .dial-face {
   position: absolute;
-  inset: 0;
+  left: 0;
+  top: 0;
+  width: calc(var(--rx) * 2);
+  height: calc(var(--r) * 2);
   border-radius: 50%;
   background:
     repeating-conic-gradient(from -30deg, rgba(255, 255, 255, 0.13) 0deg 0.3deg, transparent 0.3deg 60deg),

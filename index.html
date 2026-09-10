@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=47">
+  <link rel="stylesheet" href="css/style.css?v=48">
 </head>
 <body>
 
@@ -258,9 +258,11 @@
       <div class="carousel reveal" id="carousel">
         <div class="dial-stage">
           <div class="dial-clip">
+          <!-- Sits outside #dial on purpose — #dial is the part the
+               carousel spins, and the dome's painted background
+               should stay put while only the tiles orbit it. -->
+          <div class="dial-face" aria-hidden="true"></div>
           <div class="dial" id="dial">
-            <div class="dial-face" aria-hidden="true"></div>
-
             <button class="spoke" type="button" style="--a: 0deg" data-tint="272">
               <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
