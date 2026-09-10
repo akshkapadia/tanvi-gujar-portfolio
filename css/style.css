@@ -1359,6 +1359,12 @@ main {
   aspect-ratio: 3 / 4.6;
   padding: 9% 10%;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  /* No bottom edge to the border — a solid line there crossed
+     straight through the dome's own hairlines right behind it,
+     reading as two things intersecting instead of one emerging from
+     the other. Dropping it leaves only the fade (below) to carry
+     the card into the dome, with nothing hard cutting across. */
+  border-bottom: none;
   border-radius: 20px 20px 7px 7px;
   background:
     linear-gradient(160deg, hsl(var(--tint, 272) 62% 48% / 0.6), hsl(var(--tint, 272) 70% 16% / 0.95));
