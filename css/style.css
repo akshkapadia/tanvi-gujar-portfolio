@@ -1291,11 +1291,12 @@ main {
      -width by the time they reach this height — otherwise they cross
      behind the card's lower half instead of framing it. Given the
      hairlines' 30° angle, clearing them needs bottom ≳ width * 0.87;
-     0.65 of --r covers that across the card's own width range with
-     margin, at both this and the mobile breakpoint. Also comfortably
-     higher than the side tiles, so the card reads as the highlighted
-     one. */
-  bottom: calc(var(--r) * 0.65);
+     0.62 of --r still covers that across the card's own width range
+     (a little tighter than 0.65, brought down slightly on purpose)
+     with margin at both this and the mobile breakpoint. Also
+     comfortably higher than the side tiles, so the card reads as the
+     highlighted one. */
+  bottom: calc(var(--r) * 0.62);
   z-index: 2;
   transform: translateX(-50%);
   display: flex;
@@ -1378,6 +1379,59 @@ main {
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+}
+
+/* Name + case-study link for whichever project the card is showing
+   — sits below the whole wheel rather than on the card itself, so
+   the poster stays just the cover and this can carry as much text
+   as a real project needs without crowding it. */
+.project-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-top: clamp(20px, 3vw, 32px);
+  text-align: center;
+}
+
+.project-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-title);
+  letter-spacing: -0.4px;
+  color: var(--color-white);
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 50px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-fill);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--fs-body);
+  color: var(--color-white);
+  transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.project-link .arrow-icon {
+  transition: transform 0.25s ease;
+}
+
+.project-link:hover {
+  transform: translateY(-2px);
+  background: var(--color-purple-strong);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.project-link:hover .arrow-icon {
+  transform: translate(2px, -2px);
 }
 
 .carousel-note {

@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=52">
+  <link rel="stylesheet" href="css/style.css?v=53">
 </head>
 <body>
 
@@ -245,22 +245,22 @@
                should stay put while only the tiles orbit it. -->
           <div class="dial-face" aria-hidden="true"></div>
           <div class="dial" id="dial">
-            <button class="spoke" type="button" style="--a: 0deg" data-tint="272">
+            <button class="spoke" type="button" style="--a: 0deg" data-tint="272" data-name="Pulse Healthcare Dashboard">
               <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
-            <button class="spoke" type="button" style="--a: 60deg" data-tint="258">
+            <button class="spoke" type="button" style="--a: 60deg" data-tint="258" data-name="Nomad Travel Booking">
               <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
-            <button class="spoke" type="button" style="--a: 120deg" data-tint="286">
+            <button class="spoke" type="button" style="--a: 120deg" data-tint="286" data-name="Ledger Fintech Console">
               <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
-            <button class="spoke" type="button" style="--a: 180deg" data-tint="248">
+            <button class="spoke" type="button" style="--a: 180deg" data-tint="248" data-name="Aria Music Player">
               <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
-            <button class="spoke" type="button" style="--a: 240deg" data-tint="295">
+            <button class="spoke" type="button" style="--a: 240deg" data-tint="295" data-name="Verde Grocery Commerce">
               <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
-            <button class="spoke" type="button" style="--a: 300deg" data-tint="265">
+            <button class="spoke" type="button" style="--a: 300deg" data-tint="265" data-name="Atlas Design System">
               <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
           </div>
@@ -282,6 +282,18 @@
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
+      </div>
+
+      <!-- Name + case-study link for whichever project the card is
+           currently showing — kept off the card itself so the poster
+           stays just the cover, and updated by showCard() in
+           script.js as the wheel turns. -->
+      <div class="project-info reveal">
+        <h3 class="project-name" id="projectName">Pulse Healthcare Dashboard</h3>
+        <a class="project-link" id="projectLink" href="#" data-placeholder>
+          Behance
+          <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
+        </a>
       </div>
 
       <p class="carousel-note">Placeholder covers — replace with real case study images.</p>
@@ -359,6 +371,6 @@
     <p>Designed &amp; built with care</p>
   </footer>
 
-  <script src="js/script.js?v=16"></script>
+  <script src="js/script.js?v=17"></script>
 </body>
 </html>
