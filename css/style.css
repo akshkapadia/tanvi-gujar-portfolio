@@ -1113,8 +1113,11 @@ main {
   --rx: calc(var(--r) * 1.3);
   --tile-w: clamp(72px, 7.6vw, 108px);
   --tile-h: calc(var(--tile-w) * 1.3);
-  /* Where the projects sit on the radius, as a fraction of it. */
-  --ring: 0.71;
+  /* Where the projects sit on the radius, as a fraction of it —
+     pushed out further than 0.71 so there's real air between the
+     side tiles and the featured card at the wheel's current,
+     larger scale; 0.71 had them almost touching. */
+  --ring: 0.85;
 }
 
 .carousel {
@@ -1329,8 +1332,11 @@ main {
   /* Flush with the inner circle's own rim — its radius above the
      baseline, i.e. half of .dial-core's diameter — not the outer
      ring's true bottom. That's what makes the card read as rising
-     out of the inner semicircle specifically, not the whole dome. */
-  bottom: calc(var(--r) * 0.3);
+     out of the inner semicircle specifically, not the whole dome.
+     Lifted a bit further than that radius alone (0.36 instead of
+     0.3) so the card sits visibly higher than the side tiles and
+     reads as the highlighted one. */
+  bottom: calc(var(--r) * 0.36);
   z-index: 2;
   transform: translateX(-50%);
   display: flex;
@@ -1339,8 +1345,10 @@ main {
   /* Scaled off --r (not a flat percentage of the stage) so the card
      always stays inside the gap the arrows sit in — that gap itself
      is a fraction of --r, and a flat percentage let the two collide
-     at the smaller end of the desktop range. */
-  width: clamp(80px, calc(var(--r) * 1.04 - 112px), 220px);
+     at the smaller end of the desktop range. Narrower coefficients
+     than a plain "half the safe arrow gap" — the card was crowding
+     the side tiles at the wheel's current, larger scale. */
+  width: clamp(70px, calc(var(--r) * 0.85 - 90px), 170px);
   text-align: center;
   transition: opacity 0.36s ease, transform 0.36s var(--ease-out);
 }
@@ -1356,15 +1364,13 @@ main {
 .hub-shot {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4.6;
+  aspect-ratio: 3 / 4.2;
   padding: 9% 10%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  /* No bottom edge to the border — a solid line there crossed
-     straight through the dome's own hairlines right behind it,
-     reading as two things intersecting instead of one emerging from
-     the other. Dropping it leaves only the fade (below) to carry
-     the card into the dome, with nothing hard cutting across. */
-  border-bottom: none;
+  /* No border at all — a line on any edge crossed straight through
+     the dome's own hairlines right behind it, reading as two things
+     intersecting instead of one emerging from the other. The fade
+     (below) and the box-shadow are what carry and lift the card
+     instead. */
   border-radius: 20px 20px 7px 7px;
   background:
     linear-gradient(160deg, hsl(var(--tint, 272) 62% 48% / 0.6), hsl(var(--tint, 272) 70% 16% / 0.95));
@@ -1886,8 +1892,10 @@ main {
     /* 36vw keeps the dial (two radii wide) inside the page's own
        padding — anything larger and the section scrolls sideways. */
     --r: clamp(120px, 36vw, 195px);
-    /* Projects ride further out so the card does not cover them. */
-    --ring: 0.84;
+    /* Projects ride further out so the card does not cover them —
+       pushed out a bit further than before so there's real air
+       around the featured card, not just enough to avoid the arrows. */
+    --ring: 0.95;
   }
 
   .carousel {
@@ -1895,11 +1903,11 @@ main {
   }
 
   .hub {
-    /* Same scaled-off-radius formula as the desktop rule, so the
-       card keeps clear of the arrows at this breakpoint's own
-       tighter geometry instead of relying on an unrelated
-       percentage of the carousel's width. */
-    width: clamp(50px, calc(var(--r) * 1.32 - 92px), 160px);
+    /* Same scaled-off-radius formula as the desktop rule, narrowed
+       the same way, so the card keeps real air around it at this
+       breakpoint's own tighter geometry instead of crowding the
+       side tiles. */
+    width: clamp(42px, calc(var(--r) * 1.08 - 74px), 130px);
   }
 
   .dial-arrow {
