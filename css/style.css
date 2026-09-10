@@ -1105,6 +1105,12 @@ main {
      reads at the same scale as the rest of the section's content
      instead of looking small in all the open space. */
   --r: clamp(220px, 24vw, 340px);
+  /* The dome's own vertical reach — taller than --r on purpose, so
+     the arc reads as an elongated, egg-like curve rather than a
+     perfect half-circle. Only the painted face uses this; the
+     spokes still travel a true circular path off --r alone, so the
+     tiles themselves stay round and undistorted. */
+  --ry: calc(var(--r) * 1.3);
   --tile-w: clamp(72px, 7.6vw, 108px);
   --tile-h: calc(var(--tile-w) * 1.3);
   /* Where the projects sit on the radius, as a fraction of it. */
@@ -1113,7 +1119,7 @@ main {
 
 .carousel {
   position: relative;
-  height: calc(var(--r) + var(--extra, 0px) + 24px);
+  height: calc(var(--ry) + var(--extra, 0px) + 24px);
 }
 
 /* The dial is a whole circle whose centre sits on the bottom edge
@@ -1126,7 +1132,7 @@ main {
   left: 50%;
   bottom: 0;
   width: calc(var(--r) * 2);
-  height: var(--r);
+  height: var(--ry);
   transform: translateX(-50%);
 }
 
@@ -1136,12 +1142,19 @@ main {
   overflow: hidden;
 }
 
+/* Sized off --ry, not --r — an ellipse, not a circle. Its own centre
+   (50%, 50%) still lands exactly on .dial-stage's bottom edge, the
+   same rotation origin the spokes are anchored to, because
+   .dial-stage's own height is --ry too (half of this box's height).
+   The spokes don't care: they travel a true circular path off --r
+   alone (see .spoke's own translate distance), so only the dome's
+   painted shape elongates — the tiles stay round. */
 .dial {
   position: absolute;
   left: 0;
   top: 0;
   width: calc(var(--r) * 2);
-  height: calc(var(--r) * 2);
+  height: calc(var(--ry) * 2);
 }
 
 /* Six wedges and the hairlines between them, as one painted face
@@ -1150,8 +1163,9 @@ main {
    0.15 read as two different colours (purple wedges next to near-
    black ones) instead of one ring, and made the tint look like it
    petered out before the true outer edge. A single opacity carries
-   evenly out from the centre. Fills the whole disc, centre included
-   — nothing punches a hole for .dial-core any more. */
+   evenly out from the centre. Fills the whole disc (now an ellipse,
+   via .dial's own non-square box), centre included — nothing punches
+   a hole for .dial-core any more. */
 .dial-face {
   position: absolute;
   inset: 0;
