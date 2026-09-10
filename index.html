@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=43">
+  <link rel="stylesheet" href="css/style.css?v=44">
 </head>
 <body>
 
@@ -247,61 +247,56 @@
 
     <!-- ============ PROJECT ============ -->
     <section class="section" id="project">
-      <!-- Everything — label and wheel both — lives inside one fixed-
-           size frame now, rather than the heading sitting as a full
-           page section above a sprawling carousel. Just the covers:
-           no name, category or links on the featured card, so
-           nothing here depends on JS to show real content — the
-           wheel is purely a showcase piece. -->
-      <div class="project-frame glass reveal">
-        <header class="project-frame-head">
-          <p class="eyebrow">Selected work</p>
-          <h2 class="project-frame-title">PROJECT</h2>
-        </header>
+      <header class="section-head reveal">
+        <p class="eyebrow">Selected work</p>
+        <h2 class="section-title">PROJECT</h2>
+      </header>
 
-        <div class="carousel" id="carousel">
-          <div class="dial-stage">
-            <div class="dial-clip">
-            <div class="dial" id="dial">
-              <div class="dial-face" aria-hidden="true"></div>
+      <!-- Just the covers: no name, category or links on the featured
+           card, so nothing here depends on JS to show real content —
+           the wheel is purely a showcase piece. -->
+      <div class="carousel reveal" id="carousel">
+        <div class="dial-stage">
+          <div class="dial-clip">
+          <div class="dial" id="dial">
+            <div class="dial-face" aria-hidden="true"></div>
 
-              <button class="spoke" type="button" style="--a: 0deg" data-tint="272">
-                <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
-              </button>
-              <button class="spoke" type="button" style="--a: 60deg" data-tint="258">
-                <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
-              </button>
-              <button class="spoke" type="button" style="--a: 120deg" data-tint="286">
-                <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
-              </button>
-              <button class="spoke" type="button" style="--a: 180deg" data-tint="248">
-                <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
-              </button>
-              <button class="spoke" type="button" style="--a: 240deg" data-tint="295">
-                <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
-              </button>
-              <button class="spoke" type="button" style="--a: 300deg" data-tint="265">
-                <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
-              </button>
-            </div>
-              <div class="dial-core" aria-hidden="true"></div>
-            </div>
-
-            <div class="hub" id="hub">
-              <div class="hub-shot" id="hubShot" aria-hidden="true">
-                <span class="hub-play">
-                  <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" stroke="white" stroke-width="1.4" opacity="0.85"/><path d="M16.5 13.5v13l11-6.5Z" fill="white"/></svg>
-                </span>
-              </div>
-            </div>
-
-            <button class="dial-arrow prev" type="button" id="dialPrev" aria-label="Previous project">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <button class="spoke" type="button" style="--a: 0deg" data-tint="272">
+              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
-            <button class="dial-arrow next" type="button" id="dialNext" aria-label="Next project">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <button class="spoke" type="button" style="--a: 60deg" data-tint="258">
+              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            </button>
+            <button class="spoke" type="button" style="--a: 120deg" data-tint="286">
+              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            </button>
+            <button class="spoke" type="button" style="--a: 180deg" data-tint="248">
+              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            </button>
+            <button class="spoke" type="button" style="--a: 240deg" data-tint="295">
+              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            </button>
+            <button class="spoke" type="button" style="--a: 300deg" data-tint="265">
+              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
           </div>
+            <div class="dial-core" aria-hidden="true"></div>
+          </div>
+
+          <div class="hub" id="hub">
+            <div class="hub-shot" id="hubShot" aria-hidden="true">
+              <span class="hub-play">
+                <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" stroke="white" stroke-width="1.4" opacity="0.85"/><path d="M16.5 13.5v13l11-6.5Z" fill="white"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <button class="dial-arrow prev" type="button" id="dialPrev" aria-label="Previous project">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="dial-arrow next" type="button" id="dialNext" aria-label="Next project">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
       </div>
 

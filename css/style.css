@@ -1107,37 +1107,6 @@ main {
   --ring: 0.71;
 }
 
-/* The whole wheel — label included — now lives inside one bounded
-   glass card rather than sprawling as a page-width section, so the
-   frame's own max-width/padding is what keeps this compact. */
-.project-frame {
-  max-width: 560px;
-  margin: 0 auto;
-  padding: clamp(24px, 3.4vw, 36px) clamp(20px, 3vw, 32px) clamp(32px, 4vw, 44px);
-  overflow: hidden;
-}
-
-.project-frame-head {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  margin-bottom: clamp(10px, 1.6vw, 18px);
-  text-align: center;
-}
-
-.project-frame-title {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: var(--fs-title);
-  letter-spacing: -0.5px;
-  background: linear-gradient(to bottom, #ffffff 36%, #dcc0ff 84%, #b276ef 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
-
 .carousel {
   position: relative;
   height: calc(var(--r) + var(--extra, 0px) + 24px);
@@ -1319,19 +1288,14 @@ main {
 
 /* ---- the card in the middle of the dial ----
    Tall and narrow rather than a landscape rectangle, and its base
-   dissolves into the core's own dark fill (a fade pseudo-element,
-   not a hard edge) so the card reads as rising up out of the ring
-   rather than a shape floating in front of it. Narrower than the
-   core on purpose — the bare dark circle showing on either side is
-   part of the effect, not empty space to fill.
+   dissolves into the dome's own flat tint (a fade pseudo-element, not
+   a hard edge) so the card reads as rising up out of the wheel
+   rather than a shape floating in front of it.
 
-   Anchored flush with the stage's own bottom edge (never past it —
-   pushing it lower would cut into the semicircle's own boundary,
-   which is exactly the overlap this must avoid). The card is free to
-   run tall enough that its TOP pokes past the arc instead — that's
-   the reference's own read: the poster rises above the wheel, not
-   below it. .project-frame's own top padding gives that poke room
-   to clear the frame's edge without being clipped. */
+   Anchored flush with the inner ring's own rim (see below), free to
+   run tall enough that its top pokes past the outer arc — that's the
+   reference's own read: the poster rises above the wheel, not below
+   it. */
 .hub {
   position: absolute;
   left: 50%;
@@ -1886,15 +1850,11 @@ main {
      comment) so .carousel-note's own clearance tracks this override
      too, not just .carousel's internals. */
   #project {
-    /* 34vw keeps the dial (two radii wide) inside the frame's own
-       padding — anything larger and the frame scrolls sideways. */
+    /* 34vw keeps the dial (two radii wide) inside the page's own
+       padding — anything larger and the section scrolls sideways. */
     --r: clamp(110px, 34vw, 180px);
     /* Projects ride further out so the card does not cover them. */
     --ring: 0.84;
-  }
-
-  .project-frame {
-    padding: clamp(20px, 5vw, 28px) clamp(14px, 4vw, 22px) clamp(24px, 5vw, 32px);
   }
 
   .carousel {
