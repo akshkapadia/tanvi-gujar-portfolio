@@ -1060,21 +1060,34 @@ main {
   /* Sized off the section's own width now that the wheel sits
      directly on the page rather than in a capped-width card, so it
      reads at the same scale as the rest of the section's content
-     instead of looking small in all the open space. */
-  --r: clamp(220px, 24vw, 340px);
+     instead of looking small in all the open space. Pulled back a
+     bit from an earlier, taller pass — the whole section (heading
+     through the name/link under the wheel) needs to fit in one
+     screen without scrolling, not just look big. */
+  --r: clamp(190px, 20vw, 290px);
   /* The dome's own horizontal reach — wider than --r on purpose, so
      the arc reads as a flattened, elongated oval rather than a
      perfect half-circle. Only the painted face uses this; the
      spokes still travel a true circular path off --r alone, so the
      tiles themselves stay round and undistorted. */
   --rx: calc(var(--r) * 1.3);
-  --tile-w: clamp(72px, 7.6vw, 108px);
+  --tile-w: clamp(62px, 6.4vw, 92px);
   --tile-h: calc(var(--tile-w) * 1.3);
   /* Where the projects sit on the radius, as a fraction of it —
      pushed out further than 0.71 so there's real air between the
      side tiles and the featured card at the wheel's current,
      larger scale; 0.71 had them almost touching. */
   --ring: 0.85;
+  /* Tighter than the shared .section padding — this section has a
+     name and a link to fit below the wheel too, on top of the
+     heading and the carousel itself, and the shared clamp alone
+     used to push the whole thing past one screen's height. */
+  padding-top: clamp(40px, 6vw, 90px);
+  padding-bottom: clamp(40px, 6vw, 90px);
+}
+
+#project .section-head {
+  margin-bottom: clamp(16px, 2.4vw, 32px);
 }
 
 .carousel {
@@ -1398,8 +1411,8 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
-  margin-top: clamp(20px, 3vw, 32px);
+  gap: 10px;
+  margin-top: clamp(10px, 1.6vw, 18px);
   text-align: center;
 }
 
