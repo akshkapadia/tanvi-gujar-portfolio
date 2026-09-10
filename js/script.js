@@ -318,11 +318,11 @@ if (stackHead) {
 /* ---------------------------------------------------------
    Project wheel
 
-   The ring turns slowly and forever; whichever project is
-   nearest the top is the one the card above the arc shows.
-   Hovering (or focusing, or touching) holds it still so the
-   card can actually be read, and clicking a project eases it
-   round to the top rather than snapping.
+   The ring turns slowly and forever, hover included — it does not
+   pause the way it used to; only keyboard focus or a touch still
+   holds it still, since those need the extra time to read or tap a
+   target rather than just glancing at one. Clicking a project eases
+   it round to the top rather than snapping.
    --------------------------------------------------------- */
 const dial = document.getElementById("dial");
 const carousel = document.getElementById("carousel");
@@ -426,11 +426,12 @@ if (dial && carousel) {
     held = false;
   };
 
-  carousel.addEventListener("pointerenter", hold);
-  carousel.addEventListener("pointerleave", release);
+  // No pointerenter/pointerleave here on purpose — the wheel keeps
+  // turning under a mouse hover now. Keyboard focus still holds it,
+  // since a keyboard user can't "glance" at a target the way a mouse
+  // hover implies; a touch still holds it too, for the same reason.
   carousel.addEventListener("focusin", hold);
   carousel.addEventListener("focusout", release);
-  // A touch has no hover to leave, so the pause ends with the touch.
   carousel.addEventListener("touchstart", hold, { passive: true });
   carousel.addEventListener("touchend", release, { passive: true });
 

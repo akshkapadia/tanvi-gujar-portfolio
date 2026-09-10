@@ -1290,13 +1290,14 @@ main {
      vertical, at ±30°) have already spread past the card's own half
      -width by the time they reach this height — otherwise they cross
      behind the card's lower half instead of framing it. Given the
-     hairlines' 30° angle, clearing them needs bottom ≳ width * 0.87;
-     0.62 of --r still covers that across the card's own width range
-     (a little tighter than 0.65, brought down slightly on purpose)
-     with margin at both this and the mobile breakpoint. Also
-     comfortably higher than the side tiles, so the card reads as the
-     highlighted one. */
-  bottom: calc(var(--r) * 0.62);
+     hairlines' 30° angle, clearing them needs bottom ≳ width * 0.87,
+     which at the mobile breakpoint's own worst case (where its width
+     formula caps out) works out to bottom ≳ 0.596 of --r — the floor
+     this can't go below without touching them. 0.61 sits just above
+     that floor (nudged down as far as it safely goes), and clears
+     the desktop range with plenty to spare. Also comfortably higher
+     than the side tiles, so the card reads as the highlighted one. */
+  bottom: calc(var(--r) * 0.61);
   z-index: 2;
   transform: translateX(-50%);
   display: flex;
@@ -1336,7 +1337,15 @@ main {
     linear-gradient(160deg, hsl(var(--tint, 272) 62% 48% / 0.6), hsl(var(--tint, 272) 70% 16% / 0.95));
   box-shadow: 0 22px 54px rgba(0, 0, 0, 0.6);
   overflow: hidden;
-  transition: background 0.7s ease;
+  transition: background 0.7s ease, box-shadow 0.35s ease, transform 0.35s var(--ease-out);
+}
+
+/* A soft purple glow behind the card and a slight lift on hover —
+   the wheel doesn't pause for it any more, so this is what tells the
+   viewer the featured card itself is the interactive-feeling one. */
+.hub-shot:hover {
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.6), 0 0 70px rgba(157, 78, 221, 0.55);
+  transform: translateY(-4px);
 }
 
 /* The blend into the core — its colour matches .dial-core's own
