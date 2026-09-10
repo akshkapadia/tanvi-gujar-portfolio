@@ -1218,8 +1218,12 @@ main {
   height: calc(var(--r) * 0.6);
   transform: translate(-50%, 50%);
   border-radius: 50%;
-  border: 1px solid rgba(157, 78, 221, 0.3);
-  background: radial-gradient(closest-side, #16021f, #050008);
+  /* No border and a fade to transparent at the rim, rather than a
+     flat fill stopping dead — a hard ring outline there read as its
+     own separate shape sitting on the dome instead of a well sunk
+     into it. Fading out lets the dome's own tint show through at
+     the edge, so the two blend instead of meeting at a hard line. */
+  background: radial-gradient(closest-side, #16021f, #050008 70%, transparent 100%);
 }
 
 .dial-arrow {
