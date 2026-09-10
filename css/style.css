@@ -1172,16 +1172,19 @@ main {
 }
 
 /* Six wedges and the hairlines between them, as one painted face
-   that turns with the projects rather than under them. */
+   that turns with the projects rather than under them. One flat
+   tint rather than alternating wedge opacities — alternating 0.34/
+   0.15 read as two different colours (purple wedges next to near-
+   black ones) instead of one ring, and made the tint look like it
+   petered out before the true outer edge. A single opacity carries
+   evenly from the inner mask all the way out to the rim. */
 .dial-face {
   position: absolute;
   inset: 0;
   border-radius: 50%;
   background:
     repeating-conic-gradient(from -30deg, rgba(255, 255, 255, 0.13) 0deg 0.3deg, transparent 0.3deg 60deg),
-    repeating-conic-gradient(from -30deg,
-      rgba(157, 78, 221, 0.34) 0deg 60deg,
-      rgba(157, 78, 221, 0.15) 60deg 120deg);
+    rgba(157, 78, 221, 0.26);
   mask-image: radial-gradient(closest-side, transparent 35%, #000 37%);
   -webkit-mask-image: radial-gradient(closest-side, transparent 35%, #000 37%);
 }
@@ -1378,15 +1381,22 @@ main {
 /* The blend into the core — its colour matches .dial-core's own
    fill exactly, so the join is invisible rather than a visible
    second gradient sitting on top of the first. */
+/* A taller fade than a simple bottom trim — the lower part of the
+   cover dissolves into the ring's own colour well before the card's
+   actual bottom edge, so nothing reads as a hard rectangle sitting
+   in the well. That dissolve is what sells "emerging": the visible
+   poster effectively ends partway down, above the true box edge and
+   clear of the ring's own border, and floats a little higher than
+   the side tiles as a result. */
 .hub-shot::after {
   content: "";
   position: absolute;
   inset: auto 0 0 0;
-  height: 52%;
+  height: 68%;
   /* #050008 matches .dial-core's own outer fill exactly — the join
      has to be the same colour on both sides or it reads as a second
      gradient sitting on the card, not a blend into the ring. */
-  background: linear-gradient(to bottom, transparent, #050008 85%);
+  background: linear-gradient(to bottom, transparent, #050008 72%);
   pointer-events: none;
 }
 
