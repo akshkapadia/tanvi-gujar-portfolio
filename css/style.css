@@ -1029,10 +1029,9 @@ main {
    pushed out by the radius, so only the upper arc is on screen
    and the rest of the ring waits below the fold.
    ========================================================= */
-/* Defined on the section, not .carousel itself, so .carousel-note —
-   a sibling of .carousel, not a descendant — can also read --r to
-   size its own clearance below the hub card, which now deliberately
-   overflows .carousel's own box. */
+/* Defined on the section, not .carousel itself, so .project-info —
+   a sibling of .carousel, not a descendant — can also read --r for
+   its own desktop overlap offset. */
 #project {
   /* Sized off the section's own width now that the wheel sits
      directly on the page rather than in a capped-width card, so it
@@ -1353,7 +1352,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   margin-top: clamp(10px, 1.6vw, 18px);
   text-align: center;
 }
@@ -1362,20 +1361,22 @@ main {
   /* Pulled up into the dome's own empty space below the featured
      card — between the card's bottom (0.61 * --r above the
      baseline) and the baseline itself — instead of sitting in normal
-     flow below the whole wheel. Still normal flow underneath (the
-     negative margin only shifts where its box paints), so
-     .carousel-note right after it naturally lands close under the
-     wheel too, rather than leaving a tall gap where this used to sit. */
+     flow below the whole wheel. */
   .project-info {
     margin-top: calc(var(--r) * -0.42);
   }
 }
 
 .project-name {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: var(--fs-title);
-  letter-spacing: -0.4px;
+  /* Poppins semibold, not the condensed display face used for page
+     headings — League Gothic is drawn narrow on purpose for big
+     type; at project-name's smaller size that same narrowness just
+     read as shrunken. A plain, confident weight is what portfolio
+     sites use for case-study titles. */
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(26px, 2.6vw, 42px);
+  letter-spacing: -0.3px;
   color: var(--color-white);
   /* Sits over the dome's own wedge pattern now, not a plain
      background — the shadow is what keeps it legible regardless of
@@ -1386,9 +1387,9 @@ main {
 .project-link {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 44px;
-  padding: 0 20px;
+  gap: 10px;
+  height: clamp(44px, 3.6vw, 52px);
+  padding: 0 clamp(20px, 2vw, 28px);
   border-radius: 50px;
   border: 1px solid var(--glass-border);
   background: var(--glass-fill);
@@ -1396,7 +1397,7 @@ main {
   -webkit-backdrop-filter: var(--glass-blur);
   font-family: var(--font-body);
   font-weight: 500;
-  font-size: var(--fs-body);
+  font-size: clamp(15px, 1.1vw, 18px);
   color: var(--color-white);
   transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
 }
@@ -1413,13 +1414,6 @@ main {
 
 .project-link:hover .arrow-icon {
   transform: translate(2px, -2px);
-}
-
-.carousel-note {
-  margin-top: clamp(14px, 2vw, 22px);
-  text-align: center;
-  font-size: var(--fs-small);
-  color: var(--text-faint);
 }
 
 /* =========================================================
@@ -1878,8 +1872,7 @@ main {
   /* A phone is narrower than the dial wants to be, so the radius is
      driven by the viewport width and the card inside it shrinks to
      match. --r and --ring live on #project (see the desktop rule's
-     comment) so .carousel-note's own clearance tracks this override
-     too, not just .carousel's internals. */
+     comment). */
   #project {
     /* 36vw keeps the dial (two radii wide) inside the page's own
        padding — anything larger and the section scrolls sideways. */
