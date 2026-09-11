@@ -854,29 +854,6 @@ main {
 }
 
 /* =========================================================
-   Technology — a single looping showcase video, nothing else.
-   The clip is portrait (720x1280), so it's capped by HEIGHT with
-   width following automatically — capping by width instead would
-   render it well over 1000px tall on a normal viewport.
-   ========================================================= */
-.tech-video-wrap {
-  display: flex;
-  justify-content: center;
-}
-
-.tech-video {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: min(70vh, 640px);
-  border-radius: var(--radius-card);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(157, 78, 221, 0.14);
-  background: #000;
-}
-
-/* =========================================================
    About
    ========================================================= */
 .about-grid {
@@ -1237,17 +1214,12 @@ main {
   height: 100%;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 10px;
-  /* The real cover, recoloured into the page's own purple family via
-     a "color" blend — keeps each screenshot's actual light/dark
-     detail but replaces its hue/saturation with the gradient's, so
-     five very different brand palettes still read as one cohesive
-     strip instead of a rainbow sitting oddly on a purple page. */
-  background-image:
-    linear-gradient(160deg, hsl(var(--tint, 272) 60% 45% / 0.85), hsl(var(--tint, 272) 75% 16% / 0.92)),
-    var(--cover, none);
-  background-size: cover, cover;
-  background-position: center, center;
-  background-blend-mode: color;
+  /* The real cover, in its own true colours (see .hub-shot's own
+     comment on why the purple recolour came out) — a tint gradient
+     stands in only until --cover loads. */
+  background-image: var(--cover, linear-gradient(160deg, hsl(var(--tint, 272) 62% 46%), hsl(var(--tint, 272) 70% 18%)));
+  background-size: cover;
+  background-position: center top;
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   transition: border-color 0.5s ease, box-shadow 0.5s ease, filter 0.5s ease;
@@ -1322,18 +1294,13 @@ main {
      (below) and the box-shadow are what carry and lift the card
      instead. */
   border-radius: 20px 20px 7px 7px;
-  /* The real cover, recoloured into the page's own purple family via
-     a "color" blend — same treatment as .tile, so the featured card
-     and the side tiles read as one consistent palette rather than
-     each project's own screenshot colours clashing with the theme
-     (and with each other). */
-  background-image:
-    linear-gradient(160deg, hsl(var(--tint, 272) 60% 46% / 0.72), hsl(var(--tint, 272) 78% 14% / 0.88)),
-    var(--cover, none);
-  background-size: cover, cover;
-  background-position: center, center;
-  background-blend-mode: color;
-  filter: saturate(0.92) brightness(0.9) contrast(1.05);
+  /* The real cover, in its own true colours — this is the first
+     look a visitor gets at the actual work, not a mood board, so a
+     purple recolour was working against the showcase rather than
+     for it. A tint gradient still stands in until --cover loads. */
+  background-image: var(--cover, linear-gradient(160deg, hsl(var(--tint, 272) 55% 40%), hsl(var(--tint, 272) 65% 14%)));
+  background-size: cover;
+  background-position: center top;
   box-shadow: 0 22px 54px rgba(0, 0, 0, 0.6);
   overflow: hidden;
   transition: background-image 0.7s ease, box-shadow 0.35s ease, transform 0.35s var(--ease-out);
@@ -1361,32 +1328,15 @@ main {
   content: "";
   position: absolute;
   inset: auto 0 0 0;
-  height: 78%;
-  /* Matches .dial-face's own flat tint exactly (same colour, not an
-     approximation) — the join has to land on the same shade on both
-     sides or it reads as a second patch sitting on the card, not a
-     blend into the dome. Reaches full colour well before the card's
-     own bottom edge, so nothing box-shaped is left to read as a
-     border down there — just the poster dissolving into the dome. */
-  background: linear-gradient(to bottom, transparent, rgba(157, 78, 221, 0.26) 60%);
+  height: 24%;
+  /* Just enough to dissolve the bottom edge into the dome behind it
+     — not a large solid block. The whole point of showing the real
+     cover was to let its own colours read; a tall, fully-opaque fade
+     (like this used to be) ate most of the card back into a flat
+     purple panel. Reaches full colour only right at the edge, not
+     partway up, so nearly all of the card stays true-colour. */
+  background: linear-gradient(to bottom, transparent, rgba(157, 78, 221, 0.4));
   pointer-events: none;
-}
-
-.hub-play {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 1;
-  transform: translate(-50%, -50%);
-  width: 30%;
-  aspect-ratio: 1;
-}
-
-.hub-play svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
 }
 
 /* Name + case-study link for whichever project the card is showing
