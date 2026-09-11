@@ -11,6 +11,15 @@ const coarse = window.matchMedia("(pointer: coarse)").matches;
 const clamp = (v, min, max) => (v < min ? min : v > max ? max : v);
 const maxScroll = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
 
+// A CSS custom property's url() resolves against the stylesheet that
+// reads it, not the page — so a path relative to index.html (which
+// is what every data-cover holds) would resolve against css/ instead
+// once it's substituted into a --cover custom property. Resolving it
+// against the document here first sidesteps that everywhere this
+// site is hosted, GitHub Pages' own subpath included. Shared by both
+// the project wheel and the showcase coverflow below.
+const coverUrl = (path) => "url('" + new URL(path, document.baseURI).href + "')";
+
 /* ---------------------------------------------------------
    Damped scrolling
 
@@ -334,14 +343,6 @@ if (dial && carousel) {
   const projectName = document.getElementById("projectName");
   const projectLink = document.getElementById("projectLink");
 
-  // A CSS custom property's url() resolves against the stylesheet
-  // that reads it, not the page — so a path relative to index.html
-  // (which is what data-cover holds) would resolve against css/
-  // instead once it's substituted into --cover. Resolving it against
-  // the document here first sidesteps that everywhere this site is
-  // hosted, GitHub Pages' own subpath included.
-  const coverUrl = (path) => "url('" + new URL(path, document.baseURI).href + "')";
-
   const HOLD = 2400; // a project sits at the top for this long
   const TURN = 820; // and takes this long to hand over to the next
 
@@ -479,6 +480,109 @@ if (dial && carousel) {
     mark = performance.now();
     requestAnimationFrame(frame);
   }
+}
+
+/* ---------------------------------------------------------
+   Showcase — a second, differently-shaped browser for the same
+   five projects: a coverflow instead of the wheel above. Held
+   noticeably longer per card (4.2s) than the wheel's own 2.4s —
+   this is the section meant to actually be read (a name and a
+   case-study link both live right on the card, not below it), so
+   it needs to sit still long enough for that, not just glanced at
+   mid-turn.
+   --------------------------------------------------------- */
+const showcaseTrack = document.getElementById("showcaseTrack");
+const showcaseStage = document.getElementById("showcaseStage");
+
+if (showcaseTrack && showcaseStage) {
+  const scCards = [...showcaseTrack.querySelectorAll(".showcase-card")];
+  scCards.forEach((card) => {
+    card.style.setProperty("--cover", coverUrl(card.dataset.cover));
+  });
+  const scDotsWrap = document.getElementById("showcaseDots");
+  const scDots = scDotsWrap ? [...scDotsWrap.querySelectorAll("button")] : [];
+  const SC_HOLD = 4200;
+  const n = scCards.length;
+
+  let scIndex = 0;
+  let scHeld = false;
+  let scTimer = null;
+
+  function scLayout() {
+    // The shift is a fraction of however wide the active card is
+    // actually rendering right now, not a fixed px value — so the
+    // stacked spacing stays proportional whatever --r-less, vh-only
+    // sizing this section lands on at any given viewport.
+    const shift = scCards[scIndex].offsetWidth * 0.62;
+
+    scCards.forEach((card, i) => {
+      let offset = i - scIndex;
+      if (offset > n / 2) offset -= n;
+      if (offset < -n / 2) offset += n;
+      const abs = Math.abs(offset);
+      const scale = abs === 0 ? 1 : abs === 1 ? 0.78 : 0.58;
+      const opacity = abs === 0 ? 1 : abs === 1 ? 0.5 : 0;
+
+      card.style.transform =
+        "translate(-50%, -50%) translateX(" + offset * shift + "px) scale(" + scale + ")";
+      card.style.opacity = String(opacity);
+      card.style.zIndex = String(10 - abs);
+      card.style.pointerEvents = abs > 1 ? "none" : "";
+      card.classList.toggle("is-active", offset === 0);
+      card.setAttribute("aria-hidden", offset === 0 ? "false" : "true");
+      const link = card.querySelector(".showcase-link");
+      if (link) link.tabIndex = offset === 0 ? 0 : -1;
+    });
+
+    scDots.forEach((d, i) => d.setAttribute("aria-current", i === scIndex ? "true" : "false"));
+  }
+
+  function scGoTo(next) {
+    scIndex = ((next % n) + n) % n;
+    scLayout();
+  }
+
+  function scRestart() {
+    clearInterval(scTimer);
+    if (reduceMotion) return;
+    scTimer = setInterval(() => {
+      if (!scHeld) scGoTo(scIndex + 1);
+    }, SC_HOLD);
+  }
+
+  scCards.forEach((card, i) => {
+    card.addEventListener("click", (e) => {
+      // A click on the active card's own link should follow the
+      // link, not just re-centre a card that's already centred.
+      if (i === scIndex) return;
+      scGoTo(i);
+      scRestart();
+    });
+  });
+
+  scDots.forEach((dot, i) => {
+    dot.addEventListener("click", () => {
+      scGoTo(i);
+      scRestart();
+    });
+  });
+
+  const scPrev = document.getElementById("showcasePrev");
+  const scNext = document.getElementById("showcaseNext");
+  if (scPrev) scPrev.addEventListener("click", () => { scGoTo(scIndex - 1); scRestart(); });
+  if (scNext) scNext.addEventListener("click", () => { scGoTo(scIndex + 1); scRestart(); });
+
+  // No hover-pause here either, to match the wheel above — focus
+  // and touch still hold it, same reasoning as there.
+  showcaseStage.addEventListener("focusin", () => { scHeld = true; });
+  showcaseStage.addEventListener("focusout", () => { scHeld = false; });
+  showcaseStage.addEventListener("touchstart", () => { scHeld = true; }, { passive: true });
+  showcaseStage.addEventListener("touchend", () => { scHeld = false; }, { passive: true });
+
+  window.addEventListener("resize", scLayout);
+
+  scLayout();
+  scRestart();
 }
 
 /* ---------------------------------------------------------
