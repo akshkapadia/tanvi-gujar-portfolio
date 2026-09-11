@@ -499,6 +499,8 @@ if (showcaseTrack && showcaseStage) {
   scCards.forEach((card) => {
     card.style.setProperty("--cover", coverUrl(card.dataset.cover));
   });
+  const scName = document.getElementById("showcaseName");
+  const scLink = document.getElementById("showcaseLink");
   const SC_HOLD = 4200;
   const n = scCards.length;
   // A slight lean toward the centre card, not a full carousel spin —
@@ -536,9 +538,11 @@ if (showcaseTrack && showcaseStage) {
       card.style.pointerEvents = abs > 1 ? "none" : "";
       card.classList.toggle("is-active", offset === 0);
       card.setAttribute("aria-hidden", offset === 0 ? "false" : "true");
-      const link = card.querySelector(".showcase-link");
-      if (link) link.tabIndex = offset === 0 ? 0 : -1;
     });
+
+    const active = scCards[scIndex];
+    scName.textContent = active.dataset.name;
+    scLink.href = active.dataset.behance;
   }
 
   function scGoTo(next) {
@@ -555,9 +559,7 @@ if (showcaseTrack && showcaseStage) {
   }
 
   scCards.forEach((card, i) => {
-    card.addEventListener("click", (e) => {
-      // A click on the active card's own link should follow the
-      // link, not just re-centre a card that's already centred.
+    card.addEventListener("click", () => {
       if (i === scIndex) return;
       scGoTo(i);
       scRestart();
