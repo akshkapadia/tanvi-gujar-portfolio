@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=56">
+  <link rel="stylesheet" href="css/style.css?v=57">
 </head>
 <body>
 
@@ -237,8 +237,11 @@
       <!-- Five real case studies. Each spoke's data-name/data-behance
            drive #projectName and #projectLink as the wheel turns
            (see showCard() in script.js); data-tint is a rough stand-
-           in for each brand's own palette until real cover art
-           replaces .tile's abstract mock screens. -->
+           in — real cover art, but kept inside the same purple
+           family as the rest of the page (a "color" blend mode over
+           each photo, see .tile/.hub-shot) rather than each brand's
+           own colours, so five very different screenshots still read
+           as one cohesive show-reel instead of a rainbow. -->
       <div class="carousel reveal" id="carousel">
         <div class="dial-stage">
           <div class="dial-clip">
@@ -247,20 +250,20 @@
                should stay put while only the tiles orbit it. -->
           <div class="dial-face" aria-hidden="true"></div>
           <div class="dial" id="dial">
-            <button class="spoke" type="button" style="--a: 0deg" data-tint="352" data-name="Dhanvi Creation" data-behance="https://www.behance.net/gallery/254691051/Dhanvi-Creation-Luxury-Couture-E-commerce-Website">
-              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            <button class="spoke" type="button" style="--a: 0deg" data-tint="285" data-name="Dhanvi Creation" data-behance="https://www.behance.net/gallery/254691051/Dhanvi-Creation-Luxury-Couture-E-commerce-Website" data-cover="assets/img/dhanvi.webp">
+              <span class="tile"></span>
             </button>
-            <button class="spoke" type="button" style="--a: 72deg" data-tint="205" data-name="Lumera Jewels" data-behance="https://www.behance.net/gallery/253968535/LUMERA-Jewels-Premium-Luxury-Jewellery">
-              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            <button class="spoke" type="button" style="--a: 72deg" data-tint="260" data-name="Lumera Jewels" data-behance="https://www.behance.net/gallery/253968535/LUMERA-Jewels-Premium-Luxury-Jewellery" data-cover="assets/img/Lumera-Jewels.webp">
+              <span class="tile"></span>
             </button>
-            <button class="spoke" type="button" style="--a: 144deg" data-tint="28" data-name="Aurelia" data-behance="https://www.behance.net/gallery/253859343/AURELIA-Luxury-Furniture-E-Commerce-Experience">
-              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            <button class="spoke" type="button" style="--a: 144deg" data-tint="275" data-name="Aurelia" data-behance="https://www.behance.net/gallery/253859343/AURELIA-Luxury-Furniture-E-Commerce-Experience" data-cover="assets/img/aurelia.webp">
+              <span class="tile"></span>
             </button>
-            <button class="spoke" type="button" style="--a: 216deg" data-tint="216" data-name="Timeora" data-behance="https://www.behance.net/gallery/254693533/Timeora-Luxury-Watch-E-commerce-Experience">
-              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            <button class="spoke" type="button" style="--a: 216deg" data-tint="250" data-name="Timeora" data-behance="https://www.behance.net/gallery/254693533/Timeora-Luxury-Watch-E-commerce-Experience" data-cover="assets/img/timeora.png">
+              <span class="tile"></span>
             </button>
-            <button class="spoke" type="button" style="--a: 288deg" data-tint="185" data-name="Sweet Heaven" data-behance="https://www.behance.net/gallery/254093915/Sweet-Haven-Premium-Bakery-Website-UIUX-Design">
-              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
+            <button class="spoke" type="button" style="--a: 288deg" data-tint="295" data-name="Sweet Heaven" data-behance="https://www.behance.net/gallery/254093915/Sweet-Haven-Premium-Bakery-Website-UIUX-Design" data-cover="assets/img/sweet-bites.webp">
+              <span class="tile"></span>
             </button>
           </div>
             <div class="dial-core" aria-hidden="true"></div>
@@ -295,7 +298,7 @@
         </a>
       </div>
 
-      <p class="carousel-note">Covers are stand-ins — swap in each project's real cover art when it's ready.</p>
+      <p class="carousel-note">Covers link out to the full case study on Behance.</p>
     </section>
 
     <!-- ============ EXPERIENCE ============ -->
@@ -370,6 +373,6 @@
     <p>Designed &amp; built with care</p>
   </footer>
 
-  <script src="js/script.js?v=19"></script>
+  <script src="js/script.js?v=20"></script>
 </body>
 </html>

@@ -1235,11 +1235,19 @@ main {
   display: block;
   width: 100%;
   height: 100%;
-  padding: 12% 11%;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 10px;
-  background:
-    linear-gradient(160deg, hsl(var(--tint, 272) 62% 46% / 0.55), hsl(var(--tint, 272) 70% 18% / 0.92));
+  /* The real cover, recoloured into the page's own purple family via
+     a "color" blend — keeps each screenshot's actual light/dark
+     detail but replaces its hue/saturation with the gradient's, so
+     five very different brand palettes still read as one cohesive
+     strip instead of a rainbow sitting oddly on a purple page. */
+  background-image:
+    linear-gradient(160deg, hsl(var(--tint, 272) 60% 45% / 0.85), hsl(var(--tint, 272) 75% 16% / 0.92)),
+    var(--cover, none);
+  background-size: cover, cover;
+  background-position: center, center;
+  background-blend-mode: color;
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   transition: border-color 0.5s ease, box-shadow 0.5s ease, filter 0.5s ease;
@@ -1252,41 +1260,7 @@ main {
 }
 
 .spoke:not([data-active]) .tile {
-  filter: brightness(0.72) saturate(0.8);
-}
-
-/* Abstract screen inside a cover — a stand-in for real artwork,
-   drawn rather than faked with a stock photo. */
-.shot-bar,
-.shot-row,
-.shot-block {
-  display: block;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.62);
-}
-
-.shot-bar {
-  width: 46%;
-  height: 5%;
-  margin-bottom: 11%;
-}
-
-.shot-row {
-  width: 78%;
-  height: 4%;
-  margin-bottom: 7%;
-  background: rgba(255, 255, 255, 0.34);
-}
-
-.shot-row.short {
-  width: 52%;
-}
-
-.shot-block {
-  width: 100%;
-  height: 42%;
-  border-radius: 6px;
-  background: linear-gradient(150deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+  filter: brightness(0.78) saturate(0.85);
 }
 
 /* ---- the card in the middle of the dial ----
@@ -1342,18 +1316,27 @@ main {
   position: relative;
   width: 100%;
   aspect-ratio: 3 / 4.2;
-  padding: 9% 10%;
   /* No border at all — a line on any edge crossed straight through
      the dome's own hairlines right behind it, reading as two things
      intersecting instead of one emerging from the other. The fade
      (below) and the box-shadow are what carry and lift the card
      instead. */
   border-radius: 20px 20px 7px 7px;
-  background:
-    linear-gradient(160deg, hsl(var(--tint, 272) 62% 48% / 0.6), hsl(var(--tint, 272) 70% 16% / 0.95));
+  /* The real cover, recoloured into the page's own purple family via
+     a "color" blend — same treatment as .tile, so the featured card
+     and the side tiles read as one consistent palette rather than
+     each project's own screenshot colours clashing with the theme
+     (and with each other). */
+  background-image:
+    linear-gradient(160deg, hsl(var(--tint, 272) 60% 46% / 0.72), hsl(var(--tint, 272) 78% 14% / 0.88)),
+    var(--cover, none);
+  background-size: cover, cover;
+  background-position: center, center;
+  background-blend-mode: color;
+  filter: saturate(0.92) brightness(0.9) contrast(1.05);
   box-shadow: 0 22px 54px rgba(0, 0, 0, 0.6);
   overflow: hidden;
-  transition: background 0.7s ease, box-shadow 0.35s ease, transform 0.35s var(--ease-out);
+  transition: background-image 0.7s ease, box-shadow 0.35s ease, transform 0.35s var(--ease-out);
 }
 
 /* A soft purple glow behind the card and a slight lift on hover —
