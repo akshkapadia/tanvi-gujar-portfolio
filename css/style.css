@@ -1436,7 +1436,7 @@ main {
      from the stage's own centre regardless of which project is
      showing — anchoring the buttons off this variable instead of
      tracking the card in JS keeps them glued to it for free. */
-  --sc-card-s: clamp(240px, 44vmin, 480px);
+  --sc-card-s: clamp(260px, 48vmin, 520px);
 }
 
 #showcase .section-head {
@@ -1450,13 +1450,13 @@ main {
      nav buttons landing in its corner near the card they control,
      instead of a nearly-invisible tint stretched edge to edge with
      the buttons stranded far off to the side of the actual card. */
-  max-width: 800px;
+  max-width: 860px;
   margin: 0 auto;
-  /* Comfortably above --sc-card-s's own ceiling (480px) plus this
+  /* Comfortably above --sc-card-s's own ceiling (520px) plus this
      rule's own padding (up to 32px a side) — otherwise the stage's
      overflow:hidden clips the card's top/bottom at large viewports
      where both hit their ceilings together. */
-  height: clamp(300px, 56vh, 580px);
+  height: clamp(320px, 58vh, 620px);
   padding: clamp(18px, 2.6vw, 32px);
   /* No glass panel behind the whole stage any more — just the cards
      themselves floating on the page, with .showcase-glass carrying
@@ -1529,13 +1529,11 @@ main {
   z-index: 1;
   padding: clamp(14px, 2vh, 20px) clamp(16px, 2vw, 22px);
   border-radius: 20px;
-  /* Lighter than the site's own --glass-fill, but pulled back down
-     toward transparent from an earlier, too-opaque pass — the blur
-     alone (below) is most of what keeps the name legible; the fill
-     just needs to be enough of a hint of white to tip dark text over
-     into readable, not a near-solid backing. */
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.07));
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  /* Almost transparent — the blur (below) is what actually keeps the
+     dark text legible over the photo; the fill is barely more than a
+     faint hint of white on top of that, not a backing panel. */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.14);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
@@ -1563,7 +1561,7 @@ main {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 8px;
+  margin-top: 3px;
   font-family: var(--font-body);
   font-weight: 500;
   font-size: clamp(11px, 0.8vw, 13px);
