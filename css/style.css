@@ -1458,15 +1458,9 @@ main {
      where both hit their ceilings together. */
   height: clamp(280px, 54vh, 540px);
   padding: clamp(18px, 2.6vw, 32px);
-  border-radius: var(--radius-card);
-  /* The whole stage is one glass panel now, not just the info
-     overlay on the active card — a frosted frame around the
-     coverflow instead of the cards floating bare on the page. */
-  background: var(--glass-fill);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
+  /* No glass panel behind the whole stage any more — just the cards
+     themselves floating on the page, with .showcase-glass carrying
+     the only frosted surface (on the active card's own info strip). */
   /* The side cards translate out from centre; without this a narrow
      viewport shows a real horizontal scrollbar for however far they
      land off-screen. */
@@ -1535,8 +1529,13 @@ main {
   z-index: 1;
   padding: clamp(14px, 2vh, 20px) clamp(16px, 2vw, 22px);
   border-radius: 20px;
-  background: var(--glass-fill);
-  border: 1px solid var(--glass-border);
+  /* Noticeably lighter than the site's own --glass-fill — that tint
+     is subtle by design for panels sitting on an already-light page
+     area, but here it's blurring a photo behind it and read as
+     dark. More white in the mix keeps the name legible without
+     needing a solid backing. */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.16));
+  border: 1px solid rgba(255, 255, 255, 0.4);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
@@ -1555,7 +1554,9 @@ main {
   font-weight: 600;
   font-size: clamp(17px, 1.6vw, 22px);
   letter-spacing: -0.2px;
-  color: var(--color-white);
+  /* Dark, not white — .showcase-glass is a light panel now, so white
+     text lost its contrast against it. */
+  color: var(--color-purple-deep);
 }
 
 .showcase-link {
@@ -1566,19 +1567,24 @@ main {
   font-family: var(--font-body);
   font-weight: 500;
   font-size: clamp(13px, 1vw, 15px);
-  color: #c58bf5;
+  color: var(--color-purple-strong);
   border-bottom: 1px solid transparent;
   transition: border-color 0.3s ease, color 0.3s ease;
 }
 
 .showcase-link:hover {
-  color: #dcc0ff;
+  color: var(--color-purple);
   border-bottom-color: currentColor;
 }
 
 .showcase-link .arrow-icon {
   width: 15px;
   height: 15px;
+  /* The source SVG is a hardcoded white stroke (it's shared with
+     buttons on dark backgrounds elsewhere) — recoloured dark here
+     specifically, to stay legible on .showcase-glass's now-light
+     panel instead of disappearing into it. */
+  filter: brightness(0) saturate(100%);
 }
 
 /* Small, one at each of the active card's own top corners (prev

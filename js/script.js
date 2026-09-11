@@ -515,7 +515,7 @@ if (showcaseTrack && showcaseStage) {
     // actually rendering right now, not a fixed px value — so the
     // stacked spacing stays proportional whatever --r-less, vh-only
     // sizing this section lands on at any given viewport.
-    const shift = scCards[scIndex].offsetWidth * 0.62;
+    const shift = scCards[scIndex].offsetWidth * 0.42;
 
     scCards.forEach((card, i) => {
       let offset = i - scIndex;
