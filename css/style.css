@@ -1436,7 +1436,7 @@ main {
      from the stage's own centre regardless of which project is
      showing — anchoring the buttons off this variable instead of
      tracking the card in JS keeps them glued to it for free. */
-  --sc-card-s: clamp(220px, 40vmin, 440px);
+  --sc-card-s: clamp(240px, 44vmin, 480px);
 }
 
 #showcase .section-head {
@@ -1450,13 +1450,13 @@ main {
      nav buttons landing in its corner near the card they control,
      instead of a nearly-invisible tint stretched edge to edge with
      the buttons stranded far off to the side of the actual card. */
-  max-width: 760px;
+  max-width: 800px;
   margin: 0 auto;
-  /* Comfortably above --sc-card-s's own ceiling (440px) plus this
+  /* Comfortably above --sc-card-s's own ceiling (480px) plus this
      rule's own padding (up to 32px a side) — otherwise the stage's
      overflow:hidden clips the card's top/bottom at large viewports
      where both hit their ceilings together. */
-  height: clamp(280px, 54vh, 540px);
+  height: clamp(300px, 56vh, 580px);
   padding: clamp(18px, 2.6vw, 32px);
   /* No glass panel behind the whole stage any more — just the cards
      themselves floating on the page, with .showcase-glass carrying
@@ -1529,13 +1529,13 @@ main {
   z-index: 1;
   padding: clamp(14px, 2vh, 20px) clamp(16px, 2vw, 22px);
   border-radius: 20px;
-  /* Noticeably lighter than the site's own --glass-fill — that tint
-     is subtle by design for panels sitting on an already-light page
-     area, but here it's blurring a photo behind it and read as
-     dark. More white in the mix keeps the name legible without
-     needing a solid backing. */
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.16));
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  /* Lighter than the site's own --glass-fill, but pulled back down
+     toward transparent from an earlier, too-opaque pass — the blur
+     alone (below) is most of what keeps the name legible; the fill
+     just needs to be enough of a hint of white to tip dark text over
+     into readable, not a near-solid backing. */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.07));
+  border: 1px solid rgba(255, 255, 255, 0.25);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
@@ -1552,7 +1552,7 @@ main {
 .showcase-name {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: clamp(17px, 1.6vw, 22px);
+  font-size: clamp(14px, 1.2vw, 18px);
   letter-spacing: -0.2px;
   /* Dark, not white — .showcase-glass is a light panel now, so white
      text lost its contrast against it. */
@@ -1566,7 +1566,7 @@ main {
   margin-top: 8px;
   font-family: var(--font-body);
   font-weight: 500;
-  font-size: clamp(13px, 1vw, 15px);
+  font-size: clamp(11px, 0.8vw, 13px);
   color: var(--color-purple-strong);
   border-bottom: 1px solid transparent;
   transition: border-color 0.3s ease, color 0.3s ease;
