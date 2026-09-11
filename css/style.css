@@ -1428,14 +1428,15 @@ main {
 #showcase {
   padding-top: clamp(32px, 6vh, 72px);
   padding-bottom: clamp(32px, 6vh, 72px);
-  /* Shared by .showcase-card's own width and .showcase-nav's
-     position — the active card is always centred, so its right edge
-     sits at a fixed offset from the stage's own centre regardless of
-     which project is showing. Anchoring the nav buttons off that
-     same variable, instead of tracking the card in JS, keeps them
-     glued to its corner with zero extra layout work per frame. */
-  --sc-card-w: clamp(230px, 46vw, 560px);
-  --sc-card-h: clamp(170px, 30vh, 340px);
+  /* A full rounded square, not a landscape rectangle — one size for
+     both width and height, off vmin so it respects whichever of the
+     viewport's own width/height is tighter rather than overflowing
+     the other. Shared with .showcase-nav's position too: the active
+     card is always centred, so its corners sit at a fixed offset
+     from the stage's own centre regardless of which project is
+     showing — anchoring the buttons off this variable instead of
+     tracking the card in JS keeps them glued to it for free. */
+  --sc-card-s: clamp(220px, 40vmin, 440px);
 }
 
 #showcase .section-head {
@@ -1449,9 +1450,13 @@ main {
      nav buttons landing in its corner near the card they control,
      instead of a nearly-invisible tint stretched edge to edge with
      the buttons stranded far off to the side of the actual card. */
-  max-width: 920px;
+  max-width: 760px;
   margin: 0 auto;
-  height: clamp(260px, 48vh, 440px);
+  /* Comfortably above --sc-card-s's own ceiling (440px) plus this
+     rule's own padding (up to 32px a side) — otherwise the stage's
+     overflow:hidden clips the card's top/bottom at large viewports
+     where both hit their ceilings together. */
+  height: clamp(280px, 54vh, 540px);
   padding: clamp(18px, 2.6vw, 32px);
   border-radius: var(--radius-card);
   /* The whole stage is one glass panel now, not just the info
@@ -1478,23 +1483,16 @@ main {
   perspective: 1400px;
 }
 
-/* Width and height are each their own clamp — vw-bound and vh-bound
-   respectively — rather than one driving the other through
-   aspect-ratio. That was clean at desktop widths but had no floor on
-   width specifically: at a narrow phone width, a height-derived
-   width (off a viewport that's tall relative to its own width) came
-   out wide enough to overlap .showcase-nav. Sizing width off vw
-   directly keeps it in proportion to the screen it actually has to
-   fit across. */
 .showcase-card {
   position: absolute;
   top: 50%;
   left: 50%;
-  /* Bigger and distinctly wider than tall now — a landscape card
-     closer to the reference than the earlier near-square one. */
-  width: var(--sc-card-w);
-  height: var(--sc-card-h);
-  border-radius: 28px;
+  /* A true square (--sc-card-s for both), not the landscape
+     rectangle this used to be — closer look at the reference showed
+     a full rounded square, matching the heavier border-radius below. */
+  width: var(--sc-card-s);
+  height: var(--sc-card-s);
+  border-radius: clamp(28px, 8vmin, 56px);
   overflow: hidden;
   background-image: var(--cover);
   background-size: cover;
@@ -1583,19 +1581,20 @@ main {
   height: 15px;
 }
 
-/* Small, sat in the stage's own top-right corner — like a control
-   that belongs to the glass panel itself, rather than a pair of big
-   arrows bracketing the whole carousel from off to the sides. */
-/* Anchored off the active card's own edge (--sc-card-w/-h, shared
-   with .showcase-card), not the stage's corner — the stage is wider
-   than the card to leave room for the side cards to peek, so pinning
-   these to the stage's own corner stranded them well past the
-   card's actual edge. This keeps them glued to it regardless of
-   viewport, with zero per-frame tracking needed since the active
-   card's size never changes, only which project is on it. */
+/* Small, one at each of the active card's own top corners (prev
+   top-left, next top-right) — like controls that belong to the card
+   itself, rather than a pair of big arrows bracketing the whole
+   carousel from off to the sides, or both crowded onto one corner.
+   Anchored off --sc-card-s (shared with .showcase-card's own size),
+   not the stage's corner — the stage is wider than the card to leave
+   room for the side cards to peek, so pinning these to the stage's
+   own corner stranded them well past the card's actual edge. This
+   keeps them glued to it regardless of viewport, with zero per-frame
+   tracking needed since the active card's size never changes, only
+   which project is on it. */
 .showcase-nav {
   position: absolute;
-  top: calc(50% - var(--sc-card-h) / 2 + 12px);
+  top: calc(50% - var(--sc-card-s) / 2 + 12px);
   /* Above every card's own z-index (the active one reaches 10) —
      otherwise the active card would paint over these. */
   z-index: 20;
@@ -1617,12 +1616,12 @@ main {
   height: 16px;
 }
 
-.showcase-nav.next {
-  left: calc(50% + var(--sc-card-w) / 2 - 44px);
+.showcase-nav.prev {
+  left: calc(50% - var(--sc-card-s) / 2 + 12px);
 }
 
-.showcase-nav.prev {
-  left: calc(50% + var(--sc-card-w) / 2 - 82px);
+.showcase-nav.next {
+  left: calc(50% + var(--sc-card-s) / 2 - 44px);
 }
 
 .showcase-nav:hover {
