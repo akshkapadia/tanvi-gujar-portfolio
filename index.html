@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=58">
+  <link rel="stylesheet" href="css/style.css?v=59">
 </head>
 <body>
 
@@ -268,9 +268,12 @@
       </div>
 
       <!-- Name + case-study link for whichever project the card is
-           currently showing — kept off the card itself so the poster
-           stays just the cover, and updated by showCard() in
-           script.js as the wheel turns. -->
+           currently showing — pulled up into the dome's own empty
+           space below the featured card on desktop (see the negative
+           margin-top on .project-info), rather than adding its own
+           row below the whole wheel; that's what lets the section
+           fit one screen without the wheel having to shrink to make
+           room for it. Updated by showCard() in script.js. -->
       <div class="project-info reveal">
         <h3 class="project-name" id="projectName">Dhanvi Creation</h3>
         <a class="project-link" id="projectLink" href="https://www.behance.net/gallery/254691051/Dhanvi-Creation-Luxury-Couture-E-commerce-Website" target="_blank" rel="noopener">

@@ -1037,11 +1037,15 @@ main {
   /* Sized off the section's own width now that the wheel sits
      directly on the page rather than in a capped-width card, so it
      reads at the same scale as the rest of the section's content
-     instead of looking small in all the open space. Pulled back a
-     bit from an earlier, taller pass — the whole section (heading
-     through the name/link under the wheel) needs to fit in one
-     screen without scrolling, not just look big. */
-  --r: clamp(190px, 20vw, 290px);
+     instead of looking small in all the open space. The name/link
+     row now overlaps up into the dome itself on desktop (see
+     .project-info) rather than adding its own row below the wheel,
+     which freed up the room to size this larger again while the
+     section still fits one screen. The 250px floor is load-bearing,
+     not just cosmetic — .project-info needs the arrows' own gap
+     (0.52 * --r, minus their 46px width) wide enough to clear its
+     own width; below ~242px that gap closes below the button. */
+  --r: clamp(250px, 26vw, 330px);
   /* The dome's own horizontal reach — wider than --r on purpose, so
      the arc reads as a flattened, elongated oval rather than a
      perfect half-circle. Only the painted face uses this; the
@@ -1344,6 +1348,8 @@ main {
    the poster stays just the cover and this can carry as much text
    as a real project needs without crowding it. */
 .project-info {
+  position: relative;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1352,12 +1358,29 @@ main {
   text-align: center;
 }
 
+@media (min-width: 901px) {
+  /* Pulled up into the dome's own empty space below the featured
+     card — between the card's bottom (0.61 * --r above the
+     baseline) and the baseline itself — instead of sitting in normal
+     flow below the whole wheel. Still normal flow underneath (the
+     negative margin only shifts where its box paints), so
+     .carousel-note right after it naturally lands close under the
+     wheel too, rather than leaving a tall gap where this used to sit. */
+  .project-info {
+    margin-top: calc(var(--r) * -0.42);
+  }
+}
+
 .project-name {
   font-family: var(--font-display);
   font-weight: 400;
   font-size: var(--fs-title);
   letter-spacing: -0.4px;
   color: var(--color-white);
+  /* Sits over the dome's own wedge pattern now, not a plain
+     background — the shadow is what keeps it legible regardless of
+     what's behind it. */
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
 }
 
 .project-link {
