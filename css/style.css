@@ -1147,8 +1147,11 @@ main {
   width: calc(var(--rx) * 2);
   height: calc(var(--r) * 2);
   border-radius: 50%;
+  /* 72deg segments, offset -36deg so a hairline bisects the gap on
+     each side of top dead centre — five slices for five projects,
+     not the six this was tuned for originally. */
   background:
-    repeating-conic-gradient(from -30deg, rgba(255, 255, 255, 0.13) 0deg 0.3deg, transparent 0.3deg 60deg),
+    repeating-conic-gradient(from -36deg, rgba(255, 255, 255, 0.13) 0deg 0.3deg, transparent 0.3deg 72deg),
     rgba(157, 78, 221, 0.26);
   /* A long, slow fade out to the rim rather than a flat tint cut off
      by the clip — a hard-edged dome silhouette is exactly what read

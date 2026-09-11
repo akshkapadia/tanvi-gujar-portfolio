@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=55">
+  <link rel="stylesheet" href="css/style.css?v=56">
 </head>
 <body>
 
@@ -234,9 +234,11 @@
         <h2 class="section-title">PROJECT</h2>
       </header>
 
-      <!-- Just the covers: no name, category or links on the featured
-           card, so nothing here depends on JS to show real content —
-           the wheel is purely a showcase piece. -->
+      <!-- Five real case studies. Each spoke's data-name/data-behance
+           drive #projectName and #projectLink as the wheel turns
+           (see showCard() in script.js); data-tint is a rough stand-
+           in for each brand's own palette until real cover art
+           replaces .tile's abstract mock screens. -->
       <div class="carousel reveal" id="carousel">
         <div class="dial-stage">
           <div class="dial-clip">
@@ -245,22 +247,19 @@
                should stay put while only the tiles orbit it. -->
           <div class="dial-face" aria-hidden="true"></div>
           <div class="dial" id="dial">
-            <button class="spoke" type="button" style="--a: 0deg" data-tint="272" data-name="Pulse Healthcare Dashboard">
+            <button class="spoke" type="button" style="--a: 0deg" data-tint="352" data-name="Dhanvi Creation" data-behance="https://www.behance.net/gallery/254691051/Dhanvi-Creation-Luxury-Couture-E-commerce-Website">
               <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
-            <button class="spoke" type="button" style="--a: 60deg" data-tint="258" data-name="Nomad Travel Booking">
+            <button class="spoke" type="button" style="--a: 72deg" data-tint="205" data-name="Lumera Jewels" data-behance="https://www.behance.net/gallery/253968535/LUMERA-Jewels-Premium-Luxury-Jewellery">
               <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
-            <button class="spoke" type="button" style="--a: 120deg" data-tint="286" data-name="Ledger Fintech Console">
+            <button class="spoke" type="button" style="--a: 144deg" data-tint="28" data-name="Aurelia" data-behance="https://www.behance.net/gallery/253859343/AURELIA-Luxury-Furniture-E-Commerce-Experience">
               <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
-            <button class="spoke" type="button" style="--a: 180deg" data-tint="248" data-name="Aria Music Player">
+            <button class="spoke" type="button" style="--a: 216deg" data-tint="216" data-name="Timeora" data-behance="https://www.behance.net/gallery/254693533/Timeora-Luxury-Watch-E-commerce-Experience">
               <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
-            <button class="spoke" type="button" style="--a: 240deg" data-tint="295" data-name="Verde Grocery Commerce">
-              <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
-            </button>
-            <button class="spoke" type="button" style="--a: 300deg" data-tint="265" data-name="Atlas Design System">
+            <button class="spoke" type="button" style="--a: 288deg" data-tint="185" data-name="Sweet Heaven" data-behance="https://www.behance.net/gallery/254093915/Sweet-Haven-Premium-Bakery-Website-UIUX-Design">
               <span class="tile"><span class="shot-bar"></span><span class="shot-row"></span><span class="shot-block"></span></span>
             </button>
           </div>
@@ -289,14 +288,14 @@
            stays just the cover, and updated by showCard() in
            script.js as the wheel turns. -->
       <div class="project-info reveal">
-        <h3 class="project-name" id="projectName">Pulse Healthcare Dashboard</h3>
-        <a class="project-link" id="projectLink" href="#" data-placeholder>
+        <h3 class="project-name" id="projectName">Dhanvi Creation</h3>
+        <a class="project-link" id="projectLink" href="https://www.behance.net/gallery/254691051/Dhanvi-Creation-Luxury-Couture-E-commerce-Website" target="_blank" rel="noopener">
           Behance
           <img src="assets/img/arrow-up-right.svg" alt="" class="arrow-icon sm">
         </a>
       </div>
 
-      <p class="carousel-note">Placeholder covers — replace with real case study images.</p>
+      <p class="carousel-note">Covers are stand-ins — swap in each project's real cover art when it's ready.</p>
     </section>
 
     <!-- ============ EXPERIENCE ============ -->
@@ -371,6 +370,6 @@
     <p>Designed &amp; built with care</p>
   </footer>
 
-  <script src="js/script.js?v=18"></script>
+  <script src="js/script.js?v=19"></script>
 </body>
 </html>

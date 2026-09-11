@@ -332,6 +332,7 @@ if (dial && carousel) {
   const STEP = 360 / spokes.length;
   const hubShot = document.getElementById("hubShot");
   const projectName = document.getElementById("projectName");
+  const projectLink = document.getElementById("projectLink");
 
   const HOLD = 2400; // a project sits at the top for this long
   const TURN = 820; // and takes this long to hand over to the next
@@ -366,6 +367,7 @@ if (dial && carousel) {
     const s = spokes[((index % spokes.length) + spokes.length) % spokes.length];
     hubShot.style.setProperty("--tint", s.dataset.tint);
     projectName.textContent = s.dataset.name;
+    projectLink.href = s.dataset.behance;
   }
 
   function goTo(next) {
