@@ -1428,6 +1428,14 @@ main {
 #showcase {
   padding-top: clamp(32px, 6vh, 72px);
   padding-bottom: clamp(32px, 6vh, 72px);
+  /* Shared by .showcase-card's own width and .showcase-nav's
+     position — the active card is always centred, so its right edge
+     sits at a fixed offset from the stage's own centre regardless of
+     which project is showing. Anchoring the nav buttons off that
+     same variable, instead of tracking the card in JS, keeps them
+     glued to its corner with zero extra layout work per frame. */
+  --sc-card-w: clamp(230px, 46vw, 560px);
+  --sc-card-h: clamp(170px, 30vh, 340px);
 }
 
 #showcase .section-head {
@@ -1436,7 +1444,24 @@ main {
 
 .showcase-stage {
   position: relative;
-  height: clamp(240px, 46vh, 420px);
+  /* Hugs the card rather than spanning the section's full width —
+     a glass panel that size reads as its own framed piece, with the
+     nav buttons landing in its corner near the card they control,
+     instead of a nearly-invisible tint stretched edge to edge with
+     the buttons stranded far off to the side of the actual card. */
+  max-width: 920px;
+  margin: 0 auto;
+  height: clamp(260px, 48vh, 440px);
+  padding: clamp(18px, 2.6vw, 32px);
+  border-radius: var(--radius-card);
+  /* The whole stage is one glass panel now, not just the info
+     overlay on the active card — a frosted frame around the
+     coverflow instead of the cards floating bare on the page. */
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
   /* The side cards translate out from centre; without this a narrow
      viewport shows a real horizontal scrollbar for however far they
      land off-screen. */
@@ -1447,6 +1472,10 @@ main {
   position: relative;
   width: 100%;
   height: 100%;
+  /* Gives the side cards' rotateY somewhere to actually recede into
+     — without a perspective on the containing block a rotateY just
+     skews flat instead of reading as a lean in 3D space. */
+  perspective: 1400px;
 }
 
 /* Width and height are each their own clamp — vw-bound and vh-bound
@@ -1461,8 +1490,10 @@ main {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: clamp(140px, 34vw, 300px);
-  height: clamp(190px, 42vh, 380px);
+  /* Bigger and distinctly wider than tall now — a landscape card
+     closer to the reference than the earlier near-square one. */
+  width: var(--sc-card-w);
+  height: var(--sc-card-h);
   border-radius: 28px;
   overflow: hidden;
   background-image: var(--cover);
@@ -1552,15 +1583,26 @@ main {
   height: 15px;
 }
 
+/* Small, sat in the stage's own top-right corner — like a control
+   that belongs to the glass panel itself, rather than a pair of big
+   arrows bracketing the whole carousel from off to the sides. */
+/* Anchored off the active card's own edge (--sc-card-w/-h, shared
+   with .showcase-card), not the stage's corner — the stage is wider
+   than the card to leave room for the side cards to peek, so pinning
+   these to the stage's own corner stranded them well past the
+   card's actual edge. This keeps them glued to it regardless of
+   viewport, with zero per-frame tracking needed since the active
+   card's size never changes, only which project is on it. */
 .showcase-nav {
   position: absolute;
-  top: 50%;
-  z-index: 4;
+  top: calc(50% - var(--sc-card-h) / 2 + 12px);
+  /* Above every card's own z-index (the active one reaches 10) —
+     otherwise the active card would paint over these. */
+  z-index: 20;
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
-  margin-top: -24px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.24);
@@ -1571,59 +1613,22 @@ main {
 }
 
 .showcase-nav svg {
-  width: 22px;
-  height: 22px;
-}
-
-.showcase-nav.prev {
-  left: clamp(4px, 3vw, 32px);
+  width: 16px;
+  height: 16px;
 }
 
 .showcase-nav.next {
-  right: clamp(4px, 3vw, 32px);
+  left: calc(50% + var(--sc-card-w) / 2 - 44px);
+}
+
+.showcase-nav.prev {
+  left: calc(50% + var(--sc-card-w) / 2 - 82px);
 }
 
 .showcase-nav:hover {
-  transform: translateY(-50%) scale(1.08);
+  transform: scale(1.08);
   background: rgba(157, 78, 221, 0.4);
   border-color: rgba(157, 78, 221, 0.85);
-}
-
-.showcase-dots {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: clamp(16px, 2.6vh, 26px);
-}
-
-.showcase-dots button {
-  width: 9px;
-  height: 9px;
-  padding: 0;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  background: transparent;
-  cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
-}
-
-.showcase-dots button[aria-current="true"] {
-  background: var(--color-purple);
-  border-color: var(--color-purple);
-  transform: scale(1.25);
-}
-
-@media (max-width: 640px) {
-  .showcase-nav {
-    width: 40px;
-    height: 40px;
-    margin-top: -20px;
-  }
-
-  .showcase-nav svg {
-    width: 18px;
-    height: 18px;
-  }
 }
 
 /* =========================================================

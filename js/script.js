@@ -499,10 +499,12 @@ if (showcaseTrack && showcaseStage) {
   scCards.forEach((card) => {
     card.style.setProperty("--cover", coverUrl(card.dataset.cover));
   });
-  const scDotsWrap = document.getElementById("showcaseDots");
-  const scDots = scDotsWrap ? [...scDotsWrap.querySelectorAll("button")] : [];
   const SC_HOLD = 4200;
   const n = scCards.length;
+  // A slight lean toward the centre card, not a full carousel spin —
+  // .showcase-track's own perspective is what makes this read as a
+  // 3D tilt rather than a flat skew.
+  const SC_TILT = 8;
 
   let scIndex = 0;
   let scHeld = false;
@@ -522,9 +524,13 @@ if (showcaseTrack && showcaseStage) {
       const abs = Math.abs(offset);
       const scale = abs === 0 ? 1 : abs === 1 ? 0.78 : 0.58;
       const opacity = abs === 0 ? 1 : abs === 1 ? 0.5 : 0;
+      // Leans in toward the centre card — positive offset (to the
+      // right) rotates its left edge toward the viewer, and vice
+      // versa, so both sides visually angle in rather than away.
+      const rotate = offset === 0 ? 0 : offset < 0 ? SC_TILT : -SC_TILT;
 
       card.style.transform =
-        "translate(-50%, -50%) translateX(" + offset * shift + "px) scale(" + scale + ")";
+        "translate(-50%, -50%) translateX(" + offset * shift + "px) rotateY(" + rotate + "deg) scale(" + scale + ")";
       card.style.opacity = String(opacity);
       card.style.zIndex = String(10 - abs);
       card.style.pointerEvents = abs > 1 ? "none" : "";
@@ -533,8 +539,6 @@ if (showcaseTrack && showcaseStage) {
       const link = card.querySelector(".showcase-link");
       if (link) link.tabIndex = offset === 0 ? 0 : -1;
     });
-
-    scDots.forEach((d, i) => d.setAttribute("aria-current", i === scIndex ? "true" : "false"));
   }
 
   function scGoTo(next) {
@@ -555,13 +559,6 @@ if (showcaseTrack && showcaseStage) {
       // A click on the active card's own link should follow the
       // link, not just re-centre a card that's already centred.
       if (i === scIndex) return;
-      scGoTo(i);
-      scRestart();
-    });
-  });
-
-  scDots.forEach((dot, i) => {
-    dot.addEventListener("click", () => {
       scGoTo(i);
       scRestart();
     });
