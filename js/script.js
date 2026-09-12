@@ -585,6 +585,111 @@ if (showcaseTrack && showcaseStage) {
 }
 
 /* ---------------------------------------------------------
+   Gallery — skewed 3D card carousel (third project view)
+
+   Mirrors the standalone card-carousel source but ported to
+   vanilla JS and the portfolio's data-attribute convention.
+   Three CSS custom properties drive each card's transform:
+     --offset   : signed position from active (set in CSS too)
+     --angle    : offset * 60deg on Y-axis (vs SHOWCASE's 8°)
+     --distance : abs(offset) for the scale falloff
+   The project name is shown as an on-card caption (CSS-only,
+   no JS update needed). Only the Behance link is updated by
+   gLayout() when the active card changes.
+   --------------------------------------------------------- */
+const galTrack = document.getElementById("galTrack");
+const galStage = document.getElementById("galStage");
+
+if (galTrack && galStage) {
+  const gCards = [...galTrack.querySelectorAll(".gal-card")];
+  gCards.forEach((card) => {
+    card.style.setProperty("--cover", coverUrl(card.dataset.cover));
+  });
+
+  const galLink = document.getElementById("galLink");
+  const GAL_HOLD = 3800;
+  const gn = gCards.length;
+
+  let gIndex = 0;
+  let gHeld = false;
+  let gTimer = null;
+  let gDragStart = null;
+
+  function gLayout() {
+    gCards.forEach((card, i) => {
+      let offset = i - gIndex;
+      // Wrap so the carousel reads as circular — the card
+      // just past the last wraps around to the near side.
+      if (offset > gn / 2) offset -= gn;
+      if (offset < -gn / 2) offset += gn;
+
+      const distance = Math.abs(offset);
+
+      card.style.setProperty("--offset", offset);
+      card.style.setProperty("--angle", offset * 60 + "deg");
+      card.style.setProperty("--distance", distance);
+      card.style.zIndex = String(10 - distance);
+      card.classList.toggle("is-active", offset === 0);
+      // No aria-hidden toggling needed — with 5 cards, all
+      // offsets are within ±2 after wrapping, so every card
+      // is always visible.
+    });
+
+    if (galLink) galLink.href = gCards[gIndex].dataset.behance;
+  }
+
+  function gGoTo(next) {
+    gIndex = ((next % gn) + gn) % gn;
+    gLayout();
+  }
+
+  function gRestart() {
+    clearInterval(gTimer);
+    if (reduceMotion) return;
+    gTimer = setInterval(() => {
+      if (!gHeld) gGoTo(gIndex + 1);
+    }, GAL_HOLD);
+  }
+
+  // Clicking a non-active card jumps to it.
+  gCards.forEach((card, i) => {
+    card.addEventListener("click", () => {
+      if (i === gIndex) return;
+      gGoTo(i);
+      gRestart();
+    });
+  });
+
+  // Drag / swipe — pointer events for cross-device support.
+  galStage.addEventListener("pointerdown", (e) => {
+    gDragStart = e.clientX;
+    galStage.setPointerCapture(e.pointerId);
+  });
+  galStage.addEventListener("pointerup", (e) => {
+    if (gDragStart === null) return;
+    const d = e.clientX - gDragStart;
+    if (Math.abs(d) > 35) {
+      gGoTo(gIndex + (d > 0 ? -1 : 1));
+      gRestart();
+    }
+    gDragStart = null;
+  });
+
+  const galPrev = document.getElementById("galPrev");
+  const galNext = document.getElementById("galNext");
+  if (galPrev) galPrev.addEventListener("click", () => { gGoTo(gIndex - 1); gRestart(); });
+  if (galNext) galNext.addEventListener("click", () => { gGoTo(gIndex + 1); gRestart(); });
+
+  galStage.addEventListener("focusin", () => { gHeld = true; });
+  galStage.addEventListener("focusout", () => { gHeld = false; });
+  galStage.addEventListener("touchstart", () => { gHeld = true; }, { passive: true });
+  galStage.addEventListener("touchend", () => { gHeld = false; }, { passive: true });
+
+  gLayout();
+  gRestart();
+}
+
+/* ---------------------------------------------------------
    Footer year
    --------------------------------------------------------- */
 const yearEl = document.getElementById("year");

@@ -2233,3 +2233,194 @@ main {
     transform: none;
   }
 }
+
+/* =========================================================
+   Gallery — skewed 3D card carousel (third project view)
+
+   Adapted from the standalone card-carousel source. Cards
+   tilt 60° on the Y-axis as they step off-centre, giving a
+   much more dramatic perspective than the 8° tilt in
+   SHOWCASE. Project name appears as an on-card caption on
+   the active card; the Behance link lives in the controls
+   bar below alongside the arrow buttons.
+   ========================================================= */
+#gallery {
+  padding-top: clamp(40px, 6vw, 90px);
+  padding-bottom: clamp(40px, 6vw, 90px);
+}
+
+#gallery .section-head {
+  margin-bottom: clamp(16px, 2.4vw, 32px);
+}
+
+/* Stage — holds the 3D perspective and clips side overflow */
+.gal-stage {
+  position: relative;
+  height: clamp(300px, 52vh, 520px);
+  /* Perspective is set on the parent so all sibling cards share
+     the same vanishing point — the same technique the original
+     card-carousel uses on .carousel__stage. */
+  perspective: 900px;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.gal-stage:active {
+  cursor: grabbing;
+}
+
+/* Track centres all cards; transform-style: preserve-3d lets the
+   rotateY on each card read as a real 3D tilt. */
+.gal-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+}
+
+/* Cards — portrait 3:4, transform driven by three CSS custom
+   properties set per-frame by JS:
+   --offset  : signed integer position relative to active card
+   --angle   : offset * 60deg — more dramatic tilt than SHOWCASE's 8°
+   --distance: abs(offset) — drives the scale falloff           */
+.gal-card {
+  position: absolute;
+  width: clamp(130px, 17vw, 240px);
+  aspect-ratio: 3 / 4;
+  border-radius: clamp(10px, 1.2vw, 16px);
+  overflow: hidden;
+  background-image: var(--cover);
+  background-size: cover;
+  background-position: center top;
+  transform:
+    translateX(calc(var(--offset) * 102%))
+    rotateY(var(--angle))
+    scale(calc(1 - min(var(--distance), 3) * 0.12));
+  filter: brightness(0.55);
+  opacity: 0.8;
+  transition:
+    transform 0.75s cubic-bezier(0.22, 0.8, 0.24, 1),
+    filter 0.75s ease,
+    opacity 0.75s ease;
+  user-select: none;
+  cursor: pointer;
+}
+
+.gal-card.is-active {
+  filter: brightness(1);
+  opacity: 1;
+  z-index: 3;
+  cursor: default;
+  /* Purple halo on the active card — ties it to the site's
+     purple identity while helping it read as the focal card
+     without needing a hard border. */
+  box-shadow:
+    0 0 55px rgba(157, 78, 221, 0.38),
+    0 28px 64px rgba(0, 0, 0, 0.65);
+}
+
+/* Caption — project name overlaid at the bottom of the active
+   card only; the name on non-active cards stays hidden so it
+   never competes with the caption of the card in focus.      */
+.gal-caption {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 40px 16px 16px;
+  background: linear-gradient(to bottom, transparent, rgba(10, 3, 20, 0.82));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.gal-card.is-active .gal-caption {
+  opacity: 1;
+}
+
+.gal-caption h3 {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(14px, 1.3vw, 19px);
+  color: var(--color-white);
+  white-space: nowrap;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+}
+
+/* Controls bar: [← Prev]  [View Case Study ↗]  [→ Next]
+   A single row below the stage is cleaner and more compact
+   than stacking the link separately, and makes this section
+   read differently from the other two showcases which each
+   have a standalone name+link block. */
+.gal-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2.4vw, 30px);
+  margin-top: clamp(14px, 2vh, 22px);
+}
+
+.gal-arrow {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(30, 12, 50, 0.70);
+  color: var(--color-white);
+  cursor: pointer;
+  transition:
+    transform 0.3s var(--ease-out),
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.gal-arrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+.gal-arrow:hover {
+  transform: scale(1.1);
+  background: rgba(157, 78, 221, 0.38);
+  border-color: rgba(157, 78, 221, 0.8);
+}
+
+.gal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(13px, 1.1vw, 16px);
+  color: #c58bf5;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.gal-link:hover {
+  color: #dcc0ff;
+  border-bottom-color: currentColor;
+}
+
+.gal-link .arrow-icon {
+  width: 15px;
+  height: 15px;
+}
+
+@media (max-width: 760px) {
+  .gal-stage {
+    height: clamp(240px, 46vh, 380px);
+  }
+
+  .gal-caption h3 {
+    font-size: 13px;
+    white-space: normal;
+  }
+}
