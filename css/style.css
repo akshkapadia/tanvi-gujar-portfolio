@@ -2425,3 +2425,258 @@ main {
     white-space: normal;
   }
 }
+
+/* =========================================================
+   Experience — Envelope letter reveal
+   ========================================================= */
+
+/* Outer scene: height grows to make room for the cards when
+   the envelope is open. padding-top is the lever — cards sit
+   at the top of the scene in normal flow and are pushed into
+   view as padding expands. */
+.ltr-scene {
+  position: relative;
+  padding-top: 0;
+  transition: padding-top 0.72s var(--ease-out);
+}
+
+.ltr-scene.is-open {
+  padding-top: clamp(260px, 38vw, 420px);
+}
+
+/* Cards cluster — absolute, pinned to the top of the scene.
+   They slide up and appear as the scene padding expands. */
+.ltr-cards {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(880px, 96%);
+  display: flex;
+  justify-content: center;
+  gap: clamp(10px, 1.8vw, 22px);
+  pointer-events: none;
+  opacity: 0;
+  /* Start below the envelope; slide up as the scene opens */
+  transform: translateX(-50%) translateY(60px);
+  transition:
+    opacity 0.55s var(--ease-out),
+    transform 0.6s var(--ease-out);
+}
+
+.ltr-scene.is-open .ltr-cards {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+  /* Slight stagger handled per-card via transition-delay */
+  transition-delay: 0.14s;
+}
+
+/* Individual experience card — glass pill with a slight tilt */
+.ltr-card {
+  flex: 1 1 0;
+  max-width: clamp(180px, 26vw, 280px);
+  padding: clamp(18px, 2.4vw, 28px) clamp(16px, 2vw, 24px);
+  border-radius: clamp(14px, 1.6vw, 20px);
+  transform: rotate(var(--tilt, 0deg)) translateY(10px);
+  opacity: 0;
+  transition:
+    opacity 0.5s var(--ease-out),
+    transform 0.55s var(--ease-out);
+}
+
+.ltr-scene.is-open .ltr-card {
+  opacity: 1;
+  transform: rotate(var(--tilt, 0deg)) translateY(0);
+  transition-delay: calc(0.22s + var(--di, 0s));
+}
+
+.ltr-when {
+  font-size: var(--fs-small);
+  color: var(--text-dim);
+  margin: 0 0 6px;
+}
+
+.ltr-role {
+  font-family: var(--font-body);
+  font-size: clamp(14px, 1.3vw, 17px);
+  font-weight: 600;
+  color: var(--color-white);
+  margin: 0 0 4px;
+  line-height: 1.25;
+}
+
+.ltr-org {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--color-purple);
+  margin: 0 0 10px;
+}
+
+.ltr-text {
+  font-size: var(--fs-small);
+  color: var(--text-dim);
+  line-height: var(--lh-body);
+  margin: 0;
+}
+
+/* Envelope button — full-width letter shape */
+.ltr-env {
+  position: relative;
+  display: block;
+  width: min(560px, 96%);
+  margin: 0 auto;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  /* 3D perspective so the flap fold reads as a real fold */
+  perspective: 900px;
+  outline-offset: 6px;
+}
+
+/* Flap — triangle that folds open like an envelope lid.
+   SVG draws the triangular top face; rotateX on the Y-axis
+   folds it back over the envelope body on open. */
+.ltr-flap {
+  position: relative;
+  z-index: 2;
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transition: transform 0.65s var(--ease-out);
+  transform-style: preserve-3d;
+  /* Flap matches the envelope background */
+  background: rgba(40, 15, 65, 0.88);
+  border-radius: clamp(10px, 1.4vw, 14px) clamp(10px, 1.4vw, 14px) 0 0;
+  border: 1px solid rgba(157, 78, 221, 0.35);
+  border-bottom: none;
+  overflow: hidden;
+}
+
+.ltr-flap svg {
+  display: block;
+  width: 100%;
+  /* Height matches the SVG viewBox ratio (150/560 ≈ 26.8%) */
+  height: auto;
+  aspect-ratio: 560 / 150;
+}
+
+.ltr-flap svg path {
+  fill: rgba(60, 20, 90, 0.95);
+}
+
+.ltr-flap svg path:nth-child(2),
+.ltr-flap svg path:nth-child(3) {
+  fill: rgba(40, 12, 65, 0.95);
+}
+
+/* When open: fold the flap back 175° — almost flat behind
+   the body, revealing the card cluster above */
+.ltr-scene.is-open .ltr-flap {
+  transform: rotateX(-175deg);
+}
+
+/* Envelope body — solid rectangle below the flap */
+.ltr-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: clamp(22px, 3.2vw, 36px) 24px clamp(20px, 3vw, 32px);
+  background: rgba(28, 10, 50, 0.92);
+  border: 1px solid rgba(157, 78, 221, 0.35);
+  border-top: none;
+  border-radius: 0 0 clamp(12px, 1.6vw, 18px) clamp(12px, 1.6vw, 18px);
+  /* Slide down on open to separate from the cards above */
+  transform: translateY(0);
+  transition: transform 0.65s var(--ease-out);
+}
+
+.ltr-scene.is-open .ltr-body {
+  transform: translateY(28px);
+}
+
+/* Wax-seal decoration */
+.ltr-seal {
+  font-size: clamp(22px, 3.2vw, 38px);
+  color: var(--color-purple);
+  line-height: 1;
+  filter: drop-shadow(0 0 8px rgba(157, 78, 221, 0.6));
+  transition: transform 0.55s var(--ease-out);
+}
+
+.ltr-scene.is-open .ltr-seal {
+  transform: scale(0.82) rotate(20deg);
+}
+
+/* Instructional hint text */
+.ltr-hint {
+  font-family: var(--font-body);
+  font-size: clamp(12px, 1.1vw, 15px);
+  font-weight: 400;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+  position: relative;
+}
+
+.ltr-hint-open,
+.ltr-hint-close {
+  display: inline-block;
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-out);
+}
+
+.ltr-hint-close {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%) translateY(6px);
+  opacity: 0;
+  white-space: nowrap;
+}
+
+.ltr-scene.is-open .ltr-hint-open {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.ltr-scene.is-open .ltr-hint-close {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Hover glow on the envelope */
+.ltr-env:hover .ltr-body,
+.ltr-env:focus-visible .ltr-body {
+  border-color: rgba(157, 78, 221, 0.65);
+  background: rgba(35, 12, 60, 0.96);
+}
+
+.ltr-env:hover .ltr-flap,
+.ltr-env:focus-visible .ltr-flap {
+  border-color: rgba(157, 78, 221, 0.65);
+}
+
+@media (max-width: 760px) {
+  .ltr-cards {
+    flex-direction: column;
+    align-items: center;
+    width: min(340px, 96%);
+  }
+
+  .ltr-card {
+    max-width: 100%;
+    transform: rotate(0deg) translateY(10px);
+  }
+
+  .ltr-scene.is-open .ltr-card {
+    transform: rotate(0deg) translateY(0);
+  }
+
+  .ltr-scene.is-open {
+    padding-top: clamp(520px, 90vw, 760px);
+  }
+}

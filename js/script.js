@@ -677,6 +677,24 @@ if (galTrack && galStage) {
 }
 
 /* ---------------------------------------------------------
+   Experience — Envelope letter reveal
+   Click the envelope to toggle is-open on the scene, which
+   drives all the CSS transitions (padding-top expansion,
+   card slide-up, flap fold, body shift).
+   --------------------------------------------------------- */
+const ltrScene = document.getElementById("ltrScene");
+const ltrEnv   = document.getElementById("ltrEnv");
+const ltrCards = document.getElementById("ltrCards");
+if (ltrScene && ltrEnv) {
+  ltrEnv.addEventListener("click", () => {
+    const opening = !ltrScene.classList.contains("is-open");
+    ltrScene.classList.toggle("is-open", opening);
+    ltrEnv.setAttribute("aria-expanded", String(opening));
+    if (ltrCards) ltrCards.setAttribute("aria-hidden", String(!opening));
+  });
+}
+
+/* ---------------------------------------------------------
    Footer year
    --------------------------------------------------------- */
 const yearEl = document.getElementById("year");
