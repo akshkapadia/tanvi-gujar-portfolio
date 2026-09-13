@@ -1801,21 +1801,6 @@ main {
   font-family: var(--font-body);
 }
 
-/* Torn-edge decoration — bleeds upward into the last section
-   so the purple starts exactly where content starts, no gap */
-.site-footer::before {
-  content: '';
-  position: absolute;
-  top: clamp(-80px, -8vw, -50px);
-  left: 0;
-  right: 0;
-  height: clamp(80px, 10vw, 130px);
-  background-image: url('../assets/img/footer-bg.png');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  pointer-events: none;
-  z-index: 0;
-}
 
 .site-footer__inner {
   position: relative;
