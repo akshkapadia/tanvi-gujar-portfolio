@@ -2438,10 +2438,12 @@ main {
 }
 
 .ltr-scene.is-open {
-  padding-top: clamp(320px, 46vw, 520px);
+  /* ~78% of the card height visible, ~22% still tucked into the envelope */
+  padding-top: clamp(200px, 28vw, 360px);
 }
 
-/* Cards — absolute at top of scene, slide up on open */
+/* Cards — absolute at top of scene, slide up on open.
+   z-index 2 so they sit on top of the envelope image. */
 .ltr-cards {
   position: absolute;
   top: 0;
@@ -2454,6 +2456,7 @@ main {
   pointer-events: none;
   opacity: 0;
   transform: translateX(-50%) translateY(80px);
+  z-index: 2;
   transition:
     opacity 0.55s var(--ease-out),
     transform 0.65s var(--ease-out);
@@ -2487,9 +2490,11 @@ main {
   transition-delay: calc(0.2s + var(--di, 0s));
 }
 
-/* Envelope button — uses the actual envelope image */
+/* Envelope button — uses the actual envelope image.
+   z-index 1 so cards overlap it at the top edge. */
 .ltr-env {
   position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2506,7 +2511,7 @@ main {
 }
 
 .ltr-scene.is-open .ltr-env {
-  transform: translateY(32px);
+  transform: translateY(16px);
 }
 
 /* The envelope image fills the button width */
@@ -2564,18 +2569,14 @@ main {
 
 @media (max-width: 760px) {
   .ltr-scene.is-open {
-    padding-top: clamp(380px, 88vw, 600px);
+    padding-top: clamp(220px, 60vw, 380px);
   }
 
   .ltr-cards {
-    gap: clamp(-30px, -6vw, -12px);
+    gap: clamp(-24px, -5vw, -10px);
   }
 
   .ltr-card {
-    width: clamp(130px, 28vw, 200px);
+    width: clamp(110px, 26vw, 180px);
   }
-
-  .ltr-card:nth-child(1) { --tilt: -6deg; }
-  .ltr-card:nth-child(2) { --tilt: 1deg; }
-  .ltr-card:nth-child(3) { --tilt: 6deg; }
 }
