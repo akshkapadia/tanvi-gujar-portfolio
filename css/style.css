@@ -2472,15 +2472,18 @@ main {
 }
 
 /* Each card takes exactly 1/3 of the envelope width so all
-   three together span edge-to-edge with the envelope below */
+   three together span edge-to-edge with the envelope below.
+   mix-blend-mode: multiply drops the white card background on
+   the dark site surface so only the text and icons show. */
 .ltr-card {
   flex: 1 1 0;
   min-width: 0;
   width: calc(100% / 3);
   height: auto;
   border-radius: clamp(10px, 1.2vw, 16px);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
-  transform: rotate(var(--tilt, 0deg)) translateY(20px);
+  box-shadow: none;
+  mix-blend-mode: multiply;
+  transform: rotate(var(--tilt, 0deg)) translateY(20px) scale(1.08);
   opacity: 0;
   transition:
     opacity 0.5s var(--ease-out),
@@ -2490,7 +2493,7 @@ main {
 
 .ltr-scene.is-open .ltr-card {
   opacity: 1;
-  transform: rotate(var(--tilt, 0deg)) translateY(0);
+  transform: rotate(var(--tilt, 0deg)) translateY(0) scale(1.08);
   transition-delay: calc(0.2s + var(--di, 0s));
 }
 
