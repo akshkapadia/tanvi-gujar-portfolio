@@ -12,7 +12,7 @@
 
   <!-- Bump ?v= on every change: Pages caches assets for ten
        minutes, so without it a fresh push shows stale styling. -->
-  <link rel="stylesheet" href="css/style.css?v=72">
+  <link rel="stylesheet" href="css/style.css?v=73">
 </head>
 <body>
 
@@ -377,55 +377,30 @@
         <h2 class="section-title">EXPERIENCE</h2>
       </header>
 
-      <!-- Envelope letter reveal — three experience cards sit
-           inside a sealed letter. Clicking it slides the
-           envelope down, folds the flap back and fans the
-           cards out above it. Click again to reseal. -->
       <div class="ltr-scene reveal" id="ltrScene">
 
-        <!-- Cards — absolutely pinned to the top of the
-             scene, revealed as padding-top expands on open -->
+        <!-- Three experience card images — fanned above the envelope -->
         <div class="ltr-cards" id="ltrCards" aria-hidden="true">
-          <article class="ltr-card glass" style="--tilt:-7deg;--di:0.05s">
-            <p class="ltr-when">[START] — [END]</p>
-            <h3 class="ltr-role">[ROLE TITLE]</h3>
-            <p class="ltr-org">[COMPANY NAME]</p>
-            <p class="ltr-text">[What you owned, and one result you're proud of.]</p>
-          </article>
-          <article class="ltr-card glass" style="--tilt:1deg;--di:0.12s">
-            <p class="ltr-when">[START] — [END]</p>
-            <h3 class="ltr-role">[ROLE TITLE]</h3>
-            <p class="ltr-org">[COMPANY NAME]</p>
-            <p class="ltr-text">[What you owned, and one result you're proud of.]</p>
-          </article>
-          <article class="ltr-card glass" style="--tilt:8deg;--di:0.19s">
-            <p class="ltr-when">[START] — [END]</p>
-            <h3 class="ltr-role">[EDUCATION OR EARLY ROLE]</h3>
-            <p class="ltr-org">[INSTITUTION NAME]</p>
-            <p class="ltr-text">[One line of context.]</p>
-          </article>
+          <img class="ltr-card" src="assets/img/exp1-img.png"
+               alt="Selky Cyber Security — UI/UX Internship"
+               style="--tilt:-8deg;--di:0.08s">
+          <img class="ltr-card" src="assets/img/exp2-img.png"
+               alt="Beepixel — UI/UX Designer"
+               style="--tilt:1deg;--di:0.16s">
+          <img class="ltr-card" src="assets/img/exp3-img.png"
+               alt="Instance IT Solutions — UI/UX Designer"
+               style="--tilt:8deg;--di:0.24s">
         </div>
 
-        <!-- Envelope (the clickable letter) -->
+        <!-- Envelope button — uses the actual envelope image -->
         <button class="ltr-env" id="ltrEnv" type="button"
                 aria-expanded="false" aria-controls="ltrCards">
-          <!-- Flap: triangle sealed at top, folds back on open -->
-          <div class="ltr-flap" aria-hidden="true">
-            <svg viewBox="0 0 560 150" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M0,0 L280,138 L560,0 Z"/>
-              <!-- Left and right side triangles (the other two envelope faces) -->
-              <path d="M0,0 L0,150 L280,138 Z" opacity="0.45"/>
-              <path d="M560,0 L560,150 L280,138 Z" opacity="0.45"/>
-            </svg>
-          </div>
-          <!-- Body -->
-          <div class="ltr-body">
-            <span class="ltr-seal" aria-hidden="true">✦</span>
-            <p class="ltr-hint">
-              <span class="ltr-hint-open">3 Experiences Inside &nbsp;·&nbsp; Click to Open</span>
-              <span class="ltr-hint-close">Click to Close</span>
-            </p>
-          </div>
+          <img class="ltr-env-img" src="assets/img/envlop-img.png"
+               alt="sealed envelope" aria-hidden="true">
+          <p class="ltr-hint">
+            <span class="ltr-hint-open">3 Experiences Inside &nbsp;·&nbsp; Click to Open</span>
+            <span class="ltr-hint-close">Click to Seal</span>
+          </p>
         </button>
 
       </div>
