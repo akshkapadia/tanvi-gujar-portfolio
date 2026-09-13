@@ -587,13 +587,10 @@ if (showcaseTrack && showcaseStage) {
 /* ---------------------------------------------------------
    Gallery — skewed 3D card carousel (third project view)
 
-   Linear (not circular) — first card has nothing on its left,
-   last card has nothing on its right. When the last card's
-   hold time expires the stage fast-rewinds back through each
-   card to the first (150 ms per step), then normal autoplay
-   resumes. This eliminates the background snap that a
-   circular wrap causes when a hidden card teleports from one
-   side to the other.
+   Circular continuous loop — after the last card the index
+   wraps back to 0 seamlessly. With only 5 cards the wrapped
+   offsets are always within ±2, so no card ever jumps across
+   the background.
    --------------------------------------------------------- */
 const galTrack = document.getElementById("galTrack");
 const galStage = document.getElementById("galStage");
@@ -604,101 +601,56 @@ if (galTrack && galStage) {
     card.style.setProperty("--cover", coverUrl(card.dataset.cover));
   });
 
-  const galLink  = document.getElementById("galLink");
-  const galPrev  = document.getElementById("galPrev");
-  const galNext  = document.getElementById("galNext");
-  const GAL_HOLD = 3800;   // ms each card is featured
-  const REWIND_STEP = 150; // ms between steps during fast rewind
+  const galLink = document.getElementById("galLink");
+  const GAL_HOLD = 3800;
   const gn = gCards.length;
 
   let gIndex     = 0;
   let gHeld      = false;
   let gTimer     = null;
-  let gRewinding = false;
   let gDragStart = null;
 
   function gLayout() {
     gCards.forEach((card, i) => {
-      // Linear offset — no circular wrapping. Cards beyond ±2
-      // from the active position are hidden; they never snap
-      // across to the wrong side.
-      const offset   = i - gIndex;
-      const distance = Math.abs(offset);
-      const visible  = distance <= 2;
+      let offset = i - gIndex;
+      // Circular wrap — with 5 cards max abs(offset) after
+      // wrapping is 2, so all cards are always visible and
+      // none teleports across the back.
+      if (offset > gn / 2) offset -= gn;
+      if (offset < -gn / 2) offset += gn;
 
+      const distance = Math.abs(offset);
       card.style.setProperty("--offset", offset);
       card.style.setProperty("--angle", offset * 60 + "deg");
       card.style.setProperty("--distance", distance);
-      card.style.zIndex       = String(10 - distance);
-      card.style.visibility   = visible ? "" : "hidden";
-      card.style.pointerEvents = visible ? "" : "none";
+      card.style.zIndex = String(10 - distance);
       card.classList.toggle("is-active", offset === 0);
     });
 
     if (galLink) galLink.href = gCards[gIndex].dataset.behance;
-
-    // Grey out arrow buttons at the edges so the user knows
-    // there is no card further in that direction.
-    if (galPrev) galPrev.disabled = gIndex === 0;
-    if (galNext) galNext.disabled = gIndex === gn - 1;
   }
 
   function gGoTo(next) {
-    // Clamp to valid range — can't go left of first or right of last.
-    gIndex = Math.max(0, Math.min(gn - 1, next));
+    gIndex = ((next % gn) + gn) % gn;
     gLayout();
-  }
-
-  // Fast rewind: step back one card at a time at REWIND_STEP ms each,
-  // then resume normal autoplay once the first card is reached.
-  function gRewind() {
-    clearInterval(gTimer);
-    gTimer = null;
-    gRewinding = true;
-    galStage.classList.add("is-rewinding");
-
-    (function step() {
-      if (!gRewinding) return; // aborted by a user click
-      gIndex--;
-      gLayout();
-      if (gIndex > 0) {
-        setTimeout(step, REWIND_STEP);
-      } else {
-        setTimeout(() => {
-          if (!gRewinding) return;
-          gRewinding = false;
-          galStage.classList.remove("is-rewinding");
-          gRestart(); // resume normal pace from card 1
-        }, REWIND_STEP + 300); // brief pause at first card
-      }
-    })();
   }
 
   function gRestart() {
     clearInterval(gTimer);
     if (reduceMotion) return;
     gTimer = setInterval(() => {
-      if (gHeld) return;
-      if (gIndex >= gn - 1) {
-        gRewind(); // last card reached — fast-rewind to first
-      } else {
-        gGoTo(gIndex + 1);
-      }
+      if (!gHeld) gGoTo(gIndex + 1);
     }, GAL_HOLD);
   }
 
-  // Clicking a side card jumps to it; abort any in-progress rewind.
   gCards.forEach((card, i) => {
     card.addEventListener("click", () => {
       if (i === gIndex) return;
-      gRewinding = false;
-      galStage.classList.remove("is-rewinding");
       gGoTo(i);
       gRestart();
     });
   });
 
-  // Drag / swipe support.
   galStage.addEventListener("pointerdown", (e) => {
     gDragStart = e.clientX;
     galStage.setPointerCapture(e.pointerId);
@@ -706,27 +658,14 @@ if (galTrack && galStage) {
   galStage.addEventListener("pointerup", (e) => {
     if (gDragStart === null) return;
     const d = e.clientX - gDragStart;
-    if (Math.abs(d) > 35) {
-      gRewinding = false;
-      galStage.classList.remove("is-rewinding");
-      gGoTo(gIndex + (d > 0 ? -1 : 1));
-      gRestart();
-    }
+    if (Math.abs(d) > 35) { gGoTo(gIndex + (d > 0 ? -1 : 1)); gRestart(); }
     gDragStart = null;
   });
 
-  if (galPrev) galPrev.addEventListener("click", () => {
-    gRewinding = false;
-    galStage.classList.remove("is-rewinding");
-    gGoTo(gIndex - 1);
-    gRestart();
-  });
-  if (galNext) galNext.addEventListener("click", () => {
-    gRewinding = false;
-    galStage.classList.remove("is-rewinding");
-    gGoTo(gIndex + 1);
-    gRestart();
-  });
+  const galPrev = document.getElementById("galPrev");
+  const galNext = document.getElementById("galNext");
+  if (galPrev) galPrev.addEventListener("click", () => { gGoTo(gIndex - 1); gRestart(); });
+  if (galNext) galNext.addEventListener("click", () => { gGoTo(gIndex + 1); gRestart(); });
 
   galStage.addEventListener("focusin",    () => { gHeld = true; });
   galStage.addEventListener("focusout",   () => { gHeld = false; });

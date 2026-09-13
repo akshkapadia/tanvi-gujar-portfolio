@@ -2414,21 +2414,6 @@ main {
   height: 15px;
 }
 
-/* During fast-rewind each card's transition is trimmed to match
-   the step interval so the steps feel snappy rather than blurry. */
-.gal-stage.is-rewinding .gal-card {
-  transition:
-    transform 0.13s ease,
-    filter 0.13s ease,
-    opacity 0.13s ease;
-}
-
-/* Prev button at card 0, Next button at card 4 — fade them to
-   signal there is nothing further in that direction. */
-.gal-arrow:disabled {
-  opacity: 0.22;
-  cursor: default;
-}
 
 @media (max-width: 760px) {
   .gal-stage {
