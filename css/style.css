@@ -415,9 +415,9 @@ main {
 .hero-photo-wrap {
   position: absolute;
   left: 28%;
-  top: 0%;
+  top: -3.5%;
   width: 40%;
-  height: 86%;
+  height: 90%;
   opacity: 0;
   animation: fade-up 1s ease-out 0.25s forwards, float 6s ease-in-out 1.2s infinite;
 }
