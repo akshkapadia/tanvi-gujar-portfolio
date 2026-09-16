@@ -414,12 +414,12 @@ main {
 /* ---- photo ---- */
 .hero-photo-wrap {
   position: absolute;
-  left: 28%;
-  top: -3.5%;
-  width: 40%;
-  height: 90%;
+  left: 27%;
+  top: -4%;
+  width: 43%;
+  height: 94%;
   opacity: 0;
-  animation: fade-up 1s ease-out 0.25s forwards, float 6s ease-in-out 1.2s infinite;
+  animation: fade-up 1s ease-out 0.25s forwards;
 }
 
 /* Soft purple bloom behind the portrait — it lifts her off
@@ -445,7 +445,9 @@ main {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  object-position: bottom;
+  object-position: top;
+  -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 92%);
+  mask-image: linear-gradient(to bottom, black 55%, transparent 92%);
 }
 
 .hero-photo-shadow {
