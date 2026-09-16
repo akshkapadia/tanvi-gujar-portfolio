@@ -414,10 +414,10 @@ main {
 /* ---- photo ---- */
 .hero-photo-wrap {
   position: absolute;
-  left: 27%;
-  top: -4%;
-  width: 43%;
-  height: 94%;
+  left: 26%;
+  top: -2%;
+  width: 47%;
+  height: 98%;
   opacity: 0;
   animation: fade-up 1s ease-out 0.25s forwards;
 }
@@ -446,8 +446,8 @@ main {
   height: 100%;
   object-fit: contain;
   object-position: top;
-  -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 92%);
-  mask-image: linear-gradient(to bottom, black 55%, transparent 92%);
+  -webkit-mask-image: linear-gradient(to bottom, black 68%, transparent 97%);
+  mask-image: linear-gradient(to bottom, black 68%, transparent 97%);
 }
 
 .hero-photo-shadow {
