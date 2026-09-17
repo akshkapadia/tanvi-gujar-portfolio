@@ -2349,10 +2349,11 @@ main {
   }
 
   .hero-photo-wrap {
-    width: min(90vw, 420px);
+    width: min(96vw, 460px);
     height: auto;
     aspect-ratio: 502 / 662;
     order: 4;
+    margin-bottom: -56px;
   }
 
   .hero-photo-shadow {
@@ -2602,7 +2603,11 @@ main {
 
 @media (max-width: 760px) {
   .gal-stage {
-    height: clamp(240px, 46vh, 380px);
+    height: clamp(320px, 56vh, 440px);
+  }
+
+  .gal-card {
+    width: clamp(220px, 62vw, 290px);
   }
 
   .gal-caption h3 {
