@@ -2530,11 +2530,8 @@ main {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
 }
 
-/* Timeora card has a light-grey mockup background — multiply
-   blend darkens it to sit naturally on the dark site. */
+/* Timeora card — center the 3-phone composition */
 .gal-card[data-name="Timeora"] {
-  background-color: rgba(8, 14, 30, 0.62);
-  background-blend-mode: multiply;
   background-position: center center;
 }
 
