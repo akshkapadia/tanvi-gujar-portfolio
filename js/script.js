@@ -610,6 +610,26 @@ if (galTrack && galStage) {
   let gTimer     = null;
   let gDragStart = null;
 
+  // Desktop only — equal edge-to-edge gap between cards. The old
+  // fixed 102%-per-step translateX left a growing gap toward the
+  // outer cards because each step shrinks (scale falls off with
+  // distance) while the step itself stayed constant. This instead
+  // accumulates: half the previous card's scaled width + a fixed
+  // gap + half the current card's scaled width, so every visible
+  // gap is the same regardless of how much the card has shrunk.
+  const GAL_SCALE = (d) => 1 - Math.min(d, 3) * 0.12;
+  const GAL_GAP_RATIO = 0.08; // matches the original near-centre gap
+
+  function gOffsetX(offset, w) {
+    if (window.innerWidth <= 760 || offset === 0) return offset * w * 1.02;
+    const dir = Math.sign(offset);
+    let x = 0;
+    for (let d = 1; d <= Math.abs(offset); d++) {
+      x += (w * GAL_SCALE(d - 1)) / 2 + GAL_GAP_RATIO * w + (w * GAL_SCALE(d)) / 2;
+    }
+    return dir * x;
+  }
+
   function gLayout() {
     gCards.forEach((card, i) => {
       let offset = i - gIndex;
@@ -620,9 +640,11 @@ if (galTrack && galStage) {
       if (offset < -gn / 2) offset += gn;
 
       const distance = Math.abs(offset);
+      const w = card.offsetWidth; // layout width — unaffected by the scale transform
       card.style.setProperty("--offset", offset);
       card.style.setProperty("--angle", offset * 60 + "deg");
       card.style.setProperty("--distance", distance);
+      card.style.setProperty("--x", gOffsetX(offset, w) + "px");
       card.style.zIndex = String(10 - distance);
       card.classList.toggle("is-active", offset === 0);
     });
@@ -671,6 +693,8 @@ if (galTrack && galStage) {
   galStage.addEventListener("focusout",   () => { gHeld = false; });
   galStage.addEventListener("touchstart", () => { gHeld = true;  }, { passive: true });
   galStage.addEventListener("touchend",   () => { gHeld = false; }, { passive: true });
+
+  window.addEventListener("resize", gLayout, { passive: true });
 
   gLayout();
   gRestart();

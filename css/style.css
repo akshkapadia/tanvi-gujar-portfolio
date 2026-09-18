@@ -2478,7 +2478,7 @@ main {
   background-size: cover;
   background-position: center top;
   transform:
-    translateX(calc(var(--offset) * 102%))
+    translateX(var(--x, calc(var(--offset) * 102%)))
     rotateY(var(--angle))
     scale(calc(1 - min(var(--distance), 3) * 0.12));
   filter: brightness(0.55);
@@ -2605,6 +2605,20 @@ main {
 .gal-link .arrow-icon {
   width: 15px;
   height: 15px;
+}
+
+/* Desktop/laptop only — slightly larger cards; stage floor raised
+   to match so the taller active card never clips. Horizontal
+   spacing between cards is computed in JS (gLayout) so the gap
+   stays equal card-to-card instead of widening toward the edges. */
+@media (min-width: 761px) {
+  .gal-card {
+    width: clamp(150px, 18.5vw, 268px);
+  }
+
+  .gal-stage {
+    height: clamp(340px, 52vh, 520px);
+  }
 }
 
 
