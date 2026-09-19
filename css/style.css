@@ -876,14 +876,14 @@ main {
 }
 
 .id-lanyard {
-  width: clamp(96px, 11vw, 140px);
+  width: clamp(80px, 9vw, 112px);
   height: auto;
   margin-bottom: -6px;
 }
 
 .id-card {
   position: relative;
-  width: clamp(168px, 19vw, 240px);
+  width: clamp(140px, 15vw, 190px);
   aspect-ratio: 4 / 5;
   padding: 14px 14px 18px;
   background: var(--glass-fill);
