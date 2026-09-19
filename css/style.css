@@ -589,7 +589,7 @@ main {
 .section {
   max-width: 1440px;
   margin: 0 auto;
-  padding: clamp(72px, 10vw, 150px) var(--page-x);
+  padding: clamp(48px, 6vw, 88px) var(--page-x);
 }
 
 .section-head {
